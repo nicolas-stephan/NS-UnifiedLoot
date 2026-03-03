@@ -24,25 +24,35 @@ namespace NS.UnifiedLoot.Editor {
                 return;
             }
 
+            var headerStyle = new GUIStyle(EditorStyles.miniLabel) { fontStyle = FontStyle.Bold };
+            var contentStyle = EditorStyles.miniLabel;
+            var pad = EditorGUIUtility.standardVerticalSpacing * 2f;
+
             var weights = new float[entryCount];
             var totalWeight = 0f;
+            var maxWeightW = headerStyle.CalcSize(new GUIContent("Weight")).x;
+            var maxQtyW = headerStyle.CalcSize(new GUIContent("Quantity")).x;
+
             for (var i = 0; i < entryCount; i++) {
-                var w = entriesProp.GetArrayElementAtIndex(i).FindPropertyRelative(LootEntryDataBase.NameOfWeight);
-                weights[i] = w?.floatValue ?? 0f;
+                var entry = entriesProp.GetArrayElementAtIndex(i);
+                var wProp = entry.FindPropertyRelative(LootEntryDataBase.NameOfWeight);
+                weights[i] = wProp?.floatValue ?? 0f;
                 totalWeight += weights[i];
+
+                var weightW = contentStyle.CalcSize(new GUIContent($"{weights[i]:F3}")).x;
+                if (weightW > maxWeightW) maxWeightW = weightW;
+
+                var qtyProp = entry.FindPropertyRelative(LootEntryDataBase.NameOfQuantity);
+                var qtyW = contentStyle.CalcSize(new GUIContent(GetQuantityLabel(qtyProp))).x;
+                if (qtyW > maxQtyW) maxQtyW = qtyW;
             }
 
             EditorGUILayout.LabelField($"Total weight: {totalWeight:F3}   ·   {entryCount} entries", EditorStyles.miniLabel);
             EditorGUILayout.Space(EditorGUIUtility.standardVerticalSpacing);
 
-            // Calculate dynamic widths
-            var headerStyle = new GUIStyle(EditorStyles.miniLabel) { fontStyle = FontStyle.Bold };
-            var contentStyle = EditorStyles.miniLabel;
-            var pad = EditorGUIUtility.standardVerticalSpacing * 2f;
-
-            var colWeight = Mathf.Max(headerStyle.CalcSize(new GUIContent("Weight")).x, contentStyle.CalcSize(new GUIContent("000.000")).x) + pad;
+            var colWeight = maxWeightW + pad;
             var colPct = Mathf.Max(headerStyle.CalcSize(new GUIContent("%")).x, contentStyle.CalcSize(new GUIContent("100.0%")).x) + pad;
-            var colQty = Mathf.Max(headerStyle.CalcSize(new GUIContent("Quantity")).x, contentStyle.CalcSize(new GUIContent("x[000,000]")).x) + pad;
+            var colQty = maxQtyW + pad;
 
             DrawColumnHeaders(colWeight, colPct, colQty);
 

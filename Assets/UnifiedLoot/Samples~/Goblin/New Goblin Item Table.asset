@@ -12,4 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fe4b845050ed3c42b39f8c5d89ccf32, type: 3}
   m_Name: New Goblin Item Table
   m_EditorClassIdentifier: NS.UnifiedLoot.Example.Goblin::NS.UnifiedLoot.Examples.GoblinItemTable
-  entries: []
+  entries:
+  - weight: 5e+13
+    quantity:
+      min: 2147483647
+      max: 2147483647
+    item: 0
+  - weight: 4
+    quantity:
+      min: 2147483645
+      max: 2147483647
+    item: 0
+  - weight: 4
+    quantity:
+      min: 2147483645
+      max: 2147483647
+    item: 0
+  - weight: 4
+    quantity:
+      min: 2147483645
+      max: 2147483647
+    item: 0
