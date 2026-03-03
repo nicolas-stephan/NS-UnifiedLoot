@@ -38,12 +38,12 @@ namespace NS.UnifiedLoot {
         public bool CollectMetadata { get; internal set; } = true;
 
         /// <summary>
-        /// A free-form scratch-pad strategies can use to communicate intermediate data
+        /// A free-form blackboard strategies can use to communicate intermediate data
         /// with each other within a single pipeline execution. Unlike <see cref="LootContext"/>,
-        /// which is caller-owned and persists across calls, the scratch-pad is cleared between
+        /// which is caller-owned and persists across calls, the blackboard is cleared between
         /// every execution.
         /// </summary>
-        public Dictionary<string, object> ScratchPad { get; } = new();
+        public Dictionary<string, object> Blackboard { get; } = new();
 
         /// <summary>
         /// Clears the working set for reuse.
@@ -53,7 +53,7 @@ namespace NS.UnifiedLoot {
             Results.Clear();
             WeightedEntries.Clear();
             TotalWeight = 0f;
-            ScratchPad.Clear();
+            Blackboard.Clear();
         }
 
         /// <summary>

@@ -16,6 +16,8 @@ namespace NS.UnifiedLoot {
         private IRandom _defaultRandom;
         private bool _collectMetadata = true;
 
+        internal IRandom DefaultRandom => _defaultRandom;
+
         /// <summary>
         /// Read-only view of the strategies currently in the pipeline.
         /// Use <see cref="InsertStrategy"/> and <see cref="RemoveStrategy"/> to mutate.

@@ -49,6 +49,7 @@ namespace NS.UnifiedLoot {
             IRandom? random = null
         ) {
             context ??= LootPipeline.EmptyContext;
+            random ??= pipeline.DefaultRandom;
             var rawResults = pipeline.Execute(table, context, random);
 
             foreach (var result in rawResults) {
