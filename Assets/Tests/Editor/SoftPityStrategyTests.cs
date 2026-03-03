@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 namespace NS.UnifiedLoot.Tests {
@@ -20,12 +21,15 @@ namespace NS.UnifiedLoot.Tests {
                 .AddStrategy(new NeverDropStrategy<Item>())
                 .AddStrategy(softPity);
 
-            var r1 = pipeline.Execute(table);
-            var r2 = pipeline.Execute(table);
+            var r1 = new List<LootResult<Item>>();
+            pipeline.Execute(table, r1);
+            var r2 = new List<LootResult<Item>>();
+            pipeline.Execute(table, r2);
             Assert.AreEqual(0, r1.Count, "Run 1 should produce nothing.");
             Assert.AreEqual(0, r2.Count, "Run 2 should produce nothing.");
 
-            var r3 = pipeline.Execute(table);
+            var r3 = new List<LootResult<Item>>();
+            pipeline.Execute(table, r3);
             Assert.AreEqual(1, r3.Count, "Run 3 should guarantee a drop at hard pity.");
         }
 
@@ -38,10 +42,12 @@ namespace NS.UnifiedLoot.Tests {
                 .AddStrategy(new NeverDropStrategy<Item>())
                 .AddStrategy(softPity);
 
-            pipeline.Execute(table);
-            var drop = pipeline.Execute(table);
+            var results = new List<LootResult<Item>>();
+            pipeline.Execute(table, results);
+            results.Clear();
+            pipeline.Execute(table, results);
 
-            Assert.AreEqual(1, drop.Count);
+            Assert.AreEqual(1, results.Count);
             Assert.AreEqual(0, softPity.GetFailureCount(table.Id));
         }
 
@@ -54,8 +60,9 @@ namespace NS.UnifiedLoot.Tests {
                 .AddStrategy(new NeverDropStrategy<Item>())
                 .AddStrategy(softPity);
 
-            pipeline.Execute(table);
-            pipeline.Execute(table);
+            var results = new List<LootResult<Item>>();
+            pipeline.Execute(table, results);
+            pipeline.Execute(table, results);
 
             foreach (var r in pipeline.Strategies.OfType<IResettable>())
                 r.ResetAll();

@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace NS.UnifiedLoot.Tests {
     public class BlackboardTests {
@@ -26,7 +27,8 @@ namespace NS.UnifiedLoot.Tests {
                 .AddStrategy(new WriterStrategy())
                 .AddStrategy(reader);
 
-            pipeline.Execute(table);
+            var results = new List<LootResult<Item>>();
+            pipeline.Execute(table, results);
 
             Assert.AreEqual(42, reader.ReadValue);
         }
@@ -41,9 +43,11 @@ namespace NS.UnifiedLoot.Tests {
                 .AddStrategy(writer)
                 .AddStrategy(reader);
 
-            pipeline.Execute(table);
+            var results = new List<LootResult<Item>>();
+            pipeline.Execute(table, results);
             pipeline.RemoveStrategy(writer);
-            pipeline.Execute(table);
+            results.Clear();
+            pipeline.Execute(table, results);
 
             Assert.AreEqual(-1, reader.ReadValue, "Blackboard should be cleared between executions.");
         }

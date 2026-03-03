@@ -32,6 +32,28 @@ namespace NS.UnifiedLoot {
         public string? Name { get; }
 
         public int Count => _cachedCount;
+        public ILootEntry<T> this[int index] {
+            get {
+                if (index < 0 || index >= _cachedCount)
+                    throw new System.IndexOutOfRangeException();
+
+                var currentOffset = 0;
+                foreach (var subTable in _subTables) {
+                    if (index < currentOffset + subTable.Table.Count) {
+                        var subIndex = index - currentOffset;
+                        var entry = subTable.Table[subIndex];
+                        if (_totalSelectionWeight <= 0f || subTable.TotalEntryWeight <= 0f)
+                            return new ScaledEntry(entry, 0f);
+
+                        var tableProportion = subTable.SelectionWeight / _totalSelectionWeight;
+                        var scaledWeight = tableProportion * (entry.Weight / subTable.TotalEntryWeight);
+                        return new ScaledEntry(entry, scaledWeight);
+                    }
+                    currentOffset += subTable.Table.Count;
+                }
+                throw new System.IndexOutOfRangeException();
+            }
+        }
 
         public CompositeTable(string? name = null) => Name = name;
 

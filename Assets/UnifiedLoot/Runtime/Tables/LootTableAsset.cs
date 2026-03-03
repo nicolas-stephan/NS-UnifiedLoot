@@ -25,6 +25,7 @@ namespace NS.UnifiedLoot {
 
         public int Id => _id != 0 ? _id : (_id = LootTableIdGenerator.GetNextId());
         public int Count => entries.Count;
+        public ILootEntry<TItem> this[int index] => entries[index];
 
         public override int TableId => Id;
         public override int EntryCount => Count;

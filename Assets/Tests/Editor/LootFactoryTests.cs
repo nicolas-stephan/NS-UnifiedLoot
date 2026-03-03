@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace NS.UnifiedLoot.Tests {
     public class LootFactoryTests {
@@ -49,7 +50,8 @@ namespace NS.UnifiedLoot.Tests {
                 .AddStrategy(new WeightedRandomStrategy<WeaponDefinition>());
 
             var factory = new WeaponFactory();
-            var results = pipeline.ExecuteAndBuild(table, factory);
+            var results = new List<BuiltLootResult<WeaponDefinition, WeaponInstance>>();
+            pipeline.ExecuteAndBuild(table, factory, results);
 
             Assert.AreEqual(1, results.Count);
             Assert.IsNotNull(results[0].Instance);
@@ -68,7 +70,8 @@ namespace NS.UnifiedLoot.Tests {
                 .AddStrategy(new WeightedRandomStrategy<WeaponDefinition>());
 
             var factory = new WeaponFactory();
-            var results = pipeline.ExecuteAndBuild(table, factory);
+            var results = new List<BuiltLootResult<WeaponDefinition, WeaponInstance>>();
+            pipeline.ExecuteAndBuild(table, factory, results);
 
             Assert.AreEqual(1, results.Count);
             Assert.GreaterOrEqual(results[0].Quantity, 3);
@@ -89,7 +92,8 @@ namespace NS.UnifiedLoot.Tests {
             var factory = new LevelScalingWeaponFactory(levelKey);
             var context = new LootContext().Set(levelKey, 10);
 
-            var results = pipeline.ExecuteAndBuild(table, factory, context);
+            var results = new List<BuiltLootResult<WeaponDefinition, WeaponInstance>>();
+            pipeline.ExecuteAndBuild(table, factory, results, context);
 
             Assert.AreEqual(1, results.Count);
             Assert.GreaterOrEqual(results[0].Instance.Damage, 10 + 10);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine.Pool;
 
 namespace NS.UnifiedLoot {
     /// <summary>
@@ -22,27 +23,31 @@ namespace NS.UnifiedLoot {
         }
 
         public void Process(LootWorkingSet<T> workingSet, LootContext context) {
-            var toAdd = new List<LootResult<T>>();
-            var toRemove = new List<int>();
+            var toAdd = ListPool<LootResult<T>>.Get();
+            var toRemove = ListPool<int>.Get();
 
-            for (var i = 0; i < workingSet.Results.Count; i++) {
-                var result = workingSet.Results[i];
-                var nestedTable = _tableResolver(result.Item);
+            try {
+                for (var i = 0; i < workingSet.Results.Count; i++) {
+                    var result = workingSet.Results[i];
+                    var nestedTable = _tableResolver(result.Item);
 
-                if (nestedTable == null)
-                    continue;
+                    if (nestedTable == null)
+                        continue;
 
-                toRemove.Add(i);
+                    toRemove.Add(i);
 
-                for (var q = 0; q < result.Quantity; q++)
-                    toAdd.AddRange(_pipeline.Execute(nestedTable, context, workingSet.Random));
+                    for (var q = 0; q < result.Quantity; q++)
+                        _pipeline.Execute(nestedTable, toAdd, context, workingSet.Random);
+                }
+
+                for (var i = toRemove.Count - 1; i >= 0; i--)
+                    workingSet.Results.RemoveAt(toRemove[i]);
+
+                workingSet.Results.AddRange(toAdd);
+            } finally {
+                ListPool<LootResult<T>>.Release(toAdd);
+                ListPool<int>.Release(toRemove);
             }
-
-            // Remove in reverse order to maintain indices
-            for (var i = toRemove.Count - 1; i >= 0; i--)
-                workingSet.Results.RemoveAt(toRemove[i]);
-
-            workingSet.Results.AddRange(toAdd);
         }
     }
 }

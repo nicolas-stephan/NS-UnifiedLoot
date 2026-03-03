@@ -77,12 +77,15 @@ namespace NS.UnifiedLoot.Examples {
         private ILootTable<GoblinItem> _activeCaptainTable = null!;
         private LootContext _context = null!;
 
+        private List<LootResult<GoblinItem>> _reusableResults = new();
+
         private void Awake() {
             _context = new LootContext()
                 .Set(Luck, playerLuck)
                 .Set(PlayerLevel, 10);
             _activeGoblinTable = ResolveGoblinTable();
             _activeCaptainTable = ResolveCaptainTable();
+            _reusableResults = new List<LootResult<GoblinItem>>();
             BuildGoblinPipeline();
             BuildCaptainPipeline();
         }
@@ -181,17 +184,19 @@ namespace NS.UnifiedLoot.Examples {
         public List<LootResult<GoblinItem>> KillGoblin() {
             UpdateContext();
             _context.Set(Source, "Goblin");
-            var results = _goblinPipeline.Execute(_activeGoblinTable, _context);
-            return results;
+            _reusableResults.Clear();
+            _goblinPipeline.Execute(_activeGoblinTable, _reusableResults, _context);
+            return _reusableResults;
         }
 
         [ContextMenu("Kill Goblin Captain (roll loot)")]
         public List<LootResult<GoblinItem>> KillGoblinCaptain() {
             UpdateContext();
             _context.Set(Source, "Goblin Captain");
-            var results = _captainPipeline.Execute(_activeCaptainTable, _context);
+            _reusableResults.Clear();
+            _captainPipeline.Execute(_activeCaptainTable, _reusableResults, _context);
             Debug.Log($"[Pity] Current failure count: {_captainPity.GetFailureCount(_activeCaptainTable.Id)}");
-            return results;
+            return _reusableResults;
         }
 
         [ContextMenu("Reset Captain Pity Counter")]

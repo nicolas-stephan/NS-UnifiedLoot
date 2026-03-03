@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine.Pool;
 
 namespace NS.UnifiedLoot {
     /// <summary>
@@ -33,23 +34,38 @@ namespace NS.UnifiedLoot {
                     workingSet.AddResult(selected, index, roll / workingSet.TotalWeight);
                 }
             } else {
-                var excluded = new HashSet<int>();
-                for (var i = 0; i < _rollCount && excluded.Count < workingSet.WeightedEntries.Count; i++) {
-                    var (selected, index, rollValue) = SelectExcluding(workingSet, excluded);
-                    excluded.Add(index);
-                    workingSet.AddResult(selected, index, rollValue);
+                var excluded = HashSetPool<int>.Get();
+                try {
+                    for (var i = 0; i < _rollCount && excluded.Count < workingSet.WeightedEntries.Count; i++) {
+                        var (selected, index, rollValue) = SelectExcluding(workingSet, excluded);
+                        if (selected == null)
+                            break;
+                        excluded.Add(index);
+                        workingSet.AddResult(selected, index, rollValue);
+                    }
+                } finally {
+                    HashSetPool<int>.Release(excluded);
                 }
             }
         }
 
         private static (ILootEntry<T> entry, int index)? SelectEntry(LootWorkingSet<T> workingSet, float roll) {
-            foreach (var weighted in workingSet.WeightedEntries)
-                if (roll <= weighted.CumulativeWeight)
-                    return (weighted.Entry, weighted.Index);
+            var low = 0;
+            var high = workingSet.WeightedEntries.Count - 1;
+            var selectedIndex = high;
 
-            // Fallback to last entry (handles floating point edge cases)
-            var last = workingSet.WeightedEntries[^1];
-            return (last.Entry, last.Index);
+            while (low <= high) {
+                var mid = low + (high - low) / 2;
+                if (workingSet.WeightedEntries[mid].CumulativeWeight >= roll) {
+                    selectedIndex = mid;
+                    high = mid - 1;
+                } else {
+                    low = mid + 1;
+                }
+            }
+
+            var selected = workingSet.WeightedEntries[selectedIndex];
+            return (selected.Entry, selected.Index);
         }
 
         private static (ILootEntry<T> entry, int index, float rollValue) SelectExcluding(LootWorkingSet<T> workingSet, HashSet<int> excluded) {

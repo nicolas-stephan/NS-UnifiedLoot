@@ -10,6 +10,7 @@ namespace NS.UnifiedLoot {
 
         public int Id { get; }
         public int Count => _entries.Count;
+        public ILootEntry<T> this[int index] => _entries[index];
 
         public LootTable() {
             Id = LootTableIdGenerator.GetNextId();

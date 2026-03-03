@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine.Pool;
 
 namespace NS.UnifiedLoot {
     /// <summary>
@@ -32,28 +33,32 @@ namespace NS.UnifiedLoot {
         }
 
         public void Process(LootWorkingSet<T> workingSet, LootContext context) {
-            var expanded = new List<LootResult<T>>();
+            var expanded = ListPool<LootResult<T>>.Get();
             var anyExpanded = false;
 
-            foreach (var result in workingSet.Results) {
-                var expansion = _expander(result.Item);
-                if (expansion == null) {
-                    expanded.Add(result);
-                    continue;
+            try {
+                foreach (var result in workingSet.Results) {
+                    var expansion = _expander(result.Item);
+                    if (expansion == null) {
+                        expanded.Add(result);
+                        continue;
+                    }
+
+                    anyExpanded = true;
+                    foreach (var item in expansion) {
+                        var qty = _quantityResolver?.Invoke(item) ?? 1;
+                        expanded.Add(new LootResult<T>(item, qty, result.Metadata));
+                    }
                 }
 
-                anyExpanded = true;
-                foreach (var item in expansion) {
-                    var qty = _quantityResolver?.Invoke(item) ?? 1;
-                    expanded.Add(new LootResult<T>(item, qty, result.Metadata));
-                }
+                if (!anyExpanded)
+                    return;
+
+                workingSet.Results.Clear();
+                workingSet.Results.AddRange(expanded);
+            } finally {
+                ListPool<LootResult<T>>.Release(expanded);
             }
-
-            if (!anyExpanded)
-                return;
-
-            workingSet.Results.Clear();
-            workingSet.Results.AddRange(expanded);
         }
     }
 }

@@ -13,6 +13,11 @@ namespace NS.UnifiedLoot {
         /// The number of entries in this table.
         /// </summary>
         int Count { get; }
+
+        /// <summary>
+        /// Gets the entry at the specified index.
+        /// </summary>
+        ILootEntry<T> this[int index] { get; }
     }
 
     /// <summary>

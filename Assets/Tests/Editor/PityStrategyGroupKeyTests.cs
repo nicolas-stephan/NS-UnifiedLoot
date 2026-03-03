@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace NS.UnifiedLoot.Tests {
     public class PityStrategyGroupKeyTests {
@@ -22,10 +23,12 @@ namespace NS.UnifiedLoot.Tests {
                 .AddStrategy(new NeverDropStrategy<Item>())
                 .AddStrategy(pity);
 
-            var r1 = pipeline.Execute(tableA);
+            var r1 = new List<LootResult<Item>>();
+            pipeline.Execute(tableA, r1);
             Assert.AreEqual(0, r1.Count);
 
-            var r2 = pipeline.Execute(tableB);
+            var r2 = new List<LootResult<Item>>();
+            pipeline.Execute(tableB, r2);
             Assert.AreEqual(1, r2.Count, "Shared pity counter should trigger across tables.");
         }
 

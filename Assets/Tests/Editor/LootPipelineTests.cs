@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 namespace NS.UnifiedLoot.Tests {
@@ -20,7 +21,8 @@ namespace NS.UnifiedLoot.Tests {
             var pipeline = new LootPipeline<TestItem>()
                 .AddStrategy(new WeightedRandomStrategy<TestItem>());
 
-            var results = pipeline.Execute(table);
+            var results = new List<LootResult<TestItem>>();
+            pipeline.Execute(table, results);
 
             Assert.AreEqual(1, results.Count);
             Assert.Contains(results[0].Item, new[] { TestItem.Sword, TestItem.Shield, TestItem.Potion });
@@ -35,7 +37,8 @@ namespace NS.UnifiedLoot.Tests {
             var pipeline = new LootPipeline<TestItem>()
                 .AddStrategy(new WeightedRandomStrategy<TestItem>(5));
 
-            var results = pipeline.Execute(table);
+            var results = new List<LootResult<TestItem>>();
+            pipeline.Execute(table, results);
 
             Assert.AreEqual(5, results.Count);
         }
@@ -51,7 +54,8 @@ namespace NS.UnifiedLoot.Tests {
             var pipeline = new LootPipeline<TestItem>()
                 .AddStrategy(new DropChanceStrategy<TestItem>(weightAsPercent: false));
 
-            var results = pipeline.Execute(table);
+            var results = new List<LootResult<TestItem>>();
+            pipeline.Execute(table, results);
 
             Assert.AreEqual(3, results.Count);
         }
@@ -64,7 +68,8 @@ namespace NS.UnifiedLoot.Tests {
             var pipeline = new LootPipeline<TestItem>()
                 .AddStrategy(new GuaranteedDropStrategy<TestItem>());
 
-            var results = pipeline.Execute(table);
+            var results = new List<LootResult<TestItem>>();
+            pipeline.Execute(table, results);
 
             Assert.AreEqual(1, results.Count);
         }
@@ -80,7 +85,8 @@ namespace NS.UnifiedLoot.Tests {
                 .AddStrategy(new DropChanceStrategy<TestItem>())
                 .AddStrategy(new FilterStrategy<TestItem>(r => r.Item != TestItem.Potion));
 
-            var results = pipeline.Execute(table);
+            var results = new List<LootResult<TestItem>>();
+            pipeline.Execute(table, results);
 
             Assert.AreEqual(2, results.Count);
             Assert.IsFalse(results.Any(r => r.Item == TestItem.Potion));
@@ -95,7 +101,8 @@ namespace NS.UnifiedLoot.Tests {
                 .AddStrategy(new WeightedRandomStrategy<TestItem>(3))
                 .AddStrategy(new ConsolidateResultsStrategy<TestItem>());
 
-            var results = pipeline.Execute(table);
+            var results = new List<LootResult<TestItem>>();
+            pipeline.Execute(table, results);
 
             Assert.AreEqual(1, results.Count);
             Assert.AreEqual(TestItem.Gold, results[0].Item);
@@ -113,7 +120,8 @@ namespace NS.UnifiedLoot.Tests {
                 .AddStrategy(new DropChanceStrategy<TestItem>())
                 .AddStrategy(new LimitResultsStrategy<TestItem>(2));
 
-            var results = pipeline.Execute(table);
+            var results = new List<LootResult<TestItem>>();
+            pipeline.Execute(table, results);
 
             Assert.AreEqual(2, results.Count);
         }
@@ -126,7 +134,8 @@ namespace NS.UnifiedLoot.Tests {
             var pipeline = new LootPipeline<TestItem>()
                 .AddStrategy(new WeightedRandomStrategy<TestItem>());
 
-            var results = pipeline.Execute(table);
+            var results = new List<LootResult<TestItem>>();
+            pipeline.Execute(table, results);
 
             Assert.AreEqual(1, results.Count);
             Assert.GreaterOrEqual(results[0].Quantity, 5);

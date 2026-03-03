@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 namespace NS.UnifiedLoot.Tests {
@@ -14,7 +15,8 @@ namespace NS.UnifiedLoot.Tests {
             var pipeline = new LootPipeline<string>()
                 .AddStrategy(new WeightedRandomStrategy<string>(100));
 
-            var results = pipeline.Execute(table);
+            var results = new List<LootResult<string>>();
+            pipeline.Execute(table, results);
             Assert.IsTrue(results.All(r => r.Item != null), "Empty entries should not produce null-item results.");
         }
 

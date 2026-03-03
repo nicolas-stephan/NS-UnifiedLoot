@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 namespace NS.UnifiedLoot.Tests {
@@ -18,7 +19,8 @@ namespace NS.UnifiedLoot.Tests {
                 .AddStrategy(ModifyWeightStrategy<Item>.Multiplier(2f))
                 .AddStrategy(new WeightedRandomStrategy<Item>());
 
-            var results = pipeline.Execute(table);
+            var results = new List<LootResult<Item>>();
+            pipeline.Execute(table, results);
             Assert.AreEqual(1, results.Count);
         }
 
@@ -32,7 +34,8 @@ namespace NS.UnifiedLoot.Tests {
                 .AddStrategy(new ModifyWeightStrategy<Item>((entry, _) => Equals(entry.Entry.Item, Item.Rare) ? 0f : entry.Weight))
                 .AddStrategy(new WeightedRandomStrategy<Item>(20));
 
-            var results = pipeline.Execute(table);
+            var results = new List<LootResult<Item>>();
+            pipeline.Execute(table, results);
             Assert.IsTrue(results.All(r => r.Item == Item.Common), "Rare should never appear after its weight is zeroed.");
         }
 
@@ -46,7 +49,8 @@ namespace NS.UnifiedLoot.Tests {
                 .AddStrategy(new WeightedRandomStrategy<Item>());
 
             var context = new LootContext().Set(luckKey, 0f);
-            var results = pipeline.Execute(table, context);
+            var results = new List<LootResult<Item>>();
+            pipeline.Execute(table, results, context);
             Assert.AreEqual(0, results.Count);
         }
     }

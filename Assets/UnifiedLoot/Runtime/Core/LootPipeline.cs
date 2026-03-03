@@ -84,18 +84,6 @@ namespace NS.UnifiedLoot {
             return this;
         }
 
-        /// <summary>
-        /// Executes the pipeline against a loot table.
-        /// </summary>
-        /// <param name="table">The loot table to roll against.</param>
-        /// <param name="context">Contextual data for this roll.</param>
-        /// <param name="random">Optional random override for this execution.</param>
-        /// <returns>The loot results.</returns>
-        public List<LootResult<T>> Execute(ILootTable<T> table, LootContext? context = null, IRandom? random = null) {
-            var results = new List<LootResult<T>>();
-            Execute(table, results, context, random);
-            return results;
-        }
 
         /// <summary>
         /// Executes the pipeline and writes results to an existing list (reduces allocations).
@@ -131,17 +119,17 @@ namespace NS.UnifiedLoot {
 
         private static void BuildWeightedEntries(LootWorkingSet<T> workingSet, ILootTable<T> table) {
             var cumulative = 0f;
-            var index = 0;
+            var count = table.Count;
 
-            foreach (var entry in table) {
+            for (var i = 0; i < count; i++) {
+                var entry = table[i];
                 cumulative += entry.Weight;
                 workingSet.WeightedEntries.Add(new WeightedEntry<T> {
                     Entry = entry,
-                    Index = index,
+                    Index = i,
                     Weight = entry.Weight,
                     CumulativeWeight = cumulative
                 });
-                index++;
             }
 
             workingSet.TotalWeight = cumulative;

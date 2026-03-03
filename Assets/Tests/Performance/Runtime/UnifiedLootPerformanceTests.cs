@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Unity.PerformanceTesting;
-using NS.UnifiedLoot;
 
 namespace NS.UnifiedLoot.Tests.Performance {
     public class LootPipelinePerformanceTests {
@@ -56,7 +55,11 @@ namespace NS.UnifiedLoot.Tests.Performance {
 
         [Test, Performance]
         public void SimplePipeline_Execute_100000() {
-            Measure.Method(() => _ = _simplePipeline.Execute(_table))
+            var results = new List<LootResult<TestItem>>();
+            Measure.Method(() => {
+                    results.Clear();
+                    _simplePipeline.Execute(_table, results);
+                })
                 .WarmupCount(5)
                 .MeasurementCount(10)
                 .IterationsPerMeasurement(100000)
@@ -77,7 +80,11 @@ namespace NS.UnifiedLoot.Tests.Performance {
 
         [Test, Performance]
         public void ComplexPipeline_Execute_100000() {
-            Measure.Method(() => _ = _complexPipeline.Execute(_table, _context))
+            var results = new List<LootResult<TestItem>>();
+            Measure.Method(() => {
+                    results.Clear();
+                    _complexPipeline.Execute(_table, results, _context);
+                })
                 .WarmupCount(5)
                 .MeasurementCount(10)
                 .IterationsPerMeasurement(100000)
@@ -105,7 +112,11 @@ namespace NS.UnifiedLoot.Tests.Performance {
             var pipeline = new LootPipeline<int>()
                 .AddStrategy(new WeightedRandomStrategy<int>(10));
 
-            Measure.Method(() => _ = pipeline.Execute(largeTable))
+            var results = new List<LootResult<int>>();
+            Measure.Method(() => {
+                    results.Clear();
+                    pipeline.Execute(largeTable, results);
+                })
                 .WarmupCount(3)
                 .MeasurementCount(10)
                 .IterationsPerMeasurement(10000)

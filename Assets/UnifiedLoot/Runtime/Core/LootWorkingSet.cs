@@ -66,7 +66,8 @@ namespace NS.UnifiedLoot {
         /// Entries with a null item are silently skipped (empty/sentinel entries).
         /// </summary>
         public void AddResult(ILootEntry<T> entry, int entryIndex, float rollValue) {
-            if (entry.Item is null) return; // empty sentinel entry — nothing dropped
+            if (entry.Item is null)
+                return; // empty sentinel entry — nothing dropped
 
             var quantity = entry.Quantity.Roll(Random);
             var metadata = CollectMetadata
@@ -86,14 +87,26 @@ namespace NS.UnifiedLoot {
         /// Does nothing if there are no entries or total weight is zero.
         /// </summary>
         public void TryRollOneResult() {
-            if (WeightedEntries.Count == 0 || TotalWeight <= 0f) return;
+            if (WeightedEntries.Count == 0 || TotalWeight <= 0f)
+                return;
 
             var roll = Random.Range(0f, TotalWeight);
-            foreach (var weighted in WeightedEntries) {
-                if (roll > weighted.CumulativeWeight) continue;
-                AddResult(weighted.Entry, weighted.Index, roll / TotalWeight);
-                return;
+            var low = 0;
+            var high = WeightedEntries.Count - 1;
+            var selectedIndex = high;
+
+            while (low <= high) {
+                var mid = low + (high - low) / 2;
+                if (WeightedEntries[mid].CumulativeWeight >= roll) {
+                    selectedIndex = mid;
+                    high = mid - 1;
+                } else {
+                    low = mid + 1;
+                }
             }
+
+            var selected = WeightedEntries[selectedIndex];
+            AddResult(selected.Entry, selected.Index, roll / TotalWeight);
         }
     }
 

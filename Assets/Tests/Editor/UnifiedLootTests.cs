@@ -26,10 +26,12 @@ namespace NS.UnifiedLoot.Tests {
                 .AddStrategy(new WeightedRandomStrategy<Item>())
                 .AddObserver(observer);
 
-            pipeline.Execute(table);
+            var results = new List<LootResult<Item>>();
+            pipeline.Execute(table, results);
             Assert.AreEqual(1, observer.CallCount);
 
-            pipeline.Execute(table);
+            results.Clear();
+            pipeline.Execute(table, results);
             Assert.AreEqual(2, observer.CallCount);
         }
 
@@ -42,7 +44,8 @@ namespace NS.UnifiedLoot.Tests {
                 .AddStrategy(new WeightedRandomStrategy<Item>())
                 .AddObserver(observer);
 
-            pipeline.Execute(table);
+            var results = new List<LootResult<Item>>();
+            pipeline.Execute(table, results);
 
             Assert.IsNotNull(observer.LastResults);
             Assert.AreEqual(1, observer.LastResults.Count);
@@ -58,9 +61,11 @@ namespace NS.UnifiedLoot.Tests {
                 .AddStrategy(new WeightedRandomStrategy<Item>())
                 .AddObserver(observer);
 
-            pipeline.Execute(table);
+            var results = new List<LootResult<Item>>();
+            pipeline.Execute(table, results);
             pipeline.RemoveObserver(observer);
-            pipeline.Execute(table);
+            results.Clear();
+            pipeline.Execute(table, results);
 
             Assert.AreEqual(1, observer.CallCount, "Observer should not be called after removal.");
         }

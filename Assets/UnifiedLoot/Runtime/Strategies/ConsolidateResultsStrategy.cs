@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine.Pool;
 
 namespace NS.UnifiedLoot {
     /// <summary>
@@ -14,19 +15,28 @@ namespace NS.UnifiedLoot {
             if (workingSet.Results.Count <= 1)
                 return;
 
-            var consolidated = new Dictionary<T, LootResult<T>>(_comparer);
+            var usePool = _comparer == EqualityComparer<T>.Default;
+            var consolidated = usePool
+                ? GenericPool<Dictionary<T, LootResult<T>>>.Get()
+                : new Dictionary<T, LootResult<T>>(_comparer);
 
-            foreach (var result in workingSet.Results) {
-                if (consolidated.TryGetValue(result.Item, out var existing)) {
-                    consolidated[result.Item] = new LootResult<T>(existing.Item, existing.Quantity + result.Quantity, existing.Metadata);
-                } else {
-                    consolidated[result.Item] = result;
+            if (consolidated.Count > 0)
+                consolidated.Clear();
+
+            try {
+                foreach (var result in workingSet.Results) {
+                    if (consolidated.TryGetValue(result.Item, out var existing))
+                        consolidated[result.Item] = new LootResult<T>(existing.Item, existing.Quantity + result.Quantity, existing.Metadata);
+                    else
+                        consolidated[result.Item] = result;
                 }
-            }
 
-            workingSet.Results.Clear();
-            foreach (var kvp in consolidated) {
-                workingSet.Results.Add(kvp.Value);
+                workingSet.Results.Clear();
+                foreach (var kvp in consolidated)
+                    workingSet.Results.Add(kvp.Value);
+            } finally {
+                if (usePool)
+                    GenericPool<Dictionary<T, LootResult<T>>>.Release(consolidated);
             }
         }
     }

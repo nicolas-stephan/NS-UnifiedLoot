@@ -1,32 +1,12 @@
 using System.Collections.Generic;
 
+using UnityEngine.Pool;
+
 namespace NS.UnifiedLoot {
     /// <summary>
     /// Extension methods for LootPipeline.
     /// </summary>
     public static class LootPipelineExtensions {
-        /// <summary>
-        /// Executes the pipeline and converts results using a factory.
-        /// </summary>
-        /// <typeparam name="TDef">The definition type in the loot table.</typeparam>
-        /// <typeparam name="TInstance">The instance type to create.</typeparam>
-        /// <param name="pipeline">The loot pipeline.</param>
-        /// <param name="table">The loot table to roll against.</param>
-        /// <param name="factory">The factory to convert definitions to instances.</param>
-        /// <param name="context">Optional context data.</param>
-        /// <param name="random">Optional random override.</param>
-        /// <returns>List of built loot results with instances.</returns>
-        public static List<BuiltLootResult<TDef, TInstance>> ExecuteAndBuild<TDef, TInstance>(
-            this LootPipeline<TDef> pipeline,
-            ILootTable<TDef> table,
-            ILootFactory<TDef, TInstance> factory,
-            LootContext? context = null,
-            IRandom? random = null
-        ) {
-            var builtResults = new List<BuiltLootResult<TDef, TInstance>>();
-            pipeline.ExecuteAndBuild(table, factory, builtResults, context, random);
-            return builtResults;
-        }
 
         /// <summary>
         /// Executes the pipeline and converts results using a factory.
@@ -50,16 +30,22 @@ namespace NS.UnifiedLoot {
         ) {
             context ??= LootPipeline.EmptyContext;
             random ??= pipeline.DefaultRandom;
-            var rawResults = pipeline.Execute(table, context, random);
 
-            foreach (var result in rawResults) {
-                var instance = factory.Create(result.Item, context, random);
-                results.Add(new BuiltLootResult<TDef, TInstance> {
-                    Definition = result.Item,
-                    Instance = instance,
-                    Quantity = result.Quantity,
-                    Metadata = result.Metadata
-                });
+            var rawResults = ListPool<LootResult<TDef>>.Get();
+            try {
+                pipeline.Execute(table, rawResults, context, random);
+
+                foreach (var result in rawResults) {
+                    var instance = factory.Create(result.Item, context, random);
+                    results.Add(new BuiltLootResult<TDef, TInstance> {
+                        Definition = result.Item,
+                        Instance = instance,
+                        Quantity = result.Quantity,
+                        Metadata = result.Metadata
+                    });
+                }
+            } finally {
+                ListPool<LootResult<TDef>>.Release(rawResults);
             }
         }
     }
