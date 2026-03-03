@@ -1,0 +1,21 @@
+plugins:
+  - '@semantic-release/github'
+  - '@semantic-release/release-notes-generator'
+  - '@semantic-release/commit-analyzer'
+  - - '@semantic-release/exec'
+    - prepareCmd: "sed -i -e '/AssemblyVersion/s/\".*\"/\"${nextRelease.version}\"/' 
+        Assets/GameplayTags/Runtime/AssemblyInfo.cs
+        Assets/GameplayTags/Editor/AssemblyInfo.cs
+        Assets/GameplayTags/Samples~/AssemblyInfo.cs"
+  - - '@semantic-release/changelog'
+    - changelogFile: 'Assets/GameplayTags/CHANGELOG.md'
+  - - '@semantic-release/npm'
+    - npmPublish: false
+      pkgRoot: "Assets/GameplayTags"
+  - - '@semantic-release/git'
+    - assets:
+        - 'Assets/GameplayTags/Editor/AssemblyInfo.cs'
+        - 'Assets/GameplayTags/Runtime/AssemblyInfo.cs'
+        - 'Assets/GameplayTags/Samples~/AssemblyInfo.cs'
+        - 'Assets/GameplayTags/package.json'
+        - 'Assets/GameplayTags/CHANGELOG.md'

@@ -1,0 +1,25 @@
+{
+    "name": "NS.UnifiedLoot.Tests.Performance",
+    "rootNamespace": "NS.UnifiedLoot.Tests.Performance",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "Unity.PerformanceTesting",
+        "NS.UnifiedLoot"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

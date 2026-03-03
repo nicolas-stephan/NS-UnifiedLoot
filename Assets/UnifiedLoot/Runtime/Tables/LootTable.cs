@@ -1,0 +1,47 @@
+using System.Collections;
+using System.Collections.Generic;
+
+namespace NS.UnifiedLoot {
+    /// <summary>
+    /// A simple code-defined loot table.
+    /// </summary>
+    public class LootTable<T> : ILootTable<T> {
+        private readonly List<ILootEntry<T>> _entries;
+
+        public int Id { get; }
+        public int Count => _entries.Count;
+
+        public LootTable() {
+            Id = LootTableIdGenerator.GetNextId();
+            _entries = new List<ILootEntry<T>>();
+        }
+
+        public LootTable(IEnumerable<ILootEntry<T>> entries) {
+            Id = LootTableIdGenerator.GetNextId();
+            _entries = new List<ILootEntry<T>>(entries);
+        }
+
+        public LootTable<T> Add(T item, float weight = 1f) {
+            _entries.Add(new LootEntry<T>(item, weight));
+            return this;
+        }
+
+        public LootTable<T> Add(T item, float weight, int quantity) {
+            _entries.Add(new LootEntry<T>(item, weight, new IntRange(quantity)));
+            return this;
+        }
+
+        public LootTable<T> Add(T item, float weight, int minQuantity, int maxQuantity) {
+            _entries.Add(new LootEntry<T>(item, weight, new IntRange(minQuantity, maxQuantity)));
+            return this;
+        }
+
+        public LootTable<T> Add(ILootEntry<T> entry) {
+            _entries.Add(entry);
+            return this;
+        }
+
+        public IEnumerator<ILootEntry<T>> GetEnumerator() => _entries.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+}

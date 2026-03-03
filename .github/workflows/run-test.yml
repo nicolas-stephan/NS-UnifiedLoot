@@ -1,0 +1,67 @@
+name: Run Tests
+on:
+  workflow_call:
+    secrets:
+      unity_license:
+        required: true
+      unity_email:
+        required: true
+      unity_password:
+        required: true
+      pat:
+        required: true
+    inputs:
+      cache_key:
+        required: true
+        type: string
+
+jobs:
+  run_tests:
+    runs-on: [ self-hosted, ubuntu-latest ]
+    strategy:
+      fail-fast: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          lfs: true
+
+      - name: Cache Library folder
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: ${{ inputs.cache_key }}-${{ hashFiles('Packages/manifest.json') }}
+          restore-keys: ${{ inputs.cache_key }}-
+          
+      - name: Remove symlinked Examples folder
+        run: |
+          if [ -L "Assets/Examples" ]; then
+              echo "Removing symlink Assets/Examples for CI..."
+              rm Assets/Examples
+          else
+              echo "Assets/Examples is not a symlink — skipping."
+          fi
+          
+      - name: Run Unity Tests
+        id: tests
+        uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.unity_license }}
+          UNITY_EMAIL: ${{ secrets.unity_email }}
+          UNITY_PASSWORD: ${{ secrets.unity_password }}
+        with:
+          testMode: All
+          artifactsPath: artifacts
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          gitPrivateToken: ${{ secrets.pat }}
+          checkName: "Test Results"
+          runAsHostUser: true
+          unityVersion: '6000.2.10f1'
+
+      - name: Upload Test Artifacts
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: Test Results
+          path: artifacts

@@ -1,0 +1,25 @@
+{
+    "name": "NS.UnifiedLoot",
+    "rootNamespace": "NS.UnifiedLoot",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.netcode.gameobjects",
+            "expression": "",
+            "define": "UNIFIED_LOOT_NGO"
+        },
+        {
+            "name": "com.unity.addressables",
+            "expression": "",
+            "define": "UNIFIED_LOOT_ADDRESSABLES"
+        }
+    ],
+    "noEngineReferences": false
+}

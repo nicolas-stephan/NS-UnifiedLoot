@@ -1,0 +1,14 @@
+{
+  "name": "com.ns.unified-loot",
+  "displayName": "NS - Unified Loot",
+  "version": "0.1.0",
+  "unity": "6000.0",
+  "description": "A high-performance, type-safe, composable loot resolution engine for Unity. Features a pipeline-based architecture with swappable strategies, support for weighted random, drop chance, pity systems, and nested loot tables.",
+  "author": "Nicolas Stephan",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nicolas-stephan/UnifiedLoot.git"
+  },
+  "dependencies": {},
+  "samples": []
+}

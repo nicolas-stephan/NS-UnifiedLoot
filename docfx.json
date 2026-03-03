@@ -1,0 +1,31 @@
+{
+  "build": {
+    "content": [
+      {
+        "files": ["**/*.md", "**/toc.yml"],
+        "src": "docs",
+        "dest": "."
+      }
+    ],
+    "resource": [
+      {
+        "files": ["images/**"],
+        "src": "docs"
+      }
+    ],
+    "output": "_site",
+    "template": ["default", "modern"],
+    "globalMetadata": {
+      "_appTitle": "Unified Loot",
+      "_appName": "Unified Loot",
+      "_appFooter": "© 2026 Nicolas Stephan · MIT License",
+      "_enableSearch": true,
+      "_gitContribute": {
+        "repo": "https://github.com/nicolas-stephan/UnifiedLoot",
+        "branch": "main",
+        "path": "docs"
+      }
+    },
+    "fileMetadata": {}
+  }
+}

@@ -1,0 +1,98 @@
+﻿using NUnit.Framework;
+
+namespace NS.UnifiedLoot.Tests {
+    public class LootFactoryTests {
+        private struct WeaponDefinition {
+            public string Name;
+            public IntRange DamageRange;
+            public float CritChance;
+        }
+
+        private class WeaponInstance {
+            public string Name = string.Empty;
+            public int Damage;
+            public float CritChance;
+        }
+
+        private class WeaponFactory : ILootFactory<WeaponDefinition, WeaponInstance> {
+            public WeaponInstance Create(WeaponDefinition definition, LootContext context, IRandom random) {
+                return new WeaponInstance {
+                    Name = definition.Name,
+                    Damage = definition.DamageRange.Roll(random),
+                    CritChance = definition.CritChance
+                };
+            }
+        }
+
+        private class LevelScalingWeaponFactory : ILootFactory<WeaponDefinition, WeaponInstance> {
+            private readonly ContextKey<int> _levelKey;
+
+            public LevelScalingWeaponFactory(ContextKey<int> levelKey) { _levelKey = levelKey; }
+
+            public WeaponInstance Create(WeaponDefinition definition, LootContext context, IRandom random) {
+                var level = context.GetOrDefault(_levelKey, 1);
+                return new WeaponInstance {
+                    Name = definition.Name,
+                    Damage = definition.DamageRange.Min + level, // Simple scaling
+                    CritChance = definition.CritChance
+                };
+            }
+        }
+
+        [Test]
+        public void ExecuteAndBuild_CreatesInstances() {
+            var table = new LootTable<WeaponDefinition>()
+                .Add(new WeaponDefinition { Name = "Sword", DamageRange = new IntRange(10, 20), CritChance = 0.1f })
+                .Add(new WeaponDefinition { Name = "Axe", DamageRange = new IntRange(15, 30), CritChance = 0.05f });
+
+            var pipeline = new LootPipeline<WeaponDefinition>()
+                .AddStrategy(new WeightedRandomStrategy<WeaponDefinition>());
+
+            var factory = new WeaponFactory();
+            var results = pipeline.ExecuteAndBuild(table, factory);
+
+            Assert.AreEqual(1, results.Count);
+            Assert.IsNotNull(results[0].Instance);
+            Assert.IsNotNull(results[0].Definition.Name);
+            Assert.AreEqual(results[0].Definition.Name, results[0].Instance.Name);
+            Assert.GreaterOrEqual(results[0].Instance.Damage, results[0].Definition.DamageRange.Min);
+            Assert.LessOrEqual(results[0].Instance.Damage, results[0].Definition.DamageRange.Max);
+        }
+
+        [Test]
+        public void ExecuteAndBuild_PreservesQuantityAndMetadata() {
+            var table = new LootTable<WeaponDefinition>()
+                .Add(new WeaponDefinition { Name = "Sword", DamageRange = new IntRange(10, 20), CritChance = 0.1f }, 1f, 3, 5);
+
+            var pipeline = new LootPipeline<WeaponDefinition>()
+                .AddStrategy(new WeightedRandomStrategy<WeaponDefinition>());
+
+            var factory = new WeaponFactory();
+            var results = pipeline.ExecuteAndBuild(table, factory);
+
+            Assert.AreEqual(1, results.Count);
+            Assert.GreaterOrEqual(results[0].Quantity, 3);
+            Assert.LessOrEqual(results[0].Quantity, 5);
+            Assert.AreEqual(table.Id, results[0].Metadata.SourceTableId);
+        }
+
+        [Test]
+        public void ExecuteAndBuild_FactoryReceivesContext() {
+            var levelKey = new ContextKey<int>("PlayerLevel");
+
+            var table = new LootTable<WeaponDefinition>()
+                .Add(new WeaponDefinition { Name = "Sword", DamageRange = new IntRange(10, 20), CritChance = 0.1f });
+
+            var pipeline = new LootPipeline<WeaponDefinition>()
+                .AddStrategy(new WeightedRandomStrategy<WeaponDefinition>());
+
+            var factory = new LevelScalingWeaponFactory(levelKey);
+            var context = new LootContext().Set(levelKey, 10);
+
+            var results = pipeline.ExecuteAndBuild(table, factory, context);
+
+            Assert.AreEqual(1, results.Count);
+            Assert.GreaterOrEqual(results[0].Instance.Damage, 10 + 10);
+        }
+    }
+}

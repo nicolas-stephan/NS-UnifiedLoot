@@ -1,0 +1,57 @@
+name: Main Test and Release
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'Assets/**'
+      - 'Packages/**'
+      - 'ProjectSettings/**'
+      - '.releaserc.yml'
+      - '.github/workflows/main.yml'
+      - '.github/workflows/run-test.yml'
+
+permissions:
+  actions: read
+  contents: write
+  pull-requests: write
+  checks: write
+  issues: write
+  
+jobs:
+
+  Tests:
+    name: Run Tests
+    uses: ./.github/workflows/run-test.yml
+    secrets:
+      unity_license: ${{ secrets.UNITY_LICENSE }}
+      unity_email: ${{ secrets.UNITY_EMAIL }}
+      unity_password: ${{ secrets.UNITY_PASSWORD }}
+      pat: ${{ secrets.PAT }}
+    with:
+      cache_key: Library-${{ github.repository_id }}
+
+  Publish:
+    needs: [Tests]
+    if: github.ref == 'refs/heads/main'
+    name: Publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '18'
+
+      - name: Release
+        uses: cycjimmy/semantic-release-action@v6
+        id: semantic
+        with:
+          extra_plugins: |
+            @semantic-release/exec
+            @semantic-release/changelog
+            @semantic-release/git
+          branch: main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
