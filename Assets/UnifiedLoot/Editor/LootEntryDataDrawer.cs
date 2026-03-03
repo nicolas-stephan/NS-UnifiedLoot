@@ -31,12 +31,57 @@ namespace NS.UnifiedLoot.Editor {
             EditorGUI.EndProperty();
         }
 
+        private static (int frame, int objId, string path, float total) _totalWeightCache = (-1, -1, "", 0f);
+
+        private static float GetTotalWeight(SerializedProperty? weightProp) {
+            if (weightProp == null)
+                return -1f;
+            var path = weightProp.propertyPath;
+            var arrayIdx = path.LastIndexOf(".Array.data[", System.StringComparison.Ordinal);
+            if (arrayIdx < 0)
+                return -1f;
+
+            var listPath = path[..arrayIdx];
+            var obj = weightProp.serializedObject.targetObject;
+            if (obj == null)
+                return -1f;
+            var objId = obj.GetInstanceID();
+            var frame = Time.frameCount;
+
+            if (_totalWeightCache.frame == frame && _totalWeightCache.objId == objId && _totalWeightCache.path == listPath)
+                return _totalWeightCache.total;
+
+            var listProp = weightProp.serializedObject.FindProperty(listPath);
+            if (listProp is not { isArray: true })
+                return -1f;
+
+            var total = 0f;
+            for (var i = 0; i < listProp.arraySize; i++) {
+                var element = listProp.GetArrayElementAtIndex(i);
+                var w = element.FindPropertyRelative(LootEntryDataBase.NameOfWeight);
+                if (w != null)
+                    total += w.floatValue;
+            }
+
+            _totalWeightCache = (frame, objId, listPath, total);
+            return total;
+        }
+
         private static void DrawWeightQuantityRow(Rect row, SerializedProperty? weightProp, SerializedProperty? quantityProp) {
             var x = row.x;
             var y = row.y;
             var h = row.height;
 
-            var weightLabel = new GUIContent("Weight");
+            var weightLabelText = "Weight";
+            if (weightProp != null) {
+                var totalWeight = GetTotalWeight(weightProp);
+                if (totalWeight > 0f) {
+                    var pct = weightProp.floatValue / totalWeight * 100f;
+                    weightLabelText = $"Weight ({pct:F1}%)";
+                }
+            }
+
+            var weightLabel = new GUIContent(weightLabelText);
             var weightLabelW = EditorStyles.miniLabel.CalcSize(weightLabel).x + VerticalGap;
 
             var qtyLabel = new GUIContent("Quantity");
