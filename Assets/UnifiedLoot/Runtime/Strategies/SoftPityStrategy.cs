@@ -28,7 +28,7 @@ namespace NS.UnifiedLoot {
         /// Creates a soft-pity strategy.
         /// </summary>
         /// <param name="softPityStart">
-        /// Number of failures before the bonus chance begins to climb. Below this, the bonus is 0 %.
+        /// The number of failures before the bonus chance begins to climb. Below this, the bonus is 0 %.
         /// </param>
         /// <param name="hardPityAt">
         /// Number of failures that guarantees a bonus drop (100 %). Must be &gt; <paramref name="softPityStart"/>.

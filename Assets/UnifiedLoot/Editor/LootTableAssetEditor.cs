@@ -1,23 +1,14 @@
 using UnityEngine;
 using UnityEditor;
-using NS.UnifiedLoot;
 
 namespace NS.UnifiedLoot.Editor {
     [CustomEditor(typeof(LootTableAssetBase), true)]
     public class LootTableAssetEditor : UnityEditor.Editor {
-        // Column widths for the summary table
-        private const float ColName = 160f;
-        private const float ColW = 58f;
-        private const float ColPct = 54f;
-        private const float ColQty = 100f;
-
         public override void OnInspectorGUI() {
             DrawDefaultInspector();
-            EditorGUILayout.Space(8f);
+            EditorGUILayout.Space(EditorGUIUtility.standardVerticalSpacing * 2f);
             DrawProbabilitySummary();
         }
-
-        // ── Summary ──────────────────────────────────────────────────────────
 
         private void DrawProbabilitySummary() {
             var entriesProp = serializedObject.FindProperty(LootTableAsset<object>.NameOfEntries);
@@ -26,7 +17,6 @@ namespace NS.UnifiedLoot.Editor {
 
             var entryCount = entriesProp.arraySize;
 
-            // Header label
             EditorGUILayout.LabelField("Probability Summary", EditorStyles.boldLabel);
 
             if (entryCount == 0) {
@@ -34,7 +24,6 @@ namespace NS.UnifiedLoot.Editor {
                 return;
             }
 
-            // Collect weights for percentage calculation
             var weights = new float[entryCount];
             var totalWeight = 0f;
             for (var i = 0; i < entryCount; i++) {
@@ -44,39 +33,44 @@ namespace NS.UnifiedLoot.Editor {
             }
 
             EditorGUILayout.LabelField($"Total weight: {totalWeight:F3}   ·   {entryCount} entries", EditorStyles.miniLabel);
-            EditorGUILayout.Space(4f);
+            EditorGUILayout.Space(EditorGUIUtility.standardVerticalSpacing);
 
-            // Column headers
-            DrawColumnHeaders();
+            // Calculate dynamic widths
+            var headerStyle = new GUIStyle(EditorStyles.miniLabel) { fontStyle = FontStyle.Bold };
+            var contentStyle = EditorStyles.miniLabel;
+            var pad = EditorGUIUtility.standardVerticalSpacing * 2f;
 
-            // Separator
+            var colWeight = Mathf.Max(headerStyle.CalcSize(new GUIContent("Weight")).x, contentStyle.CalcSize(new GUIContent("000.000")).x) + pad;
+            var colPct = Mathf.Max(headerStyle.CalcSize(new GUIContent("%")).x, contentStyle.CalcSize(new GUIContent("100.0%")).x) + pad;
+            var colQty = Mathf.Max(headerStyle.CalcSize(new GUIContent("Quantity")).x, contentStyle.CalcSize(new GUIContent("x[000,000]")).x) + pad;
+
+            DrawColumnHeaders(colWeight, colPct, colQty);
+
             var sepRect = GUILayoutUtility.GetRect(0f, 1f, GUILayout.ExpandWidth(true));
-            sepRect.x += 4f;
-            sepRect.width -= 8f;
+            sepRect.x += EditorGUIUtility.standardVerticalSpacing;
+            sepRect.width -= EditorGUIUtility.standardVerticalSpacing * 2f;
             EditorGUI.DrawRect(sepRect, new Color(0.5f, 0.5f, 0.5f, 0.4f));
-            EditorGUILayout.Space(2f);
+            EditorGUILayout.Space(EditorGUIUtility.standardVerticalSpacing * 0.5f);
 
-            // Rows
-            using (new EditorGUI.DisabledScope(true)) {
+            using (new EditorGUI.DisabledScope(true))
                 for (var i = 0; i < entryCount; i++)
-                    DrawSummaryRow(entriesProp.GetArrayElementAtIndex(i), weights[i], totalWeight, i);
-            }
+                    DrawSummaryRow(entriesProp.GetArrayElementAtIndex(i), weights[i], totalWeight, i, colWeight, colPct, colQty);
 
-            EditorGUILayout.Space(4f);
+            EditorGUILayout.Space(EditorGUIUtility.standardVerticalSpacing);
             DrawValidationWarnings(entriesProp, entryCount, weights);
         }
 
-        private static void DrawColumnHeaders() {
+        private static void DrawColumnHeaders(float colW, float colPct, float colQty) {
             using (new EditorGUILayout.HorizontalScope()) {
                 var headerStyle = new GUIStyle(EditorStyles.miniLabel) { fontStyle = FontStyle.Bold };
-                EditorGUILayout.LabelField("Name", headerStyle, GUILayout.Width(ColName));
-                EditorGUILayout.LabelField("Weight", headerStyle, GUILayout.Width(ColW));
-                EditorGUILayout.LabelField("%", headerStyle, GUILayout.Width(ColPct));
-                EditorGUILayout.LabelField("Quantity", headerStyle, GUILayout.Width(ColQty));
+                EditorGUILayout.LabelField("Name", headerStyle, GUILayout.MinWidth(80f));
+                EditorGUILayout.LabelField("Weight", headerStyle, GUILayout.Width(colW));
+                EditorGUILayout.LabelField("%", headerStyle, GUILayout.Width(colPct));
+                EditorGUILayout.LabelField("Quantity", headerStyle, GUILayout.Width(colQty));
             }
         }
 
-        private static void DrawSummaryRow(SerializedProperty elem, float weight, float totalWeight, int index) {
+        private static void DrawSummaryRow(SerializedProperty elem, float weight, float totalWeight, int index, float colW, float colPct, float colQty) {
             var itemProp = elem.FindPropertyRelative(LootTableAsset<object>.LootEntryData.NameOfItem);
             var qtyProp = elem.FindPropertyRelative(LootEntryDataBase.NameOfQuantity);
 
@@ -85,14 +79,12 @@ namespace NS.UnifiedLoot.Editor {
             var qtyLabel = GetQuantityLabel(qtyProp);
 
             using (new EditorGUILayout.HorizontalScope()) {
-                EditorGUILayout.LabelField(itemLabel, EditorStyles.miniLabel, GUILayout.Width(ColName));
-                EditorGUILayout.LabelField($"{weight:F3}", EditorStyles.miniLabel, GUILayout.Width(ColW));
-                EditorGUILayout.LabelField($"{pct:F1}%", EditorStyles.miniLabel, GUILayout.Width(ColPct));
-                EditorGUILayout.LabelField(qtyLabel, EditorStyles.miniLabel, GUILayout.Width(ColQty));
+                EditorGUILayout.LabelField(itemLabel, EditorStyles.miniLabel, GUILayout.MinWidth(80f));
+                EditorGUILayout.LabelField($"{weight:F3}", EditorStyles.miniLabel, GUILayout.Width(colW));
+                EditorGUILayout.LabelField($"{pct:F1}%", EditorStyles.miniLabel, GUILayout.Width(colPct));
+                EditorGUILayout.LabelField(qtyLabel, EditorStyles.miniLabel, GUILayout.Width(colQty));
             }
         }
-
-        // ── Warnings ─────────────────────────────────────────────────────────
 
         private static void DrawValidationWarnings(SerializedProperty entriesProp, int entryCount, float[] weights) {
             if (entryCount == 1)
@@ -108,8 +100,6 @@ namespace NS.UnifiedLoot.Editor {
                     EditorGUILayout.HelpBox($"Entry #{i} has a null item reference.", MessageType.Warning);
             }
         }
-
-        // ── Label helpers ─────────────────────────────────────────────────────
 
         private static string GetItemLabel(SerializedProperty? itemProp, int index) {
             if (itemProp == null)

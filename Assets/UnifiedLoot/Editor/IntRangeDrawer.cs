@@ -5,14 +5,10 @@ using UnityEngine;
 namespace NS.UnifiedLoot.Editor {
     [CustomPropertyDrawer(typeof(IntRange))]
     public class IntRangeDrawer : PropertyDrawer {
-        // Session-only per-property mode preference.
-        // Key: "{instanceID}:{propertyPath}"
         private static readonly Dictionary<string, bool> IsRangeMode = new();
 
         private static readonly string[] ModeOptions = { "Exact", "Range" };
-        private const float PopupWidth = 50f;
-        private const float DashWidth = 10f;
-        private const float Gap = 2f;
+        private static float HorizontalGap => EditorGUIUtility.standardVerticalSpacing * 2f;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label) => EditorGUIUtility.singleLineHeight;
 
@@ -31,9 +27,10 @@ namespace NS.UnifiedLoot.Editor {
             var oldIndent = EditorGUI.indentLevel;
             EditorGUI.indentLevel = 0;
 
-            isRange = DrawRangeModeDropdown(controlRect, isRange, maxProp, minProp, key);
+            var popupWidth = GetPopupWidth();
+            isRange = DrawRangeModeDropdown(controlRect, isRange, maxProp, minProp, key, popupWidth);
 
-            var fieldsRect = new Rect(controlRect.x + PopupWidth + Gap, controlRect.y, controlRect.width - PopupWidth - Gap, controlRect.height);
+            var fieldsRect = new Rect(controlRect.x + popupWidth + HorizontalGap, controlRect.y, controlRect.width - popupWidth - HorizontalGap, controlRect.height);
             if (!isRange)
                 DrawExact(fieldsRect, minProp, maxProp);
             else
@@ -43,8 +40,15 @@ namespace NS.UnifiedLoot.Editor {
             EditorGUI.EndProperty();
         }
 
-        private static bool DrawRangeModeDropdown(Rect controlRect, bool isRange, SerializedProperty maxProp, SerializedProperty minProp, string key) {
-            var popupRect = new Rect(controlRect.x, controlRect.y, PopupWidth, controlRect.height);
+        private static float GetPopupWidth() {
+            var style = EditorStyles.popup;
+            var w1 = style.CalcSize(new GUIContent(ModeOptions[0])).x;
+            var w2 = style.CalcSize(new GUIContent(ModeOptions[1])).x;
+            return Mathf.Max(w1, w2) + EditorGUIUtility.standardVerticalSpacing * 2f;
+        }
+
+        private static bool DrawRangeModeDropdown(Rect controlRect, bool isRange, SerializedProperty maxProp, SerializedProperty minProp, string key, float popupWidth) {
+            var popupRect = new Rect(controlRect.x, controlRect.y, popupWidth, controlRect.height);
             var newMode = EditorGUI.Popup(popupRect, isRange ? 1 : 0, ModeOptions);
 
             if (newMode == 0 && isRange)
@@ -66,14 +70,18 @@ namespace NS.UnifiedLoot.Editor {
         }
 
         private static void DrawRange(Rect rect, SerializedProperty minProp, SerializedProperty maxProp) {
-            var fieldW = (rect.width - DashWidth - Gap * 2f) * 0.5f;
+            var dashContent = new GUIContent("–");
+            var dashStyle = EditorStyles.centeredGreyMiniLabel;
+            var dashW = dashStyle.CalcSize(dashContent).x + EditorGUIUtility.standardVerticalSpacing;
+            var fieldW = (rect.width - dashW - HorizontalGap * 2f) * 0.5f;
+
             var minRect = new Rect(rect.x, rect.y, fieldW, rect.height);
-            var dashRect = new Rect(rect.x + fieldW + Gap, rect.y, DashWidth, rect.height);
-            var maxRect = new Rect(rect.x + fieldW + Gap + DashWidth + Gap, rect.y, fieldW, rect.height);
+            var dashRect = new Rect(rect.x + fieldW + HorizontalGap, rect.y, dashW, rect.height);
+            var maxRect = new Rect(rect.x + fieldW + HorizontalGap + dashW + HorizontalGap, rect.y, fieldW, rect.height);
 
             EditorGUI.BeginChangeCheck();
             var newMin = EditorGUI.IntField(minRect, minProp.intValue);
-            EditorGUI.LabelField(dashRect, "–", EditorStyles.centeredGreyMiniLabel);
+            EditorGUI.LabelField(dashRect, dashContent, dashStyle);
             var newMax = EditorGUI.IntField(maxRect, maxProp.intValue);
             if (!EditorGUI.EndChangeCheck())
                 return;
