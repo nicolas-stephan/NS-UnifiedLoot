@@ -52,38 +52,12 @@ namespace NS.UnifiedLoot.Tests.Performance {
             _context = new LootContext().Set(LuckKey, 0.15f);
             _reusableResults = new List<LootResult<TestItem>>();
         }
-
-        [Test, Performance]
-        public void SimplePipeline_Execute_100000() {
-            var results = new List<LootResult<TestItem>>();
-            Measure.Method(() => {
-                    results.Clear();
-                    _simplePipeline.Execute(_table, results);
-                })
-                .WarmupCount(5)
-                .MeasurementCount(10)
-                .IterationsPerMeasurement(100000)
-                .Run();
-        }
-
+        
         [Test, Performance]
         public void SimplePipeline_ExecuteNoAlloc_100000() {
             Measure.Method(() => {
                     _reusableResults.Clear();
                     _simplePipeline.Execute(_table, _reusableResults);
-                })
-                .WarmupCount(5)
-                .MeasurementCount(10)
-                .IterationsPerMeasurement(100000)
-                .Run();
-        }
-
-        [Test, Performance]
-        public void ComplexPipeline_Execute_100000() {
-            var results = new List<LootResult<TestItem>>();
-            Measure.Method(() => {
-                    results.Clear();
-                    _complexPipeline.Execute(_table, results, _context);
                 })
                 .WarmupCount(5)
                 .MeasurementCount(10)
@@ -116,6 +90,31 @@ namespace NS.UnifiedLoot.Tests.Performance {
             Measure.Method(() => {
                     results.Clear();
                     pipeline.Execute(largeTable, results);
+                })
+                .WarmupCount(3)
+                .MeasurementCount(10)
+                .IterationsPerMeasurement(10000)
+                .Run();
+        }
+
+        [Test, Performance]
+        public void CompositeTable_Execute_10000() {
+            var builder = new CompositeTableBuilder<int>();
+            for (var i = 0; i < 10; i++) {
+                var t = new LootTable<int>();
+                for (var j = 0; j < 100; j++)
+                    t.Add(i * 100 + j, UnityEngine.Random.Range(1f, 100f));
+                builder.Add(t, 1f);
+            }
+            var composite = builder.Build();
+
+            var pipeline = new LootPipeline<int>()
+                .AddStrategy(new WeightedRandomStrategy<int>(10));
+
+            var results = new List<LootResult<int>>();
+            Measure.Method(() => {
+                    results.Clear();
+                    pipeline.Execute(composite, results);
                 })
                 .WarmupCount(3)
                 .MeasurementCount(10)

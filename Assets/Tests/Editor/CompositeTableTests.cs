@@ -14,7 +14,7 @@ namespace NS.UnifiedLoot.Tests {
             var tableA = new LootTable<Item>().Add(Item.Sword, 10f);
             var tableB = new LootTable<Item>().Add(Item.Potion, 10f);
 
-            var composite = new CompositeTable<Item>().Add(tableA, 1f).Add(tableB, 1f);
+            var composite = new CompositeTableBuilder<Item>().Add(tableA, 1f).Add(tableB, 1f).Build();
 
             Assert.AreEqual(2, composite.Count);
             Assert.IsTrue(composite.Any(e => Equals(e.Item, Item.Sword)), "Sword entry expected.");
@@ -28,7 +28,7 @@ namespace NS.UnifiedLoot.Tests {
             var tableA = new LootTable<Item>().Add(Item.Sword, 10f);
             var tableB = new LootTable<Item>().Add(Item.Potion, 10f);
 
-            var composite = new CompositeTable<Item>().Add(tableA, 0.3f).Add(tableB, 0.7f);
+            var composite = new CompositeTableBuilder<Item>().Add(tableA, 0.3f).Add(tableB, 0.7f).Build();
 
             var entries = composite.ToList();
             Assert.AreEqual(2, entries.Count);
@@ -49,7 +49,7 @@ namespace NS.UnifiedLoot.Tests {
                 .Add(Item.Arrow, 5f);
             var tableB = new LootTable<Item>().Add(Item.Potion, 10f);
 
-            var composite = new CompositeTable<Item>().Add(tableA, 0.3f).Add(tableB, 0.7f);
+            var composite = new CompositeTableBuilder<Item>().Add(tableA, 0.3f).Add(tableB, 0.7f).Build();
             var entries = composite.ToList();
 
             var swordW = entries.First(e => Equals(e.Item, Item.Sword)).Weight;
@@ -67,21 +67,11 @@ namespace NS.UnifiedLoot.Tests {
             var tableA = new LootTable<Item>().Add(Item.Sword, 10f);
             var tableB = new LootTable<Item>().Add(Item.Potion, 10f);
 
-            var composite = new CompositeTable<Item>().AddMany(new[] { (tableA, 0.5f), (tableB, 0.5f) });
+            var composite = new CompositeTableBuilder<Item>().AddMany(new[] { (tableA as ILootTable<Item>, 0.5f), (tableB as ILootTable<Item>, 0.5f) }).Build();
 
             Assert.AreEqual(2, composite.Count);
             Assert.AreEqual(0.5f, composite.First(e => Equals(e.Item, Item.Sword)).Weight, 0.0001f);
         }
 
-        [Test]
-        public void CompositeTable_Clear_ResetsTable() {
-            var tableA = new LootTable<Item>().Add(Item.Sword, 10f);
-            var composite = new CompositeTable<Item>().Add(tableA, 1f);
-
-            Assert.AreEqual(1, composite.Count);
-            composite.Clear();
-            Assert.AreEqual(0, composite.Count);
-            Assert.AreEqual(0, composite.Count());
-        }
     }
 }

@@ -26,7 +26,7 @@ namespace NS.UnifiedLoot.Examples {
     /// while the assets describe <em>what</em> can drop.</para>
     ///
     /// <para><b>Features demonstrated:</b>
-    /// <see cref="LootTableAsset{TItem}"/>, <see cref="CompositeTable{T}"/>,
+    /// <see cref="LootTableAsset{TItem}"/>, <see cref="CompositeTableBuilder{T}"/>,
     /// <see cref="WeightedRandomStrategy{T}"/>, <see cref="BonusRollStrategy{T}"/>,
     /// <see cref="ConsolidateResultsStrategy{T}"/>, <see cref="ModifyWeightStrategy{T}"/>,
     /// <see cref="SoftPityStrategy{T}"/>, <see cref="ILootObserver{T}"/>,
@@ -113,7 +113,7 @@ namespace NS.UnifiedLoot.Examples {
         }
 
         /// <summary>
-        /// Builds the captain's <see cref="CompositeTable{T}"/>.
+        /// Builds the captain's <see cref="LootTable{T}"/> using <see cref="CompositeTableBuilder{T}"/>.
         /// Uses the three designer assets if all are assigned; otherwise falls back to
         /// inline code-defined sub-tables.
         /// </summary>
@@ -131,15 +131,16 @@ namespace NS.UnifiedLoot.Examples {
             var rare = captainRareTable as ILootTable<GoblinItem> ?? new LootTable<GoblinItem>()
                 .Add(GoblinItem.GoblinKingsCrown, weight: 1f);
 
-            return new CompositeTable<GoblinItem>("Captain")
+            return new CompositeTableBuilder<GoblinItem>()
                 .Add(common, captainCommonWeight)
                 .Add(weapons, captainWeaponWeight)
-                .Add(rare, captainRareWeight);
+                .Add(rare, captainRareWeight)
+                .Build();
         }
 
         private void BuildCaptainPipeline() {
             //  1. ModifyWeight — GoblinKingsCrown weight scales with player luck
-            //  2. WeightedRandom(1) — single roll from the CompositeTable
+            //  2. WeightedRandom(1) — single roll from the Flattened table
             //  3. SoftPity — ramps up the rare drop chance after consecutive failures
             _captainPity = new SoftPityStrategy<GoblinItem>(softPityStart, hardPityAt);
 

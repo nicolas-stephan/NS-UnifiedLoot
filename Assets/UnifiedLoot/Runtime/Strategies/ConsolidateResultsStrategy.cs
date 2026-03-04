@@ -20,8 +20,8 @@ namespace NS.UnifiedLoot {
                 ? GenericPool<Dictionary<T, LootResult<T>>>.Get()
                 : new Dictionary<T, LootResult<T>>(_comparer);
 
-            if (consolidated.Count > 0)
-                consolidated.Clear();
+            consolidated.Clear();
+            consolidated.EnsureCapacity(workingSet.Results.Count);
 
             try {
                 foreach (var result in workingSet.Results) {
@@ -32,6 +32,7 @@ namespace NS.UnifiedLoot {
                 }
 
                 workingSet.Results.Clear();
+                workingSet.Results.Capacity = consolidated.Count;
                 foreach (var kvp in consolidated)
                     workingSet.Results.Add(kvp.Value);
             } finally {
