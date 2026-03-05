@@ -2,7 +2,7 @@ namespace NS.UnifiedLoot {
     /// <summary>
     /// Limits results based on a context value.
     /// </summary>
-    public class LimitResultsFromContextStrategy<T> : ILootStrategy<T> {
+    public class LimitResultsFromContextStrategy<T> : ILootResultModifierStrategy<T> {
         private readonly ContextKey<int> _key;
         private readonly int _defaultMax;
 

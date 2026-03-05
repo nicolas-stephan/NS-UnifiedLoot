@@ -6,7 +6,7 @@ namespace NS.UnifiedLoot {
     /// Generates loot results using weighted random selection.
     /// This is typically the first strategy in a pipeline.
     /// </summary>
-    public class WeightedRandomStrategy<T> : ILootStrategy<T> {
+    public class WeightedRandomStrategy<T> : ILootGeneratorStrategy<T> {
         private readonly int _rollCount;
         private readonly bool _allowDuplicates;
 

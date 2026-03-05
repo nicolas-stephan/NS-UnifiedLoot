@@ -6,7 +6,7 @@ namespace NS.UnifiedLoot {
     /// Tracks state per-table (or per shared group) using integer keys.
     /// Implements <see cref="IResettable"/> so callers can reset all counters via the interface.
     /// </summary>
-    public class PityStrategy<T> : ILootStrategy<T>, IResettable {
+    public class PityStrategy<T> : ILootTableModifierStrategy<T>, IResettable {
         private readonly int _maxFailures;
         private readonly int? _groupKey;
         private readonly Dictionary<int, int> _failureCounts = new();

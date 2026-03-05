@@ -5,6 +5,9 @@ using System.Collections.Generic;
 namespace NS.UnifiedLoot.Editor {
     [CustomEditor(typeof(LootTableAssetBase), true)]
     public class LootTableAssetEditor : UnityEditor.Editor {
+        private bool _showPreview;
+        private float _previewWeightMultiplier = 2f;
+
         public override void OnInspectorGUI() {
             serializedObject.Update();
 
@@ -12,8 +15,125 @@ namespace NS.UnifiedLoot.Editor {
             EditorGUILayout.Space(EditorGUIUtility.standardVerticalSpacing * 2f);
             DrawProbabilitySummary();
             DrawCircularDependencyError();
+            
+            EditorGUILayout.Space(EditorGUIUtility.standardVerticalSpacing * 2f);
+            DrawPipelinePreview();
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void DrawPipelinePreview() {
+            _showPreview = EditorGUILayout.BeginFoldoutHeaderGroup(_showPreview, "Pipeline Preview Simulation");
+            if (_showPreview) {
+                EditorGUI.indentLevel++;
+                
+                EditorGUILayout.HelpBox("This simulates a simple 'ModifyWeightStrategy' that multiplies all weights in the table. " +
+                                       "It demonstrates how the pipeline can change probabilities before rolling.", MessageType.Info);
+
+                using (new EditorGUILayout.HorizontalScope()) {
+                    EditorGUILayout.PrefixLabel("Weight Multiplier");
+                    _previewWeightMultiplier = EditorGUILayout.FloatField(_previewWeightMultiplier);
+                }
+
+                if (GUILayout.Button("Show Preview Results")) {
+                    // Logic to show preview
+                }
+                
+                var asset = target as LootTableAssetBase;
+                if (asset != null) {
+                    // Use reflection to call ToTable on the generic LootTableAsset<TItem>
+                    // For simplicity in this editor, we'll try to find the generic type TItem.
+                    var genericType = asset.GetType().BaseType;
+                    while (genericType != null && (!genericType.IsGenericType || genericType.GetGenericTypeDefinition() != typeof(LootTableAsset<>))) {
+                        genericType = genericType.BaseType;
+                    }
+
+                    if (genericType != null) {
+                        var tItem = genericType.GetGenericArguments()[0];
+                        var toTableMethod = genericType.GetMethod("ToTable");
+                        if (toTableMethod != null) {
+                            var table = toTableMethod.Invoke(asset, null);
+                            
+                            // We need to call LootPreviewer.GetPreview<TItem>
+                            var previewerType = typeof(LootPreviewer);
+                            var getPreviewMethod = previewerType.GetMethod("GetPreview");
+                            if (getPreviewMethod != null) {
+                                var genericGetPreview = getPreviewMethod.MakeGenericMethod(tItem);
+                                
+                                // Create a pipeline for simulation
+                                var pipelineType = typeof(LootPipeline<>).MakeGenericType(tItem);
+                                var pipeline = System.Activator.CreateInstance(pipelineType, new object[] { null });
+                                
+                                // Add a ModifyWeightStrategy<TItem>
+                                var modifyWeightType = typeof(ModifyWeightStrategy<>).MakeGenericType(tItem);
+                                var multiplierMethod = modifyWeightType.GetMethod("Multiplier");
+                                if (multiplierMethod != null) {
+                                    var strategy = multiplierMethod.Invoke(null, new object[] { _previewWeightMultiplier });
+                                    var addStrategyMethod = pipelineType.GetMethod("AddStrategy");
+                                    if (addStrategyMethod != null) {
+                                        addStrategyMethod.Invoke(pipeline, new object[] { strategy });
+                                    }
+                                }
+                                
+                                var preview = genericGetPreview.Invoke(null, new object[] { pipeline, table, null });
+                                if (preview != null) {
+                                    DrawPreviewTable(preview, tItem);
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                EditorGUI.indentLevel--;
+            }
+            EditorGUILayout.EndFoldoutHeaderGroup();
+        }
+
+        private void DrawPreviewTable(object preview, System.Type tItem) {
+            var entriesProp = preview.GetType().GetProperty("Entries");
+            var totalWeightProp = preview.GetType().GetProperty("TotalWeight");
+            if (entriesProp == null || totalWeightProp == null) return;
+
+            var entries = entriesProp.GetValue(preview) as System.Collections.IEnumerable;
+            var totalWeight = (float)totalWeightProp.GetValue(preview);
+
+            if (entries == null) return;
+
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField($"Simulated Total weight: {totalWeight:F3}", EditorStyles.miniBoldLabel);
+
+            var headerStyle = new GUIStyle(EditorStyles.miniLabel) { fontStyle = FontStyle.Bold };
+            var contentStyle = EditorStyles.miniLabel;
+            
+            using (new EditorGUILayout.HorizontalScope()) {
+                EditorGUILayout.LabelField("Item", headerStyle, GUILayout.MinWidth(80f));
+                EditorGUILayout.LabelField("Orig. W", headerStyle, GUILayout.Width(50f));
+                EditorGUILayout.LabelField("Mod. W", headerStyle, GUILayout.Width(50f));
+                EditorGUILayout.LabelField("New %", headerStyle, GUILayout.Width(50f));
+                EditorGUILayout.LabelField("New Q", headerStyle, GUILayout.Width(50f));
+            }
+
+            foreach (var entry in entries) {
+                var itemProp = entry.GetType().GetProperty("Item");
+                var origWProp = entry.GetType().GetProperty("OriginalWeight");
+                var modWProp = entry.GetType().GetProperty("ModifiedWeight");
+                var probProp = entry.GetType().GetProperty("Probability");
+                var modQtyProp = entry.GetType().GetProperty("ModifiedQuantity");
+
+                var itemValue = itemProp.GetValue(entry);
+                var origW = (float)origWProp.GetValue(entry);
+                var modW = (float)modWProp.GetValue(entry);
+                var prob = (float)probProp.GetValue(entry);
+                var modQty = modQtyProp.GetValue(entry);
+
+                using (new EditorGUILayout.HorizontalScope()) {
+                    EditorGUILayout.LabelField(itemValue?.ToString() ?? "None", contentStyle, GUILayout.MinWidth(80f));
+                    EditorGUILayout.LabelField($"{origW:F2}", contentStyle, GUILayout.Width(50f));
+                    EditorGUILayout.LabelField($"{modW:F2}", contentStyle, GUILayout.Width(50f));
+                    EditorGUILayout.LabelField($"{prob * 100f:F1}%", contentStyle, GUILayout.Width(50f));
+                    EditorGUILayout.LabelField(modQty?.ToString() ?? "1", contentStyle, GUILayout.Width(50f));
+                }
+            }
         }
 
         private void DrawCircularDependencyError() {

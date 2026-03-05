@@ -18,7 +18,7 @@ namespace NS.UnifiedLoot {
     ///   <item>failures &gt;= <c>hardPityAt</c>: 100 % (guaranteed)</item>
     /// </list>
     /// </remarks>
-    public class SoftPityStrategy<T> : ILootStrategy<T>, IResettable {
+    public class SoftPityStrategy<T> : ILootTableModifierStrategy<T>, IResettable {
         private readonly int _softPityStart;
         private readonly int _hardPityAt;
         private readonly int? _groupKey;

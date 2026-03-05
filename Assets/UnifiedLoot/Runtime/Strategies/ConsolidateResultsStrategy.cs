@@ -6,7 +6,7 @@ namespace NS.UnifiedLoot {
     /// Consolidates duplicate items by combining their quantities.
     /// Useful after strategies that might produce multiple rolls of the same item.
     /// </summary>
-    public class ConsolidateResultsStrategy<T> : ILootStrategy<T> {
+    public class ConsolidateResultsStrategy<T> : ILootResultModifierStrategy<T> {
         private readonly IEqualityComparer<T> _comparer;
 
         public ConsolidateResultsStrategy(IEqualityComparer<T>? comparer = null) => _comparer = comparer ?? EqualityComparer<T>.Default;

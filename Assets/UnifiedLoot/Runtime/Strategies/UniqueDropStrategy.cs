@@ -5,7 +5,7 @@ namespace NS.UnifiedLoot {
     /// Tracks items that have already dropped and prevents duplicates.
     /// Useful for one-time drops (e.g., unique quest items, first-time boss kills).
     /// </summary>
-    public class UniqueDropStrategy<T> : ILootStrategy<T>, IResettable {
+    public class UniqueDropStrategy<T> : ILootResultModifierStrategy<T>, IResettable {
         private readonly HashSet<T> _droppedItems;
 
         public UniqueDropStrategy(IEqualityComparer<T>? comparer = null)

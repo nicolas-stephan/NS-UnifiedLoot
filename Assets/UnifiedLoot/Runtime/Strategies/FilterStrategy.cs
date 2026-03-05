@@ -4,7 +4,7 @@ namespace NS.UnifiedLoot {
     /// <summary>
     /// Filters results based on a simple predicate.
     /// </summary>
-    public class FilterStrategy<T> : ILootStrategy<T> {
+    public class FilterStrategy<T> : ILootResultModifierStrategy<T> {
         private readonly Func<LootResult<T>, bool> _predicate;
 
         /// <summary>

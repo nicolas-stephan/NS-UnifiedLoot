@@ -4,7 +4,7 @@ namespace NS.UnifiedLoot {
     /// <summary>
     /// Filters results based on a predicate that has access to context.
     /// </summary>
-    public class FilterByContextStrategy<T> : ILootStrategy<T> {
+    public class FilterByContextStrategy<T> : ILootResultModifierStrategy<T> {
         private readonly Func<LootResult<T>, LootContext, bool> _predicate;
 
         /// <summary>

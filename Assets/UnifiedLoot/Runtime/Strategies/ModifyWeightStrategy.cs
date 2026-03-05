@@ -5,7 +5,7 @@ namespace NS.UnifiedLoot {
     /// Scales the weights of weighted entries before selection strategies run.
     /// Must be placed <em>before</em> <see cref="WeightedRandomStrategy{T}"/> in the pipeline.
     /// </summary>
-    public class ModifyWeightStrategy<T> : ILootStrategy<T> {
+    public class ModifyWeightStrategy<T> : ILootTableModifierStrategy<T> {
         private readonly Func<WeightedEntry<T>, LootContext, float> _modifier;
 
         /// <summary>

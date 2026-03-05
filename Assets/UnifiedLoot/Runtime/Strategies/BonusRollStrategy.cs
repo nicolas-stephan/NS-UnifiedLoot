@@ -2,7 +2,7 @@ namespace NS.UnifiedLoot {
     /// <summary>
     /// Adds bonus rolls based on context values (like luck or magic find).
     /// </summary>
-    public class BonusRollStrategy<T> : ILootStrategy<T> {
+    public class BonusRollStrategy<T> : ILootGeneratorStrategy<T> {
         private readonly ContextKey<float> _bonusChanceKey;
         private readonly float _defaultChance;
 

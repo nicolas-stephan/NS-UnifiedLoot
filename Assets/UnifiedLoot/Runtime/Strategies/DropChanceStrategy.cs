@@ -3,7 +3,7 @@ namespace NS.UnifiedLoot {
     /// Rolls each entry independently against its weight as a drop chance (0-1 or 0-100).
     /// Unlike weighted random, entries don't compete - each is rolled separately.
     /// </summary>
-    public class DropChanceStrategy<T> : ILootStrategy<T> {
+    public class DropChanceStrategy<T> : ILootGeneratorStrategy<T> {
         private readonly float _weightScale;
 
         /// <summary>

@@ -8,7 +8,7 @@ namespace NS.UnifiedLoot {
     /// Useful for nested loot pools (e.g., a "weapon" entry that rolls on a weapon-specific table).
     /// For each matched result, the nested pipeline is executed once per quantity unit.
     /// </summary>
-    public class NestedTableStrategy<T> : ILootStrategy<T> {
+    public class NestedTableStrategy<T> : ILootGeneratorStrategy<T> {
         private readonly Func<T, ILootTable<T>> _tableResolver;
         private readonly LootPipeline<T> _pipeline;
 

@@ -4,8 +4,13 @@ namespace NS.UnifiedLoot {
     /// <summary>
     /// Modifies the quantity of all results.
     /// </summary>
-    public class ModifyQuantityStrategy<T> : ILootStrategy<T> {
+    public class ModifyQuantityStrategy<T> : ILootResultModifierStrategy<T> {
         private readonly Func<int, LootContext, int> _modifier;
+
+        /// <summary>
+        /// Returns the modifier function used by this strategy.
+        /// </summary>
+        public Func<int, LootContext, int> Modifier => _modifier;
 
         /// <summary>
         /// Creates a quantity modifier.
@@ -28,6 +33,14 @@ namespace NS.UnifiedLoot {
             for (var i = 0; i < workingSet.Results.Count; i++) {
                 var result = workingSet.Results[i];
                 workingSet.Results[i] = new LootResult<T>(result.Item, Math.Max(1, _modifier(result.Quantity, context)), result.Metadata);
+            }
+        }
+
+        public void OnPreview(LootTablePreview<T> preview, LootContext context) {
+            foreach (var entry in preview.Entries) {
+                var min = _modifier(entry.ModifiedQuantity.Min, context);
+                var max = _modifier(entry.ModifiedQuantity.Max, context);
+                entry.ModifiedQuantity = new IntRange(Math.Max(1, min), Math.Max(1, max));
             }
         }
     }

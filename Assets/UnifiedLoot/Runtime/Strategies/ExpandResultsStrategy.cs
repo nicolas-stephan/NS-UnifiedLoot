@@ -14,7 +14,7 @@ namespace NS.UnifiedLoot {
     /// is provided).  If the delegate returns <c>null</c>, the result passes through unchanged.
     /// </para>
     /// </summary>
-    public class ExpandResultsStrategy<T> : ILootStrategy<T> {
+    public class ExpandResultsStrategy<T> : ILootResultModifierStrategy<T> {
         private readonly Func<T, IEnumerable<T>?> _expander;
         private readonly Func<T, int>? _quantityResolver;
 

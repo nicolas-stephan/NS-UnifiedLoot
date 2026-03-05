@@ -13,4 +13,28 @@ namespace NS.UnifiedLoot
         /// <param name="context">Contextual data for this roll (player stats, etc.).</param>
         void Process(LootWorkingSet<T> workingSet, LootContext context);
     }
+
+    /// <summary>
+    /// A strategy that modifies the loot table (weights, entries) before any items are rolled.
+    /// These strategies are executed during the "dry-run" preview.
+    /// </summary>
+    public interface ILootTableModifierStrategy<T> : ILootStrategy<T> { }
+
+    /// <summary>
+    /// A strategy that selects items from the table and adds them as results.
+    /// These strategies are typically skipped during the "dry-run" preview.
+    /// </summary>
+    public interface ILootGeneratorStrategy<T> : ILootStrategy<T> { }
+
+    /// <summary>
+    /// A strategy that modifies loot results after they have been generated.
+    /// </summary>
+    public interface ILootResultModifierStrategy<T> : ILootStrategy<T>
+    {
+        /// <summary>
+        /// Allows the strategy to reflect its changes in a table preview.
+        /// For example, a quantity modifier can update the preview quantities of all entries.
+        /// </summary>
+        void OnPreview(LootTablePreview<T> preview, LootContext context) { }
+    }
 }
