@@ -21,8 +21,6 @@ namespace NS.UnifiedLoot.Examples {
     /// <para><b>Assign the asset</b> to the matching slot on <see cref="GoblinEncounterExample"/>
     /// and it will override the code-defined fallback table at runtime.</para>
     /// </summary>
-    [CreateAssetMenu(
-        menuName = "UnifiedLoot/Examples/Goblin Item Table",
-        fileName = "New Goblin Item Table")]
+    [CreateAssetMenu(menuName = "UnifiedLoot/Examples/Goblin Item Table", fileName = "New Goblin Item Table")]
     public class GoblinItemTable : LootTableAsset<GoblinItem> { }
 }

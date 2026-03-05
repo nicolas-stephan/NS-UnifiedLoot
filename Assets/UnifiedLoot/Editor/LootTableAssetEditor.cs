@@ -1,13 +1,32 @@
 using UnityEngine;
 using UnityEditor;
+using System.Collections.Generic;
 
 namespace NS.UnifiedLoot.Editor {
     [CustomEditor(typeof(LootTableAssetBase), true)]
     public class LootTableAssetEditor : UnityEditor.Editor {
         public override void OnInspectorGUI() {
+            serializedObject.Update();
+
             DrawDefaultInspector();
             EditorGUILayout.Space(EditorGUIUtility.standardVerticalSpacing * 2f);
             DrawProbabilitySummary();
+            DrawCircularDependencyError();
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void DrawCircularDependencyError() {
+            var asset = target as LootTableAssetBase;
+            if (asset == null)
+                return;
+
+            var stack = new List<LootTableAssetBase>();
+            if (!asset.HasCircularDependency(stack))
+                return;
+
+            var chain = string.Join(" → ", stack.ConvertAll(s => s != null ? s.name : "(null)"));
+            EditorGUILayout.HelpBox($"Circular Dependency Detected!\n{chain}", MessageType.Error);
         }
 
         private void DrawProbabilitySummary() {
@@ -40,11 +59,13 @@ namespace NS.UnifiedLoot.Editor {
                 totalWeight += weights[i];
 
                 var weightW = contentStyle.CalcSize(new GUIContent($"{weights[i]:F3}")).x;
-                if (weightW > maxWeightW) maxWeightW = weightW;
+                if (weightW > maxWeightW)
+                    maxWeightW = weightW;
 
                 var qtyProp = entry.FindPropertyRelative(LootEntryDataBase.NameOfQuantity);
                 var qtyW = contentStyle.CalcSize(new GUIContent(GetQuantityLabel(qtyProp))).x;
-                if (qtyW > maxQtyW) maxQtyW = qtyW;
+                if (qtyW > maxQtyW)
+                    maxQtyW = qtyW;
             }
 
             EditorGUILayout.LabelField($"Total weight: {totalWeight:F3}   ·   {entryCount} entries", EditorStyles.miniLabel);
@@ -82,11 +103,19 @@ namespace NS.UnifiedLoot.Editor {
 
         private static void DrawSummaryRow(SerializedProperty elem, float weight, float totalWeight, int index, float colW, float colPct, float colQty) {
             var itemProp = elem.FindPropertyRelative(LootTableAsset<object>.LootEntryData.NameOfItem);
+            var subTableProp = elem.FindPropertyRelative(LootTableAsset<object>.LootEntryData.NameOfSubTable);
+            var typeProp = elem.FindPropertyRelative(LootTableAsset<object>.LootEntryData.NameOfEntryType);
             var qtyProp = elem.FindPropertyRelative(LootEntryDataBase.NameOfQuantity);
 
-            var itemLabel = GetItemLabel(itemProp, index);
+            string itemLabel;
+            string qtyLabel = GetQuantityLabel(qtyProp);
+
+            if (typeProp is { enumValueIndex: (int)LootEntryType.SubTable })
+                itemLabel = subTableProp.objectReferenceValue != null ? $"[Table] {subTableProp.objectReferenceValue.name}" : "[Table] (null)";
+            else
+                itemLabel = GetItemLabel(itemProp, index);
+
             var pct = totalWeight > 0f ? weight / totalWeight * 100f : 0f;
-            var qtyLabel = GetQuantityLabel(qtyProp);
 
             using (new EditorGUILayout.HorizontalScope()) {
                 EditorGUILayout.LabelField(itemLabel, EditorStyles.miniLabel, GUILayout.MinWidth(80f));
@@ -104,10 +133,25 @@ namespace NS.UnifiedLoot.Editor {
                 if (weights[i] <= 0f)
                     EditorGUILayout.HelpBox($"Entry #{i} has weight ≤ 0.", MessageType.Warning);
 
-                var itemProp = entriesProp.GetArrayElementAtIndex(i).FindPropertyRelative(LootTableAsset<object>.LootEntryData.NameOfItem);
-                if (itemProp is { propertyType: SerializedPropertyType.ObjectReference }
-                    && itemProp.objectReferenceValue == null)
-                    EditorGUILayout.HelpBox($"Entry #{i} has a null item reference.", MessageType.Warning);
+                var entry = entriesProp.GetArrayElementAtIndex(i);
+                var itemProp = entry.FindPropertyRelative(LootTableAsset<object>.LootEntryData.NameOfItem);
+                var subTableProp = entry.FindPropertyRelative(LootTableAsset<object>.LootEntryData.NameOfSubTable);
+                var typeProp = entry.FindPropertyRelative(LootTableAsset<object>.LootEntryData.NameOfEntryType);
+
+                var isSubTable = typeProp is { enumValueIndex: (int)LootEntryType.SubTable };
+
+                if (isSubTable) {
+                    if (subTableProp == null || subTableProp.objectReferenceValue == null)
+                        EditorGUILayout.HelpBox($"Entry #{i} has a null sub-table reference.", MessageType.Warning);
+                } else {
+                    var hasItem = itemProp is { propertyType: SerializedPropertyType.ObjectReference }
+                        ? itemProp.objectReferenceValue != null
+                        : itemProp is not { propertyType: SerializedPropertyType.String } ||
+                          !string.IsNullOrEmpty(itemProp.stringValue);
+
+                    if (!hasItem)
+                        EditorGUILayout.HelpBox($"Entry #{i} has a null item reference.", MessageType.Warning);
+                }
             }
         }
 

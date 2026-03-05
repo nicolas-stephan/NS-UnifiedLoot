@@ -10,23 +10,27 @@ namespace NS.UnifiedLoot {
         private struct SubTableInfo {
             public ILootTable<T> Table;
             public float SelectionWeight;
+            public IntRange QuantityMultiplier;
         }
 
         private readonly List<SubTableInfo> _subTables = new();
 
-        public CompositeTableBuilder<T> Add(ILootTable<T> table, float selectionWeight) {
+        public CompositeTableBuilder<T> Add(ILootTable<T> table, float selectionWeight, IntRange? quantityMultiplier = null) {
             if (table == null)
                 throw new ArgumentNullException(nameof(table));
-            _subTables.Add(new SubTableInfo { Table = table, SelectionWeight = selectionWeight });
+            _subTables.Add(new SubTableInfo {
+                Table = table,
+                SelectionWeight = selectionWeight,
+                QuantityMultiplier = quantityMultiplier ?? 1
+            });
             return this;
         }
 
         public CompositeTableBuilder<T> AddMany(IEnumerable<(ILootTable<T> table, float weight)> tables) {
             if (tables == null)
                 throw new ArgumentNullException(nameof(tables));
-            foreach (var (table, weight) in tables) {
+            foreach (var (table, weight) in tables)
                 Add(table, weight);
-            }
 
             return this;
         }
@@ -55,7 +59,8 @@ namespace NS.UnifiedLoot {
                 for (var i = 0; i < table.Count; i++) {
                     var entry = table[i];
                     var scaledWeight = tableProportion * (entry.Weight / totalEntryWeight);
-                    flattenedEntries.Add(new LootEntry<T>(entry.Item, scaledWeight, entry.Quantity));
+                    var finalQuantity = entry.Quantity * sub.QuantityMultiplier;
+                    flattenedEntries.Add(new LootEntry<T>(entry.Item, scaledWeight, finalQuantity));
                 }
             }
 

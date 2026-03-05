@@ -41,6 +41,9 @@ namespace NS.UnifiedLoot {
         public static bool operator ==(IntRange left, IntRange right) => left.Equals(right);
         public static bool operator !=(IntRange left, IntRange right) => !left.Equals(right);
 
+        public static IntRange operator *(IntRange left, IntRange right) => new(left.min * right.min, left.max * right.max);
+        public static IntRange operator *(IntRange left, int multiplier) => new(left.min * multiplier, left.max * multiplier);
+
         public static implicit operator IntRange(int value) => new(value);
     }
 }

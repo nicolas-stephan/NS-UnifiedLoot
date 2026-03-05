@@ -7,13 +7,15 @@ namespace NS.UnifiedLoot.Editor {
         private static float VerticalGap => EditorGUIUtility.standardVerticalSpacing;
         private static float HorizontalGap => EditorGUIUtility.standardVerticalSpacing * 2f;
 
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) =>
-            (EditorGUIUtility.singleLineHeight + VerticalGap) * 2 + VerticalGap;
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+            => (EditorGUIUtility.singleLineHeight + VerticalGap) * 3 + VerticalGap;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
             var weightProp = property.FindPropertyRelative(LootEntryDataBase.NameOfWeight);
             var quantityProp = property.FindPropertyRelative(LootEntryDataBase.NameOfQuantity);
+            var typeProp = property.FindPropertyRelative(LootTableAsset<object>.LootEntryData.NameOfEntryType);
             var itemProp = property.FindPropertyRelative(LootTableAsset<object>.LootEntryData.NameOfItem);
+            var subTableProp = property.FindPropertyRelative(LootTableAsset<object>.LootEntryData.NameOfSubTable);
 
             EditorGUI.BeginProperty(position, label, property);
             var oldIndent = EditorGUI.indentLevel;
@@ -23,9 +25,19 @@ namespace NS.UnifiedLoot.Editor {
             var lh = EditorGUIUtility.singleLineHeight;
             var rowH = lh + VerticalGap;
 
-            DrawWeightQuantityRow(new Rect(x, position.y + VerticalGap, position.width, lh), weightProp, quantityProp);
-            if (itemProp != null)
-                DrawItemRow(new Rect(x, position.y + rowH + VerticalGap, position.width, lh), itemProp);
+            var rectType = new Rect(x, position.y + VerticalGap, position.width, lh);
+            typeProp.enumValueIndex = GUI.Toolbar(rectType, typeProp.enumValueIndex, new[] { "Item", "Sub-Table" });
+
+            DrawWeightQuantityRow(new Rect(x, position.y + rowH + VerticalGap, position.width, lh), weightProp, quantityProp);
+
+            var rectEntry = new Rect(x, position.y + rowH * 2 + VerticalGap, position.width, lh);
+            if (typeProp.enumValueIndex == (int)LootEntryType.Item) {
+                if (itemProp != null)
+                    DrawItemRow(rectEntry, itemProp, "Item");
+            } else {
+                if (subTableProp != null)
+                    DrawItemRow(rectEntry, subTableProp, "Sub-Table");
+            }
 
             EditorGUI.indentLevel = oldIndent;
             EditorGUI.EndProperty();
@@ -110,17 +122,17 @@ namespace NS.UnifiedLoot.Editor {
                 EditorGUI.PropertyField(new Rect(x, y, qtyFieldW, h), quantityProp, GUIContent.none);
         }
 
-        private static void DrawItemRow(Rect row, SerializedProperty itemProp) {
+        private static void DrawItemRow(Rect row, SerializedProperty property, string label) {
             var x = row.x;
             var y = row.y;
             var h = row.height;
 
-            var labelContent = new GUIContent("Item");
-            var labelW = EditorStyles.miniLabel.CalcSize(labelContent).x + VerticalGap;
+            var labelContent = new GUIContent(label);
+            var labelW = EditorStyles.miniLabel.CalcSize(new GUIContent("Sub-Table")).x + VerticalGap;
             EditorGUI.LabelField(new Rect(x, y, labelW, h), labelContent, EditorStyles.miniLabel);
             x += labelW;
 
-            EditorGUI.PropertyField(new Rect(x, y, row.xMax - x, h), itemProp, GUIContent.none);
+            EditorGUI.PropertyField(new Rect(x, y, row.xMax - x, h), property, GUIContent.none);
         }
 
         internal static string FormatRange(int min, int max) => min == max ? $"\u00d7{min}" : $"\u00d7[{min},{max}]";

@@ -103,7 +103,7 @@ namespace NS.UnifiedLoot.Examples {
         /// table with the same entries as a sensible default.
         /// </summary>
         private ILootTable<GoblinItem> ResolveGoblinTable() {
-            return goblinTable as ILootTable<GoblinItem> ?? new LootTable<GoblinItem>()
+            return goblinTable != null ? goblinTable.ToTable() : new LootTable<GoblinItem>()
                 .Add(GoblinItem.Coin, weight: 60f, minQuantity: 1, maxQuantity: 10)
                 .Add(GoblinItem.HealthPotion, weight: 20f)
                 .Add(GoblinItem.ManaPotion, weight: 10f)
@@ -118,17 +118,17 @@ namespace NS.UnifiedLoot.Examples {
         /// inline code-defined sub-tables.
         /// </summary>
         private ILootTable<GoblinItem> ResolveCaptainTable() {
-            var common = captainCommonTable as ILootTable<GoblinItem> ?? new LootTable<GoblinItem>()
+            var common = captainCommonTable != null ? captainCommonTable.ToTable() : new LootTable<GoblinItem>()
                 .Add(GoblinItem.Coin, weight: 60f, minQuantity: 5, maxQuantity: 25)
                 .Add(GoblinItem.HealthPotion, weight: 25f)
                 .Add(GoblinItem.ManaPotion, weight: 15f);
 
-            var weapons = captainWeaponTable as ILootTable<GoblinItem> ?? new LootTable<GoblinItem>()
+            var weapons = captainWeaponTable != null ? captainWeaponTable.ToTable() : new LootTable<GoblinItem>()
                 .Add(GoblinItem.IronSword, weight: 50f)
                 .Add(GoblinItem.SteelSword, weight: 35f)
                 .Add(GoblinItem.MagicStaff, weight: 15f);
 
-            var rare = captainRareTable as ILootTable<GoblinItem> ?? new LootTable<GoblinItem>()
+            var rare = captainRareTable != null ? captainRareTable.ToTable() : new LootTable<GoblinItem>()
                 .Add(GoblinItem.GoblinKingsCrown, weight: 1f);
 
             return new CompositeTableBuilder<GoblinItem>()
