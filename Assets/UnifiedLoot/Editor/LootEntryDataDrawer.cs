@@ -1,3 +1,4 @@
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 using UnityEngine;
 using UnityEditor;
 
@@ -7,8 +8,26 @@ namespace NS.UnifiedLoot.Editor {
         private static float VerticalGap => EditorGUIUtility.standardVerticalSpacing;
         private static float HorizontalGap => EditorGUIUtility.standardVerticalSpacing * 2f;
 
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-            => (EditorGUIUtility.singleLineHeight + VerticalGap) * 3 + VerticalGap;
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
+            var typeProp = property.FindPropertyRelative(LootTableAsset<object>.LootEntryData.NameOfEntryType);
+            var itemProp = property.FindPropertyRelative(LootTableAsset<object>.LootEntryData.NameOfItem);
+            var subTableProp = property.FindPropertyRelative(LootTableAsset<object>.LootEntryData.NameOfSubTable);
+
+            var h = (EditorGUIUtility.singleLineHeight + VerticalGap) * 2 + VerticalGap;
+
+            if (typeProp != null) {
+                if (typeProp.enumValueIndex == (int)LootEntryType.Item && itemProp != null)
+                    h += EditorGUI.GetPropertyHeight(itemProp, true) + VerticalGap;
+                else if (typeProp.enumValueIndex == (int)LootEntryType.SubTable && subTableProp != null)
+                    h += EditorGUI.GetPropertyHeight(subTableProp, true) + VerticalGap;
+                else
+                    h += EditorGUIUtility.singleLineHeight + VerticalGap;
+            } else {
+                h += EditorGUIUtility.singleLineHeight + VerticalGap;
+            }
+
+            return h;
+        }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
             var weightProp = property.FindPropertyRelative(LootEntryDataBase.NameOfWeight);
@@ -26,17 +45,23 @@ namespace NS.UnifiedLoot.Editor {
             var rowH = lh + VerticalGap;
 
             var rectType = new Rect(x, position.y + VerticalGap, position.width, lh);
-            typeProp.enumValueIndex = GUI.Toolbar(rectType, typeProp.enumValueIndex, new[] { "Item", "Sub-Table" });
+            if (typeProp != null)
+                typeProp.enumValueIndex = GUI.Toolbar(rectType, typeProp.enumValueIndex, new[] { "Item", "Sub-Table" });
 
             DrawWeightQuantityRow(new Rect(x, position.y + rowH + VerticalGap, position.width, lh), weightProp, quantityProp);
 
-            var rectEntry = new Rect(x, position.y + rowH * 2 + VerticalGap, position.width, lh);
-            if (typeProp.enumValueIndex == (int)LootEntryType.Item) {
-                if (itemProp != null)
-                    DrawItemRow(rectEntry, itemProp, "Item");
-            } else {
-                if (subTableProp != null)
-                    DrawItemRow(rectEntry, subTableProp, "Sub-Table");
+            if (typeProp != null) {
+                if (typeProp.enumValueIndex == (int)LootEntryType.Item) {
+                    if (itemProp != null) {
+                        var h = EditorGUI.GetPropertyHeight(itemProp, true);
+                        DrawItemRow(new Rect(x, position.y + rowH * 2 + VerticalGap, position.width, h), itemProp, "Item");
+                    }
+                } else {
+                    if (subTableProp != null) {
+                        var h = EditorGUI.GetPropertyHeight(subTableProp, true);
+                        DrawItemRow(new Rect(x, position.y + rowH * 2 + VerticalGap, position.width, h), subTableProp, "Sub-Table");
+                    }
+                }
             }
 
             EditorGUI.indentLevel = oldIndent;
@@ -129,10 +154,10 @@ namespace NS.UnifiedLoot.Editor {
 
             var labelContent = new GUIContent(label);
             var labelW = EditorStyles.miniLabel.CalcSize(new GUIContent("Sub-Table")).x + VerticalGap;
-            EditorGUI.LabelField(new Rect(x, y, labelW, h), labelContent, EditorStyles.miniLabel);
+            EditorGUI.LabelField(new Rect(x, y, labelW, EditorGUIUtility.singleLineHeight), labelContent, EditorStyles.miniLabel);
             x += labelW;
 
-            EditorGUI.PropertyField(new Rect(x, y, row.xMax - x, h), property, GUIContent.none);
+            EditorGUI.PropertyField(new Rect(x, y, row.xMax - x, h), property, GUIContent.none, true);
         }
 
         internal static string FormatRange(int min, int max) => min == max ? $"\u00d7{min}" : $"\u00d7[{min},{max}]";

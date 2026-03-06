@@ -1,4 +1,6 @@
-namespace NS.UnifiedLoot {
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
+
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Tables {
     /// <summary>
     /// Default implementation of <see cref="ILootEntry{T}"/> for code-defined loot tables.
     /// </summary>
@@ -25,11 +27,5 @@ namespace NS.UnifiedLoot {
 
         public static LootEntry<T> Create<T>(T item, float weight, int minQuantity, int maxQuantity)
             => new(item, weight, new IntRange(minQuantity, maxQuantity));
-
-        /// <summary>
-        /// Creates an "empty" entry. When this entry is selected by a weighted roll,
-        /// no item is added to the results — it represents an empty drop slot.
-        /// </summary>
-        public static LootEntry<T> Empty<T>(float weight = 1f) => new(default, weight);
     }
 }

@@ -1,6 +1,10 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Preview;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 
 namespace NS.UnifiedLoot.Editor {
     [CustomEditor(typeof(LootTableAssetBase), true)]
@@ -278,6 +282,7 @@ namespace NS.UnifiedLoot.Editor {
         private static string GetItemLabel(SerializedProperty? itemProp, int index) {
             if (itemProp == null)
                 return $"Entry #{index}";
+            
             return itemProp.propertyType switch {
                 SerializedPropertyType.ObjectReference =>
                     itemProp.objectReferenceValue != null
@@ -291,8 +296,22 @@ namespace NS.UnifiedLoot.Editor {
                     itemProp.enumDisplayNames.Length > itemProp.enumValueIndex
                         ? itemProp.enumDisplayNames[itemProp.enumValueIndex]
                         : $"#{index}",
+                SerializedPropertyType.Generic => 
+                    GetGenericLabel(itemProp, index),
                 _ => $"Entry #{index}"
             };
+        }
+
+        private static string GetGenericLabel(SerializedProperty prop, int index) {
+            var nameProp = prop.FindPropertyRelative("ItemName") 
+                        ?? prop.FindPropertyRelative("Name") 
+                        ?? prop.FindPropertyRelative("name");
+            
+            if (nameProp != null && nameProp.propertyType == SerializedPropertyType.String) {
+                return !string.IsNullOrEmpty(nameProp.stringValue) ? nameProp.stringValue : $"(empty name) #{index}";
+            }
+            
+            return $"Entry #{index}";
         }
 
         private static string GetQuantityLabel(SerializedProperty? qtyProp) {

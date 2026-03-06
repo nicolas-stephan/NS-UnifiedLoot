@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Random;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 
-namespace NS.UnifiedLoot {
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Core {
     /// <summary>
     /// The working state passed through the loot pipeline.
     /// Strategies read from and write to this set during processing.
@@ -38,12 +40,11 @@ namespace NS.UnifiedLoot {
         public bool CollectMetadata { get; internal set; } = true;
 
         /// <summary>
-        /// A free-form blackboard strategies can use to communicate intermediate data
-        /// with each other within a single pipeline execution. Unlike <see cref="LootContext"/>,
-        /// which is caller-owned and persists across calls, the blackboard is cleared between
+        /// Type-safe blackboard strategies can use to communicate intermediate data
+        /// with each other within a single pipeline execution. The blackboard is cleared between
         /// every execution.
         /// </summary>
-        public Dictionary<string, object> Blackboard { get; } = new();
+        public Context Blackboard { get; } = new();
 
         /// <summary>
         /// Clears the working set for reuse.
@@ -63,11 +64,11 @@ namespace NS.UnifiedLoot {
 
         /// <summary>
         /// Adds a result from an entry, rolling quantity.
-        /// Entries with a null item are silently skipped (empty/sentinel entries).
+        /// Entries with a null item are silently skipped (empty entries).
         /// </summary>
         public void AddResult(ILootEntry<T> entry, int entryIndex, float rollValue) {
             if (entry.Item is null)
-                return; // empty sentinel entry — nothing dropped
+                return;
 
             var quantity = entry.Quantity.Roll(Random);
             var metadata = CollectMetadata

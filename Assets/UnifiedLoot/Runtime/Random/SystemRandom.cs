@@ -1,4 +1,4 @@
-namespace NS.UnifiedLoot {
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Random {
     /// <summary>
     /// Default implementation using System.Random.
     /// </summary>

@@ -1,6 +1,7 @@
 using System;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
 
-namespace NS.UnifiedLoot {
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
     /// <summary>
     /// Filters results based on a simple predicate.
     /// </summary>
@@ -14,7 +15,7 @@ namespace NS.UnifiedLoot {
         public FilterStrategy(Func<LootResult<T>, bool> predicate)
             => _predicate = predicate ?? throw new ArgumentNullException(nameof(predicate));
 
-        public void Process(LootWorkingSet<T> workingSet, LootContext context) {
+        public void Process(LootWorkingSet<T> workingSet, Context context) {
             for (var i = workingSet.Results.Count - 1; i >= 0; i--)
                 if (!_predicate(workingSet.Results[i]))
                     workingSet.Results.RemoveAt(i);

@@ -1,0 +1,21 @@
+pdf: true
+pdfFileName: unified-loot-manual.pdf
+items:
+  - name: Getting Started
+    href: index.md
+  - name: Tables
+    href: tables.md
+  - name: Context System
+    href: context.md
+  - name: Strategies
+    href: strategies.md
+  - name: Preview System
+    href: preview.md
+  - name: Pity Systems
+    href: pity-systems.md
+  - name: Item Factories
+    href: factories.md
+  - name: Observers
+    href: observers.md
+  - name: Advanced
+    href: advanced.md

@@ -13,31 +13,14 @@ MonoBehaviour:
   m_Name: New Goblin Item Table
   m_EditorClassIdentifier: NS.UnifiedLoot.Example.Goblin::NS.UnifiedLoot.Examples.GoblinItemTable
   entries:
-  - weight: 5e+13
+  - weight: 0
     quantity:
-      min: 2147483647
-      max: 2147483647
+      min: 0
+      max: 0
     entryType: 0
-    item: 0
+    item:
+      ItemName: New Item
+      Color: {r: 1, g: 1, b: 1, a: 1}
+      BaseValue: 10
+      IconUnicode: "\U0001F4E6"
     subTable: {fileID: 0}
-  - weight: 4
-    quantity:
-      min: 2147483645
-      max: 2147483647
-    entryType: 0
-    item: 0
-    subTable: {fileID: 0}
-  - weight: 4
-    quantity:
-      min: 2147483645
-      max: 2147483647
-    entryType: 0
-    item: 0
-    subTable: {fileID: 0}
-  - weight: 4
-    quantity:
-      min: 2147483645
-      max: 2147483647
-    entryType: 1
-    item: 0
-    subTable: {fileID: 11400000, guid: 70d711458f8ea7448961ce58cb9a7acd, type: 2}

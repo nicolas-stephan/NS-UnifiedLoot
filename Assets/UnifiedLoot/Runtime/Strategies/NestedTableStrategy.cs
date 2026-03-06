@@ -1,8 +1,9 @@
 using System;
-using System.Collections.Generic;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 using UnityEngine.Pool;
 
-namespace NS.UnifiedLoot {
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
     /// <summary>
     /// Allows rolling on additional tables from the results.
     /// Useful for nested loot pools (e.g., a "weapon" entry that rolls on a weapon-specific table).
@@ -22,7 +23,7 @@ namespace NS.UnifiedLoot {
             _pipeline = pipeline ?? new LootPipeline<T>().AddStrategy(new WeightedRandomStrategy<T>());
         }
 
-        public void Process(LootWorkingSet<T> workingSet, LootContext context) {
+        public void Process(LootWorkingSet<T> workingSet, Context context) {
             var toAdd = ListPool<LootResult<T>>.Get();
             var toRemove = ListPool<int>.Get();
 

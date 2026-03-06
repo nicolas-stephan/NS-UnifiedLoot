@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
 
-namespace NS.UnifiedLoot {
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Tables {
     /// <summary>
     /// Builder for creating a flattened, immutable loot table from multiple sub-tables.
     /// Replaces the runtime CompositeTable.
@@ -35,7 +36,7 @@ namespace NS.UnifiedLoot {
             return this;
         }
 
-        public ILootTable<T> Build() {
+        public LootTable<T> Build() {
             var totalSelectionWeight = 0f;
             foreach (var sub in _subTables)
                 totalSelectionWeight += sub.SelectionWeight;

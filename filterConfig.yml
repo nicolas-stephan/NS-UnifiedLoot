@@ -1,0 +1,13 @@
+﻿apiRules:
+
+  - exclude:
+      uidRegex: ^System\.Object
+  - exclude:
+      uidRegex: ^System\.ValueType
+  - exclude:
+      uidRegex: ^System\.Enum
+  - exclude:
+      hasAttribute:
+        uid: System.ObsoleteAttribute
+  - exclude:
+       uidRegex: .*\.Internal

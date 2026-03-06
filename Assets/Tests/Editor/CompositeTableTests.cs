@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 using NUnit.Framework;
 
 namespace NS.UnifiedLoot.Tests {
@@ -17,8 +18,8 @@ namespace NS.UnifiedLoot.Tests {
             var composite = new CompositeTableBuilder<Item>().Add(tableA, 1f).Add(tableB, 1f).Build();
 
             Assert.AreEqual(2, composite.Count);
-            Assert.IsTrue(composite.Any(e => Equals(e.Item, Item.Sword)), "Sword entry expected.");
-            Assert.IsTrue(composite.Any(e => Equals(e.Item, Item.Potion)), "Potion entry expected.");
+            Assert.IsTrue(Enumerable.Range(0, composite.Count).Select(i => composite[i]).Any(e => Equals(e.Item, Item.Sword)), "Sword entry expected.");
+            Assert.IsTrue(Enumerable.Range(0, composite.Count).Select(i => composite[i]).Any(e => Equals(e.Item, Item.Potion)), "Potion entry expected.");
         }
 
         [Test]
@@ -30,7 +31,7 @@ namespace NS.UnifiedLoot.Tests {
 
             var composite = new CompositeTableBuilder<Item>().Add(tableA, 0.3f).Add(tableB, 0.7f).Build();
 
-            var entries = composite.ToList();
+            var entries = Enumerable.Range(0, composite.Count).Select(i => composite[i]).ToList();
             Assert.AreEqual(2, entries.Count);
 
             var swordWeight = entries.First(e => Equals(e.Item, Item.Sword)).Weight;
@@ -50,7 +51,7 @@ namespace NS.UnifiedLoot.Tests {
             var tableB = new LootTable<Item>().Add(Item.Potion, 10f);
 
             var composite = new CompositeTableBuilder<Item>().Add(tableA, 0.3f).Add(tableB, 0.7f).Build();
-            var entries = composite.ToList();
+            var entries = Enumerable.Range(0, composite.Count).Select(i => composite[i]).ToList();
 
             var swordW = entries.First(e => Equals(e.Item, Item.Sword)).Weight;
             var arrowW = entries.First(e => Equals(e.Item, Item.Arrow)).Weight;
@@ -70,7 +71,7 @@ namespace NS.UnifiedLoot.Tests {
             var composite = new CompositeTableBuilder<Item>().AddMany(new[] { (tableA as ILootTable<Item>, 0.5f), (tableB as ILootTable<Item>, 0.5f) }).Build();
 
             Assert.AreEqual(2, composite.Count);
-            Assert.AreEqual(0.5f, composite.First(e => Equals(e.Item, Item.Sword)).Weight, 0.0001f);
+            Assert.AreEqual(0.5f, Enumerable.Range(0, composite.Count).Select(i => composite[i]).First(e => Equals(e.Item, Item.Sword)).Weight, 0.0001f);
         }
 
     }

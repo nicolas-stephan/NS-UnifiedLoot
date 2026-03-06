@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 using NUnit.Framework;
 
 namespace NS.UnifiedLoot.Tests {
@@ -11,7 +14,7 @@ namespace NS.UnifiedLoot.Tests {
             public int CallCount { get; private set; }
             public IReadOnlyList<LootResult<Item>> LastResults { get; private set; } = new List<LootResult<Item>>();
 
-            public void OnRollComplete(ILootTable<Item> table, IReadOnlyList<LootResult<Item>> results, LootContext context) {
+            public void OnRollComplete(ILootTable<Item> table, IReadOnlyList<LootResult<Item>> results, Context context) {
                 CallCount++;
                 LastResults = results;
             }

@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
 using UnityEngine.Pool;
 
-namespace NS.UnifiedLoot {
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
     /// <summary>
     /// Consolidates duplicate items by combining their quantities.
     /// Useful after strategies that might produce multiple rolls of the same item.
@@ -11,7 +12,7 @@ namespace NS.UnifiedLoot {
 
         public ConsolidateResultsStrategy(IEqualityComparer<T>? comparer = null) => _comparer = comparer ?? EqualityComparer<T>.Default;
 
-        public void Process(LootWorkingSet<T> workingSet, LootContext context) {
+        public void Process(LootWorkingSet<T> workingSet, Context context) {
             if (workingSet.Results.Count <= 1)
                 return;
 

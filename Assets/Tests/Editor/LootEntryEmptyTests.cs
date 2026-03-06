@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 using NUnit.Framework;
 
 namespace NS.UnifiedLoot.Tests {
@@ -10,7 +13,7 @@ namespace NS.UnifiedLoot.Tests {
             // With many rolls, at most Sword should appear — empty entries never produce results
             var table = new LootTable<string>()
                 .Add("Sword")
-                .Add(LootEntry.Empty<string>());
+                .AddEmpty(1);
 
             var pipeline = new LootPipeline<string>()
                 .AddStrategy(new WeightedRandomStrategy<string>(100));
@@ -18,13 +21,6 @@ namespace NS.UnifiedLoot.Tests {
             var results = new List<LootResult<string>>();
             pipeline.Execute(table, results);
             Assert.IsTrue(results.All(r => r.Item != null), "Empty entries should not produce null-item results.");
-        }
-
-        [Test]
-        public void EmptyEntry_Item_IsDefault() {
-            var entry = LootEntry.Empty<string>(2f);
-            Assert.IsNull(entry.Item);
-            Assert.AreEqual(2f, entry.Weight);
         }
     }
 }

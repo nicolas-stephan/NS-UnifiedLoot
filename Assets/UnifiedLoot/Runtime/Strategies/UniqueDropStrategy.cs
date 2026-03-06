@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
 
-namespace NS.UnifiedLoot {
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
     /// <summary>
     /// Tracks items that have already dropped and prevents duplicates.
     /// Useful for one-time drops (e.g., unique quest items, first-time boss kills).
@@ -11,7 +12,7 @@ namespace NS.UnifiedLoot {
         public UniqueDropStrategy(IEqualityComparer<T>? comparer = null)
             => _droppedItems = new HashSet<T>(comparer ?? EqualityComparer<T>.Default);
 
-        public void Process(LootWorkingSet<T> workingSet, LootContext context) {
+        public void Process(LootWorkingSet<T> workingSet, Context context) {
             for (var i = workingSet.Results.Count - 1; i >= 0; i--) {
                 var item = workingSet.Results[i].Item;
 

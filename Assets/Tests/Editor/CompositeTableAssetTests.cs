@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 using NUnit.Framework;
 using UnityEngine;
 

@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 
-namespace NS.UnifiedLoot {
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Preview {
     /// <summary>
     /// Utility for calculating the "dry run" state of a loot table processed by a pipeline.
     /// Useful for showing users what a loot table looks like after modifications.
@@ -14,7 +15,7 @@ namespace NS.UnifiedLoot {
         /// Strategies that filter or generate results based on randomness (like WeightedRandomStrategy) are partially
         /// reflected in weight changes, but not as specific "results".
         /// </summary>
-        public static LootTablePreview<T> GetPreview<T>(LootPipeline<T> pipeline, ILootTable<T> table, LootContext? context = null) {
+        public static LootTablePreview<T> GetPreview<T>(LootPipeline<T> pipeline, ILootTable<T> table, Context? context = null) {
             context ??= LootPipeline.EmptyContext;
             var preview = new LootTablePreview<T>();
             

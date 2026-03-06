@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 using NUnit.Framework;
 
 namespace NS.UnifiedLoot.Tests {
@@ -41,14 +44,14 @@ namespace NS.UnifiedLoot.Tests {
 
         [Test]
         public void ModifyWeight_MultiplierFromContext_UsesContextValue() {
-            var luckKey = new ContextKey<float>("Luck");
+            var luckKey = new Key<float>("Luck");
             var table = new LootTable<Item>().Add(Item.Common).Add(Item.Rare);
 
             var pipeline = new LootPipeline<Item>()
                 .AddStrategy(ModifyWeightStrategy<Item>.MultiplierFromContext(luckKey))
                 .AddStrategy(new WeightedRandomStrategy<Item>());
 
-            var context = new LootContext().Set(luckKey, 0f);
+            var context = new Context().Set(luckKey, 0f);
             var results = new List<LootResult<Item>>();
             pipeline.Execute(table, results, context);
             Assert.AreEqual(0, results.Count);

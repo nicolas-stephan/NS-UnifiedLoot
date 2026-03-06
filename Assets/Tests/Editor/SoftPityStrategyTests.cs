@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 using NUnit.Framework;
 
 namespace NS.UnifiedLoot.Tests {
@@ -9,7 +12,7 @@ namespace NS.UnifiedLoot.Tests {
         }
 
         private class NeverDropStrategy<T> : ILootStrategy<T> {
-            public void Process(LootWorkingSet<T> workingSet, LootContext context) { }
+            public void Process(LootWorkingSet<T> workingSet, Context context) { }
         }
 
         [Test]

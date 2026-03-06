@@ -1,0 +1,64 @@
+/* Copyright (c) Microsoft Corporation. All Rights Reserved. Licensed under the MIT License. See License.txt in the project root for license information. */
+
+/* Checkout https://getbootstrap.com/docs/5.3/customize/color/ for more customization options */
+:root {
+    --stride-red: #FC365B;
+    --stride-red-web: #da0830;
+    --bs-link-color-rgb: 218, 8, 48 !important;
+    --bs-link-hover-color-rgb: 174, 6, 38 !important;
+}
+/* Tempory fix, stopped working from docfx 2.78.5 */
+/*@media (min-width: 1400px) {
+    .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+        max-width: 1768px;
+    }
+}*/
+
+.navbar-brand #logo {
+    width: 124px;
+    height: 37px;
+}
+
+#navbar ul.navbar-nav {
+    margin-top: -3px;
+}
+
+.filter input, .search input {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    font-size: .875rem;
+    border-radius: var(--bs-border-radius-sm);
+}
+
+[data-bs-theme=light] body {
+    background-image: url(../media/bg_light.svg);
+}
+
+/* ToDo: JavaScipt needs to be hooked to theme selector to switch logo */
+
+[data-bs-theme=dark] {
+    --logo: url(../media/stride-logo-dark-theme.svg) no-repeat;
+    --bs-link-color-rgb: 245, 122, 122 !important;
+    --bs-link-hover-color-rgb: 247, 149, 149 !important;
+}
+
+.link-secondary {
+    padding-left: 10px;
+    display: block;
+}
+
+footer .link-danger {
+    color: var(--stride-red-web);
+}
+
+blockquote {
+    border-width: 0 0 0 4px;
+    border-color: var(--stride-red-web);
+    background: #f4f4f4;
+    padding: 9px .8em 1px 0.8em;
+}
+
+[data-bs-theme=dark] blockquote {
+    border-color: var(--stride-red-web);
+    background: #33383c;
+}

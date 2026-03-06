@@ -1,4 +1,6 @@
-namespace NS.UnifiedLoot {
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
+
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
     /// <summary>
     /// Limits the number of results to a maximum count.
     /// </summary>
@@ -7,7 +9,7 @@ namespace NS.UnifiedLoot {
 
         public LimitResultsStrategy(int maxResults) => _maxResults = maxResults;
 
-        public void Process(LootWorkingSet<T> workingSet, LootContext context) {
+        public void Process(LootWorkingSet<T> workingSet, Context context) {
             if (workingSet.Results.Count > _maxResults)
                 workingSet.Results.RemoveRange(_maxResults, workingSet.Results.Count - _maxResults);
         }

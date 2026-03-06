@@ -1,9 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
 using UnityEngine;
 
-namespace NS.UnifiedLoot {
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Tables {
     /// <summary>
     /// A ScriptableObject-based loot table for designer-defined loot.
     /// </summary>
@@ -44,7 +44,7 @@ namespace NS.UnifiedLoot {
         internal void TriggerValidate() => OnValidate();
 #endif
 
-        private ILootTable<TItem> _cachedTable;
+        private LootTable<TItem>? _cachedTable;
         private int _id;
 
         public int Id => _id != 0 ? _id : (_id = LootTableIdGenerator.GetNextId());
@@ -66,7 +66,7 @@ namespace NS.UnifiedLoot {
         /// This table is immutable and uses precomputed weights for performance.
         /// </summary>
         /// <returns>A runtime-ready loot table.</returns>
-        public ILootTable<TItem> ToTable() {
+        public LootTable<TItem> ToTable() {
             if (_cachedTable != null)
                 return _cachedTable;
 

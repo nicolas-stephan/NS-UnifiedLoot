@@ -1,7 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
 
-namespace NS.UnifiedLoot {
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Tables {
     /// <summary>
     /// A simple code-defined loot table.
     /// </summary>
@@ -22,13 +22,18 @@ namespace NS.UnifiedLoot {
             _entries = new List<ILootEntry<T>>(entries);
         }
 
+        public LootTable<T> AddEmpty(float weight = 1f) {
+            _entries.Add(new LootEntry<T>(default, weight));
+            return this;
+        }
+
         public LootTable<T> Add(T item, float weight = 1f) {
             _entries.Add(new LootEntry<T>(item, weight));
             return this;
         }
 
-        public LootTable<T> Add(T item, float weight, int quantity) {
-            _entries.Add(new LootEntry<T>(item, weight, new IntRange(quantity)));
+        public LootTable<T> Add(T item, float weight, IntRange quantity) {
+            _entries.Add(new LootEntry<T>(item, weight, quantity));
             return this;
         }
 
@@ -41,8 +46,5 @@ namespace NS.UnifiedLoot {
             _entries.Add(entry);
             return this;
         }
-
-        public IEnumerator<ILootEntry<T>> GetEnumerator() => _entries.GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

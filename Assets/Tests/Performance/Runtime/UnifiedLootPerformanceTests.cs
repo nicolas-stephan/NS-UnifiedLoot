@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 using NUnit.Framework;
 using Unity.PerformanceTesting;
 
@@ -20,10 +23,10 @@ namespace NS.UnifiedLoot.Tests.Performance {
         private LootTable<TestItem> _table = null!;
         private LootPipeline<TestItem> _simplePipeline = null!;
         private LootPipeline<TestItem> _complexPipeline = null!;
-        private LootContext _context = null!;
+        private Context _context = null!;
         private List<LootResult<TestItem>> _reusableResults = null!;
 
-        private static readonly ContextKey<float> LuckKey = new("Luck");
+        private static readonly Key<float> LuckKey = new("Luck");
 
         [SetUp]
         public void Setup() {
@@ -49,7 +52,7 @@ namespace NS.UnifiedLoot.Tests.Performance {
                 .AddStrategy(new ConsolidateResultsStrategy<TestItem>())
                 .AddStrategy(new LimitResultsStrategy<TestItem>(10));
 
-            _context = new LootContext().Set(LuckKey, 0.15f);
+            _context = new Context().Set(LuckKey, 0.15f);
             _reusableResults = new List<LootResult<TestItem>>();
         }
         

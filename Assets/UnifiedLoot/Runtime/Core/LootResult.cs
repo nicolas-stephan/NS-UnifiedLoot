@@ -1,4 +1,4 @@
-namespace NS.UnifiedLoot {
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Core {
     /// <summary>
     /// Represents a single item drop result from the loot system.
     /// </summary>

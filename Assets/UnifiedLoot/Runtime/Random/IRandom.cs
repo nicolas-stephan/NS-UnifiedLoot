@@ -1,5 +1,4 @@
-namespace NS.UnifiedLoot
-{
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Random {
     /// <summary>
     /// Abstraction for random number generation, allowing for deterministic/seeded randomness.
     /// </summary>

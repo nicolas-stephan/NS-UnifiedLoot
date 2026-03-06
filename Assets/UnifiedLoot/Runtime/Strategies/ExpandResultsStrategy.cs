@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
 using UnityEngine.Pool;
 
-namespace NS.UnifiedLoot {
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
     /// <summary>
     /// Replaces individual results with an expanded collection — useful for "drop sets"
     /// where one logical item resolves into a group of concrete items.
@@ -32,7 +33,7 @@ namespace NS.UnifiedLoot {
             _quantityResolver = quantityResolver;
         }
 
-        public void Process(LootWorkingSet<T> workingSet, LootContext context) {
+        public void Process(LootWorkingSet<T> workingSet, Context context) {
             var expanded = ListPool<LootResult<T>>.Get();
             var anyExpanded = false;
 

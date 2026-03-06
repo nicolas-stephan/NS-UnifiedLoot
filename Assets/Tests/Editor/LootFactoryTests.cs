@@ -1,4 +1,8 @@
 ﻿using System.Collections.Generic;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Random;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 using NUnit.Framework;
 
 namespace NS.UnifiedLoot.Tests {
@@ -16,7 +20,7 @@ namespace NS.UnifiedLoot.Tests {
         }
 
         private class WeaponFactory : ILootFactory<WeaponDefinition, WeaponInstance> {
-            public WeaponInstance Create(WeaponDefinition definition, LootContext context, IRandom random) {
+            public WeaponInstance Create(WeaponDefinition definition, Context context, IRandom random) {
                 return new WeaponInstance {
                     Name = definition.Name,
                     Damage = definition.DamageRange.Roll(random),
@@ -26,11 +30,11 @@ namespace NS.UnifiedLoot.Tests {
         }
 
         private class LevelScalingWeaponFactory : ILootFactory<WeaponDefinition, WeaponInstance> {
-            private readonly ContextKey<int> _levelKey;
+            private readonly Key<int> _levelKey;
 
-            public LevelScalingWeaponFactory(ContextKey<int> levelKey) { _levelKey = levelKey; }
+            public LevelScalingWeaponFactory(Key<int> levelKey) { _levelKey = levelKey; }
 
-            public WeaponInstance Create(WeaponDefinition definition, LootContext context, IRandom random) {
+            public WeaponInstance Create(WeaponDefinition definition, Context context, IRandom random) {
                 var level = context.GetOrDefault(_levelKey, 1);
                 return new WeaponInstance {
                     Name = definition.Name,
@@ -81,7 +85,7 @@ namespace NS.UnifiedLoot.Tests {
 
         [Test]
         public void ExecuteAndBuild_FactoryReceivesContext() {
-            var levelKey = new ContextKey<int>("PlayerLevel");
+            var levelKey = new Key<int>("PlayerLevel");
 
             var table = new LootTable<WeaponDefinition>()
                 .Add(new WeaponDefinition { Name = "Sword", DamageRange = new IntRange(10, 20), CritChance = 0.1f });
@@ -90,7 +94,7 @@ namespace NS.UnifiedLoot.Tests {
                 .AddStrategy(new WeightedRandomStrategy<WeaponDefinition>());
 
             var factory = new LevelScalingWeaponFactory(levelKey);
-            var context = new LootContext().Set(levelKey, 10);
+            var context = new Context().Set(levelKey, 10);
 
             var results = new List<BuiltLootResult<WeaponDefinition, WeaponInstance>>();
             pipeline.ExecuteAndBuild(table, factory, results, context);

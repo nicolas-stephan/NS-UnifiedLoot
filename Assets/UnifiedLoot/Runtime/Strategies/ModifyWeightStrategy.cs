@@ -1,12 +1,13 @@
 using System;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
 
-namespace NS.UnifiedLoot {
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
     /// <summary>
     /// Scales the weights of weighted entries before selection strategies run.
     /// Must be placed <em>before</em> <see cref="WeightedRandomStrategy{T}"/> in the pipeline.
     /// </summary>
     public class ModifyWeightStrategy<T> : ILootTableModifierStrategy<T> {
-        private readonly Func<WeightedEntry<T>, LootContext, float> _modifier;
+        private readonly Func<WeightedEntry<T>, Context, float> _modifier;
 
         /// <summary>
         /// Creates a weight modifier with a custom delegate.
@@ -14,7 +15,7 @@ namespace NS.UnifiedLoot {
         /// <param name="modifier">
         /// Returns the new weight for an entry. Negative values are clamped to zero.
         /// </param>
-        public ModifyWeightStrategy(Func<WeightedEntry<T>, LootContext, float> modifier)
+        public ModifyWeightStrategy(Func<WeightedEntry<T>, Context, float> modifier)
             => _modifier = modifier ?? throw new ArgumentNullException(nameof(modifier));
 
         /// <summary>
@@ -27,20 +28,20 @@ namespace NS.UnifiedLoot {
         /// Reads a float multiplier from the context and applies it to every entry's weight.
         /// Falls back to <paramref name="defaultMultiplier"/> when the key is absent.
         /// </summary>
-        public static ModifyWeightStrategy<T> MultiplierFromContext(ContextKey<float> key, float defaultMultiplier = 1f)
+        public static ModifyWeightStrategy<T> MultiplierFromContext(Key<float> key, float defaultMultiplier = 1f)
             => new((entry, ctx) => entry.Weight * ctx.GetOrDefault(key, defaultMultiplier));
 
         /// <summary>
-        /// Multiplies weights of entries whose level context value falls within <paramref name="levelRange"/>.
+        /// Multiplies weights of entries whose context value falls within <paramref name="range"/>.
         /// Entries outside the range are left unchanged.
         /// </summary>
-        public static ModifyWeightStrategy<T> ScaleByLevelRange(ContextKey<int> levelKey, IntRange levelRange, float multiplier)
+        public static ModifyWeightStrategy<T> ScaleByContextRange(Key<int> key, IntRange range, float multiplier)
             => new((entry, ctx) => {
-                var level = ctx.GetOrDefault(levelKey);
-                return levelRange.Contains(level) ? entry.Weight * multiplier : entry.Weight;
+                var value = ctx.GetOrDefault(key);
+                return range.Contains(value) ? entry.Weight * multiplier : entry.Weight;
             });
 
-        public void Process(LootWorkingSet<T> workingSet, LootContext context) {
+        public void Process(LootWorkingSet<T> workingSet, Context context) {
             if (workingSet.WeightedEntries.Count == 0)
                 return;
 

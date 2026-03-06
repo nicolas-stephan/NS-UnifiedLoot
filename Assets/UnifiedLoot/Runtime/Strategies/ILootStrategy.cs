@@ -1,4 +1,7 @@
-namespace NS.UnifiedLoot
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Preview;
+
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies
 {
     /// <summary>
     /// A single step in the loot pipeline. Strategies can generate, filter, or modify loot results.
@@ -11,7 +14,7 @@ namespace NS.UnifiedLoot
         /// </summary>
         /// <param name="workingSet">The current state of the loot roll, including results and table reference.</param>
         /// <param name="context">Contextual data for this roll (player stats, etc.).</param>
-        void Process(LootWorkingSet<T> workingSet, LootContext context);
+        void Process(LootWorkingSet<T> workingSet, Context context);
     }
 
     /// <summary>
@@ -35,6 +38,6 @@ namespace NS.UnifiedLoot
         /// Allows the strategy to reflect its changes in a table preview.
         /// For example, a quantity modifier can update the preview quantities of all entries.
         /// </summary>
-        void OnPreview(LootTablePreview<T> preview, LootContext context) { }
+        void OnPreview(LootTablePreview<T> preview, Context context) { }
     }
 }

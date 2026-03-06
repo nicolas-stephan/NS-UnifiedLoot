@@ -1,4 +1,4 @@
-namespace NS.UnifiedLoot {
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Core {
     /// <summary>
     /// Implemented by stateful strategies that support full state reset.
     /// Use <c>pipeline.Strategies.OfType&lt;IResettable&gt;()</c> to reset all stateful

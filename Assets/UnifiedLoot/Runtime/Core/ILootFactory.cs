@@ -1,5 +1,6 @@
-namespace NS.UnifiedLoot
-{
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Random;
+
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Core {
     /// <summary>
     /// Factory interface for converting loot definitions into actual item instances.
     /// Users implement this to define how their items are created from loot results.
@@ -15,6 +16,6 @@ namespace NS.UnifiedLoot
         /// <param name="context">The loot context (for accessing player stats, etc.).</param>
         /// <param name="random">The random number generator.</param>
         /// <returns>The created item instance.</returns>
-        TInstance Create(TDefinition definition, LootContext context, IRandom random);
+        TInstance Create(TDefinition definition, Context context, IRandom random);
     }
 }

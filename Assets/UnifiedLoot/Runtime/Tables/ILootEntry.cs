@@ -1,4 +1,6 @@
-namespace NS.UnifiedLoot
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
+
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Tables
 {
     /// <summary>
     /// Represents a single entry in a loot table.
@@ -8,7 +10,7 @@ namespace NS.UnifiedLoot
     {
         /// <summary>
         /// The item that can drop. May be <c>null</c> for "empty" entries
-        /// (see <see cref="LootEntry.Empty{T}"/>). Strategies treat a null item as
+        /// Strategies treat a null item as
         /// "nothing dropped from this slot."
         /// </summary>
         T? Item { get; }

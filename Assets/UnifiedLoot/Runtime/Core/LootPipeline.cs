@@ -1,8 +1,12 @@
 using System.Collections.Generic;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Random;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
+using UnityEngine.Pool;
 
-namespace NS.UnifiedLoot {
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Core {
     internal static class LootPipeline {
-        internal static readonly LootContext EmptyContext = new();
+        internal static readonly Context EmptyContext = new();
     }
 
     /// <summary>
@@ -88,7 +92,7 @@ namespace NS.UnifiedLoot {
         /// <summary>
         /// Executes the pipeline and writes results to an existing list (reduces allocations).
         /// </summary>
-        public void Execute(ILootTable<T> table, List<LootResult<T>> results, LootContext? context = null, IRandom? random = null) {
+        public void Execute(ILootTable<T> table, List<LootResult<T>> results, Context? context = null, IRandom? random = null) {
             context ??= LootPipeline.EmptyContext;
             random ??= _defaultRandom;
 
@@ -112,7 +116,40 @@ namespace NS.UnifiedLoot {
             }
         }
 
-        private void NotifyObservers(ILootTable<T> table, IReadOnlyList<LootResult<T>> results, LootContext context) {
+        /// <summary>
+        /// Executes the pipeline and converts results using a factory.
+        /// </summary>
+        /// <typeparam name="TInstance">The instance type to create.</typeparam>
+        /// <param name="table">The loot table to roll against.</param>
+        /// <param name="factory">The factory to convert definitions to instances.</param>
+        /// <param name="results">The list to append results to.</param>
+        /// <param name="context">Optional context data.</param>
+        /// <param name="random">Optional random override.</param>
+        /// <returns>List of built loot results with instances.</returns>
+        public void ExecuteAndBuild<TInstance>(ILootTable<T> table, ILootFactory<T, TInstance> factory, List<BuiltLootResult<T, TInstance>> results, Context? context = null,
+            IRandom? random = null) {
+            context ??= LootPipeline.EmptyContext;
+            random ??= _defaultRandom;
+
+            var rawResults = ListPool<LootResult<T>>.Get();
+            try {
+                Execute(table, rawResults, context, random);
+
+                foreach (var result in rawResults) {
+                    var instance = factory.Create(result.Item, context, random);
+                    results.Add(new BuiltLootResult<T, TInstance> {
+                        Definition = result.Item,
+                        Instance = instance,
+                        Quantity = result.Quantity,
+                        Metadata = result.Metadata
+                    });
+                }
+            } finally {
+                ListPool<LootResult<T>>.Release(rawResults);
+            }
+        }
+
+        private void NotifyObservers(ILootTable<T> table, IReadOnlyList<LootResult<T>> results, Context context) {
             foreach (var observer in _observers)
                 observer.OnRollComplete(table, results, context);
         }
@@ -154,5 +191,36 @@ namespace NS.UnifiedLoot {
                 Pool.Push(workingSet);
             }
         }
+    }
+
+
+    /// <summary>
+    /// Result of a loot roll that has been built into an instance.
+    /// Contains both the original definition and the created instance.
+    /// </summary>
+    /// <typeparam name="TDefinition">The loot definition type.</typeparam>
+    /// <typeparam name="TInstance">The created instance type.</typeparam>
+    public readonly struct BuiltLootResult<TDefinition, TInstance> {
+        /// <summary>
+        /// The original loot definition that was rolled.
+        /// </summary>
+        public TDefinition Definition { get; init; }
+
+        /// <summary>
+        /// The created item instance.
+        /// </summary>
+        public TInstance Instance { get; init; }
+
+        /// <summary>
+        /// The quantity rolled.
+        /// </summary>
+        public int Quantity { get; init; }
+
+        /// <summary>
+        /// Metadata about the roll.
+        /// </summary>
+        public LootMetadata Metadata { get; init; }
+
+        public override string ToString() => Quantity == 1 ? $"{Instance}" : $"{Instance} x{Quantity}";
     }
 }

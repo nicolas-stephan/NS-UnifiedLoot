@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 using UnityEngine.Pool;
 
-namespace NS.UnifiedLoot {
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
     /// <summary>
     /// Generates loot results using weighted random selection.
     /// This is typically the first strategy in a pipeline.
@@ -20,7 +22,7 @@ namespace NS.UnifiedLoot {
             _allowDuplicates = allowDuplicates;
         }
 
-        public void Process(LootWorkingSet<T> workingSet, LootContext context) {
+        public void Process(LootWorkingSet<T> workingSet, Context context) {
             if (workingSet.WeightedEntries.Count == 0 || workingSet.TotalWeight <= 0f)
                 return;
 

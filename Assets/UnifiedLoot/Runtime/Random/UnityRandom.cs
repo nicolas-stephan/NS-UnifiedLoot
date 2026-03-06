@@ -1,5 +1,4 @@
-namespace NS.UnifiedLoot
-{
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Random {
     /// <summary>
     /// Implementation using Unity's random. Not seedable per-instance.
     /// </summary>

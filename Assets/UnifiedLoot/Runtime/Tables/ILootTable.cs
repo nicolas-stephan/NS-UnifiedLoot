@@ -1,12 +1,11 @@
-using System.Collections.Generic;
 using System.Threading;
 
-namespace NS.UnifiedLoot {
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Tables {
     /// <summary>
     /// Represents a collection of loot entries that can be rolled against.
     /// </summary>
     /// <typeparam name="T">The type of item in the table.</typeparam>
-    public interface ILootTable<out T> : IEnumerable<ILootEntry<T>> {
+    public interface ILootTable<out T> {
         int Id { get; }
 
         /// <summary>

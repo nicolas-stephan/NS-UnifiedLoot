@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Random;
+using NUnit.Framework;
 
 namespace NS.UnifiedLoot.Tests {
     public class IntRangeTests {

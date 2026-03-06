@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 
-namespace NS.UnifiedLoot {
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Core {
     /// <summary>
     /// Observes completed loot rolls. Register via <see cref="LootPipeline{T}.AddObserver"/>.
     /// Called after all strategies have finished processing.
@@ -13,6 +14,6 @@ namespace NS.UnifiedLoot {
         /// <param name="table">The table that was rolled against.</param>
         /// <param name="results">The final results after all strategies ran.</param>
         /// <param name="context">The context used for this roll.</param>
-        void OnRollComplete(ILootTable<T> table, IReadOnlyList<LootResult<T>> results, LootContext context);
+        void OnRollComplete(ILootTable<T> table, IReadOnlyList<LootResult<T>> results, Context context);
     }
 }

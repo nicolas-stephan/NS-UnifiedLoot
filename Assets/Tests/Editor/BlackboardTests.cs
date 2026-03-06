@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 using NUnit.Framework;
 
 namespace NS.UnifiedLoot.Tests {
@@ -7,15 +10,17 @@ namespace NS.UnifiedLoot.Tests {
             Sword
         }
 
+        private static readonly Key<int> TestKey = new("key");
+
         private class WriterStrategy : ILootStrategy<Item> {
-            public void Process(LootWorkingSet<Item> workingSet, LootContext context) => workingSet.Blackboard["key"] = 42;
+            public void Process(LootWorkingSet<Item> workingSet, Context context) => workingSet.Blackboard.Set(TestKey, 42);
         }
 
         private class ReaderStrategy : ILootStrategy<Item> {
             public int ReadValue { get; private set; }
 
-            public void Process(LootWorkingSet<Item> workingSet, LootContext context)
-                => ReadValue = workingSet.Blackboard.TryGetValue("key", out var v) ? (int)v : -1;
+            public void Process(LootWorkingSet<Item> workingSet, Context context)
+                => ReadValue = workingSet.Blackboard.GetOrDefault(TestKey, -1);
         }
 
         [Test]

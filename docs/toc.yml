@@ -1,0 +1,10 @@
+- name: 📖 UnifiedLoot Docs
+  href: index.md
+- name: 📚 Manual
+  href: manual/
+  homepage: manual/index.md
+- name: 🎓 Tutorials
+  href: tutorials/index.md
+- name: 🔧 API
+  href: api/
+  homepage: api/index.md

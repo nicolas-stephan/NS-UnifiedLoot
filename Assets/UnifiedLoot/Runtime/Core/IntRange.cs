@@ -1,7 +1,8 @@
 using System;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Random;
 using UnityEngine;
 
-namespace NS.UnifiedLoot {
+namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Core {
     /// <summary>
     /// Represents an inclusive integer range, typically used for quantity rolls.
     /// </summary>

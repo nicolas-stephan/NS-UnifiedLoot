@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using NS.UnifiedLoot;
+using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 
 namespace NS.UnifiedLoot.Tests {
     public class CircularDependencyTests {
