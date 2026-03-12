@@ -9,7 +9,7 @@
           "src": "."
         }
       ],
-      "dest": "docs/api",
+      "dest": "api",
       "filter": "filterConfig.yml",
       "includePrivateMembers": false,
       "disableGitFeatures": false,
@@ -24,7 +24,8 @@
     "globalMetadata": {
       "_appTitle": "Unified Loot",
       "_appName": "Unified Loot",
-      "_appLogoPath": "docs/media/logo.svg",
+      "_appLogoPath": "media/logo.png",
+      "_appFaviconPath": "media/logo.png",
       "_appFooter": "© 2026 Nicolas Stephan · MIT License",
       "_enableSearch": true,
       "_gitContribute": {
@@ -40,25 +41,25 @@
           "**/*.md",
           "**/toc.yml"
         ],
-        "src": "docs"
+        "src": ""
       },
       {
         "files": [
           "**.yml",
           "**/toc.yml"
         ],
-        "src": "docs/api"
+        "src": "api"
       }
     ],
     "styles": [
-      "styles/main.css"
+      "template/public/main.css"
     ],
     "resource": [
       {
         "files": [
-          "images/**"
+          "media/**"
         ],
-        "src": "docs"
+        "src": ""
       }
     ],
     "output": "_site",

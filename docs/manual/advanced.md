@@ -2,12 +2,6 @@
 
 ## Performance
 
-### Object pooling
-
-[LootWorkingSet<T>](xref:NS.UnifiedLoot.LootWorkingSet`1) is pooled internally. Every call to [Execute](xref:NS.UnifiedLoot.LootPipeline`1.Execute*) checks out a working set,
-runs strategies, copies results, then returns the working set to the pool. You pay no per-roll
-allocation for the working set itself.
-
 ### Avoiding result list allocations
 
 [!code-csharp[](../../Assets/UnifiedLoot/Samples~/Doc/AdvancedExamples.cs#avoidingAllocations)]

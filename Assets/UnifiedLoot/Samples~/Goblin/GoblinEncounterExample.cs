@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using NS.UnifiedLoot;
 using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
 using NS.UnifiedLoot.UnifiedLoot.Runtime.Random;
 using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
@@ -12,25 +11,17 @@ namespace NS.UnifiedLoot.Examples {
     /// <summary>
     /// End-to-end example of UnifiedLoot in a simple RPG enemy-kill scenario.
     ///
-    /// <para><b>Table data — two ways to supply it:</b></para>
-    /// <list type="number">
-    ///   <item>
-    ///     <b>Asset-driven (designer path):</b> create <see cref="GoblinItemTable"/> assets via
-    ///     <c>Create → UnifiedLoot/Examples/Goblin Item Table</c> and assign them in the Inspector.
-    ///     The probability summary and validation warnings appear live in the Inspector
-    ///     (powered by <c>LootTableAssetEditor</c>).
-    ///   </item>
-    ///   <item>
-    ///     <b>Code-defined (fallback):</b> leave all table slots empty and the component builds
-    ///     hard-coded tables at runtime — useful for quick iteration.
-    ///   </item>
-    /// </list>
+    /// <para><b>Table data supply:</b></para>
+    /// <para>Create <see cref="GoblinItemTable"/> assets via
+    /// <c>Create → UnifiedLoot/Examples/Goblin Item Table</c> and assign them in the Inspector.
+    /// The probability summary and validation warnings appear live in the Inspector
+    /// (powered by <c>LootTableAssetEditor</c>).</para>
     ///
     /// <para><b>Pipelines are always code-defined</b> — they describe <em>how</em> to roll,
     /// while the assets describe <em>what</em> can drop.</para>
     ///
     /// <para><b>Features demonstrated:</b>
-    /// <see cref="LootTableAsset{TItem}"/>, <see cref="CompositeTableBuilder{T}"/>,
+    /// <see cref="LootTableAsset{TItem}"/>,
     /// <see cref="WeightedRandomStrategy{T}"/>, <see cref="BonusRollStrategy{T}"/>,
     /// <see cref="ConsolidateResultsStrategy{T}"/>, <see cref="ModifyWeightStrategy{T}"/>,
     /// <see cref="SoftPityStrategy{T}"/>, <see cref="ILootObserver{T}"/>,
@@ -44,33 +35,13 @@ namespace NS.UnifiedLoot.Examples {
         private static readonly Key<int> PlayerLevel = new("PlayerLevel");
         private static readonly Key<string> Source = new("Source");
 
-        [Header("Goblin table  (leave empty to use the code-defined fallback)")]
+        [Header("Goblin table")]
         [Tooltip("Create via: Create → UnifiedLoot/Examples/Goblin Item Table")]
         [SerializeField] private GoblinItemTable? goblinTable;
 
-        [Header("Captain table pools  (all three must be assigned to use the asset path)")]
-        [Tooltip("Common drops: coins, potions. Assign a GoblinItemTable asset.")]
-        [SerializeField] private GoblinItemTable? captainCommonTable;
-
-        [Tooltip("Weapon drops: swords, staff. Assign a GoblinItemTable asset.")]
-        [SerializeField] private GoblinItemTable? captainWeaponTable;
-
-        [Tooltip("Rare drops: boss-exclusive items. Assign a GoblinItemTable asset.")]
-        [SerializeField] private GoblinItemTable? captainRareTable;
-
-        [Header("Fallback Definitions (used if assets above are empty)")]
-        [SerializeField] private GoblinItemDef? coinDef;
-        [SerializeField] private GoblinItemDef? healthPotionDef;
-        [SerializeField] private GoblinItemDef? manaPotionDef;
-        [SerializeField] private GoblinItemDef? ironSwordDef;
-        [SerializeField] private GoblinItemDef? steelSwordDef;
-        [SerializeField] private GoblinItemDef? magicStaffDef;
-        [SerializeField] private GoblinItemDef? goblinKingsCrownDef;
-
-        [Header("Selection weight for each captain sub-table (should sum to 1).")]
-        [SerializeField] private float captainCommonWeight = 0.60f;
-        [SerializeField] private float captainWeaponWeight = 0.35f;
-        [SerializeField] private float captainRareWeight = 0.05f;
+        [Header("Captain table")]
+        [Tooltip("Create via: Create → UnifiedLoot/Examples/Goblin Item Table")]
+        [SerializeField] private GoblinItemTable? captainTable;
 
         [Header("Player stats")]
         [Range(0f, 1f)]
@@ -97,8 +68,8 @@ namespace NS.UnifiedLoot.Examples {
             _context = new Context()
                 .Set(Luck, playerLuck)
                 .Set(PlayerLevel, 10);
-            _activeGoblinTable = ResolveGoblinTable();
-            _activeCaptainTable = ResolveCaptainTable();
+            _activeGoblinTable = goblinTable!.ToTable();
+            _activeCaptainTable = captainTable!.ToTable();
             _reusableResults = new List<BuiltLootResult<GoblinItemDef, GoblinItemInstance>>();
             BuildGoblinPipeline();
             BuildCaptainPipeline();
@@ -112,6 +83,7 @@ namespace NS.UnifiedLoot.Examples {
         }
 
 
+        #region factoryCreate
         /// <summary>
         /// Factory method to create runtime instances from definitions.
         /// Demonstrates how to inject logic (like luck-based value scaling) during the build process.
@@ -121,60 +93,13 @@ namespace NS.UnifiedLoot.Examples {
                 Name = definition.ItemName,
                 Color = definition.Color,
                 Icon = definition.IconUnicode,
-                // Fuller example: randomize value slightly based on luck
+                Rarity = definition.Rarity,
                 Value = Mathf.RoundToInt(definition.BaseValue * random.Range(0.9f, 1.1f) * (1f + context.GetOrDefault(Luck) * 0.5f))
             };
         }
+        #endregion
 
-        /// <summary>
-        /// Returns the designer asset if one is assigned; otherwise builds a code-defined
-        /// table using the fallback references.
-        /// </summary>
-        private ILootTable<GoblinItemDef> ResolveGoblinTable() {
-            if (goblinTable != null)
-                return goblinTable.ToTable();
-
-            return new LootTable<GoblinItemDef>()
-                .Add(coinDef!, 60f, 1, 10)
-                .Add(healthPotionDef!, 20f)
-                .Add(manaPotionDef!, 10f)
-                .Add(ironSwordDef!, 7f)
-                .Add(steelSwordDef!, 2f)
-                .Add(magicStaffDef!);
-        }
-
-        /// <summary>
-        /// Builds the captain's <see cref="LootTable{T}"/> using <see cref="CompositeTableBuilder{T}"/>.
-        /// Uses the three designer assets if all are assigned; otherwise falls back to
-        /// inline code-defined sub-tables using the fallback references.
-        /// </summary>
-        private ILootTable<GoblinItemDef> ResolveCaptainTable() {
-            var common = captainCommonTable != null ? captainCommonTable.ToTable() : new LootTable<GoblinItemDef>();
-            if (captainCommonTable == null) {
-                common.Add(coinDef!, weight: 60f, minQuantity: 5, maxQuantity: 25);
-                common.Add(healthPotionDef!, weight: 25f);
-                common.Add(manaPotionDef!, weight: 15f);
-            }
-
-            var weapons = captainWeaponTable != null ? captainWeaponTable.ToTable() : new LootTable<GoblinItemDef>();
-            if (captainWeaponTable == null) {
-                weapons.Add(ironSwordDef!, weight: 50f);
-                weapons.Add(steelSwordDef!, weight: 35f);
-                weapons.Add(magicStaffDef!, weight: 15f);
-            }
-
-            var rare = captainRareTable != null ? captainRareTable.ToTable() : new LootTable<GoblinItemDef>();
-            if (captainRareTable == null) {
-                rare.Add(goblinKingsCrownDef!, weight: 1f);
-            }
-
-            return new CompositeTableBuilder<GoblinItemDef>()
-                .Add(common, captainCommonWeight)
-                .Add(weapons, captainWeaponWeight)
-                .Add(rare, captainRareWeight)
-                .Build();
-        }
-
+        #region buildCaptainPipeline
         private void BuildCaptainPipeline() {
             //  1. ModifyWeight — GoblinKingsCrown weight scales with player luck
             //  2. WeightedRandom(1) — single roll from the Flattened table
@@ -184,16 +109,20 @@ namespace NS.UnifiedLoot.Examples {
             _captainPipeline = new LootPipeline<GoblinItemDef>()
                 .WithRandom(UnityRandom.Instance)
                 .AddStrategy(new ModifyWeightStrategy<GoblinItemDef>((entry, ctx) => {
-                    if (goblinKingsCrownDef == null || !ReferenceEquals(entry.Entry.Item, goblinKingsCrownDef))
+                    var item = entry.Entry.Item;
+                    if (item is not { Rarity: >= Rarity.Legendary })
                         return entry.Weight;
-                    var luck = ctx.GetOrDefault(Luck);
+
+                    var luck = Mathf.Clamp01(ctx.GetOrDefault(Luck));
                     return entry.Weight * (1f + luck * 3f);
                 }))
                 .AddStrategy(new WeightedRandomStrategy<GoblinItemDef>(rollCount: 1))
                 .AddStrategy(_captainPity)
                 .AddObserver(new ConsoleObserver<GoblinItemDef>("Captain"));
         }
+        #endregion
 
+        #region buildGoblinPipeline
         private void BuildGoblinPipeline() {
             //  1. ModifyWeight — rare items (SteelSword, MagicStaff) get a luck bonus
             //  2. WeightedRandom(3) — three rolls per kill
@@ -203,21 +132,22 @@ namespace NS.UnifiedLoot.Examples {
                 .WithRandom(UnityRandom.Instance)
                 .AddStrategy(new ModifyWeightStrategy<GoblinItemDef>((entry, ctx) => {
                     var item = entry.Entry.Item;
-                    if (ReferenceEquals(item, steelSwordDef) || ReferenceEquals(item, magicStaffDef)) {
-                        var luck = ctx.GetOrDefault(Luck);
-                        return entry.Weight * (1f + luck * 3f); // up to 4× at max luck
-                    }
+                    if (item is not { Rarity: >= Rarity.Rare })
+                        return entry.Weight;
 
-                    return entry.Weight;
+                    var luck = Mathf.Clamp01(ctx.GetOrDefault(Luck));
+                    return entry.Weight * (1f + luck * 3f); // up to 4× at max luck
                 }))
                 .AddStrategy(new WeightedRandomStrategy<GoblinItemDef>(rollCount: 3))
                 .AddStrategy(new BonusRollStrategy<GoblinItemDef>(Luck))
                 .AddStrategy(new ConsolidateResultsStrategy<GoblinItemDef>())
                 .AddObserver(new ConsoleObserver<GoblinItemDef>("Goblin"));
         }
+        #endregion
 
         private void UpdateContext() => _context.Set(Luck, playerLuck);
 
+        #region killGoblin
         [ContextMenu("Kill Goblin (roll loot)")]
         public List<BuiltLootResult<GoblinItemDef, GoblinItemInstance>> KillGoblin() {
             UpdateContext();
@@ -227,7 +157,9 @@ namespace NS.UnifiedLoot.Examples {
             LogBuiltResults("Goblin", _reusableResults);
             return _reusableResults;
         }
+        #endregion
 
+        #region killGoblinCaptain
         [ContextMenu("Kill Goblin Captain (roll loot)")]
         public List<BuiltLootResult<GoblinItemDef, GoblinItemInstance>> KillGoblinCaptain() {
             UpdateContext();
@@ -238,6 +170,7 @@ namespace NS.UnifiedLoot.Examples {
             Debug.Log($"[Pity] Current failure count: {_captainPity.GetFailureCount(_activeCaptainTable.Id)}");
             return _reusableResults;
         }
+        #endregion
 
         [ContextMenu("Reset Captain Pity Counter")]
         public void ResetCaptainPity() {

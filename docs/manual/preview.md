@@ -7,9 +7,9 @@ The Preview System allows you to perform "dry runs" of your loot tables through 
 
 ## Using the Editor Preview
 
-The easiest way to see the preview system in action is through the **Pipeline Preview Simulation** found on any [LootTableAsset](tables.md#scriptableobject-tables).
+The easiest way to see the preview system in action is through the **Pipeline Preview Simulation** found on any [LootTableAsset](tables.md#loottableasset--scriptableobject).
 
-1. Select a `LootTableAsset` in your Project window.
+1. Select a [LootTableAsset](tables.md#loottableasset--scriptableobject) in your Project window.
 2. In the Inspector, expand the **Pipeline Preview Simulation** foldout.
 3. This tool simulates a [ModifyWeightStrategy](strategies.md#modifyweightstrategy) applied to the table.
 4. You can see how the "Original Weight" compares to the "Modified Weight", and what the resulting drop probability (%) will be.

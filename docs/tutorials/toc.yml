@@ -1,0 +1,13 @@
+﻿pdf: true
+pdfFileName: unified-loot-tutorials.pdf
+items:
+  - name: Overview
+    href: index.md
+  - name: The Goblin Encounter
+    href: goblin-encounter.md
+  - name: Boss Loot Systems
+    href: boss-loot.md
+  - name: Gacha & Loot Boxes
+    href: gacha.md
+  - name: Dynamic Scaling
+    href: dynamic-scaling.md

@@ -2,18 +2,11 @@
 
 Welcome to the UnifiedLoot tutorials! This section provides hands-on guides for common game development scenarios.
 
-## Coming Soon
+- **[The Goblin Encounter](goblin-encounter.md)**: A complete, end-to-end example featuring custom definitions, factories, and complex pipelines.
+- **[Boss Loot Systems](boss-loot.md)**: How to handle multi-stage drops and guaranteed item types.
+- **[Gacha & Loot Boxes](gacha.md)**: Implementing pity systems and drop rate modifiers.
+- **[Dynamic Scaling](dynamic-scaling.md)**: Adjusting loot quality based on player stats or game difficulty.
 
-We are currently working on a series of tutorials to help you master UnifiedLoot:
+## Example Projects
 
-- **Boss Loot Systems**: How to handle multi-stage drops and guaranteed item types.
-- **Gacha & Loot Boxes**: Implementing pity systems and drop rate modifiers.
-- **Dynamic Scaling**: Adjusting loot quality based on player stats or game difficulty.
-
-## Example Project
-
-You can find a complete example of a loot system implementation in the package's `Assets/Examples/Goblin` directory. This example demonstrates:
-
-- Custom item definitions.
-- Building a pipeline with multiple strategies.
-- Handling roll results in a simple UI or console.
+You can find the complete source code for the tutorials in the package's `Assets/UnifiedLoot/Samples~` directory.
