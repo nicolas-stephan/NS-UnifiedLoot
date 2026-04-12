@@ -1,7 +1,7 @@
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Preview;
+using NS.UnifiedLoot;
+using NS.UnifiedLoot;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies
+namespace NS.UnifiedLoot
 {
     /// <summary>
     /// A single step in the loot pipeline. Strategies can generate, filter, or modify loot results.

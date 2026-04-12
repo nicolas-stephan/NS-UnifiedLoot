@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NS.UnifiedLoot;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
+using NS.UnifiedLoot;
+using NS.UnifiedLoot;
 using UnityEngine;
 
 public class ObserversExamples {

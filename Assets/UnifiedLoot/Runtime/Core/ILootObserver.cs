@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Core {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// Observes completed loot rolls. Register via <see cref="LootPipeline{T}.AddObserver"/>.
     /// Called after all strategies have finished processing.

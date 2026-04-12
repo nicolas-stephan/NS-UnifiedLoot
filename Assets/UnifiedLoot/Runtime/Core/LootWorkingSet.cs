@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Random;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Core {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// The working state passed through the loot pipeline.
     /// Strategies read from and write to this set during processing.

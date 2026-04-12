@@ -1,4 +1,4 @@
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
+using NS.UnifiedLoot;
 using UnityEngine;
 
 namespace NS.UnifiedLoot.Examples {

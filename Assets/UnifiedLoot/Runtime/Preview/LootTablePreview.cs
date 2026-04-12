@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
+using System.Collections.Generic;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Preview {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// Represents the state of a loot table after being processed by a pipeline,
     /// without actually performing any random rolls.

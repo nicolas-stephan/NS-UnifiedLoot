@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace NS.UnifiedLoot.Examples {
     #region bossItemDef
@@ -15,7 +15,7 @@ namespace NS.UnifiedLoot.Examples {
         public string ItemName = "Boss Drop";
         public Color Color = Color.white;
         public BossItemRarity Rarity = BossItemRarity.Common;
-        public string IconUnicode = "💎";
+        public string IconUnicode = "??";
         public bool IsWeapon;
 
         public override string ToString() => $"{IconUnicode} {ItemName}";

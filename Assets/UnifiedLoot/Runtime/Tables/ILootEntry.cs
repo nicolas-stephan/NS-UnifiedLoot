@@ -1,6 +1,6 @@
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
+using NS.UnifiedLoot;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Tables
+namespace NS.UnifiedLoot
 {
     /// <summary>
     /// Represents a single entry in a loot table.

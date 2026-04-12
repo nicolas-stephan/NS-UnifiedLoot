@@ -1,6 +1,6 @@
 using System.Threading;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Tables {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// Represents a collection of loot entries that can be rolled against.
     /// </summary>

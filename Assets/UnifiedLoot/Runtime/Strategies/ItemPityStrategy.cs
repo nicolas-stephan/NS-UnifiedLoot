@@ -1,15 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Pity;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// A strategy that tracks pity for specific items rather than the whole table.
     /// If a tracked item hasn't dropped for a certain number of rolls, it is guaranteed.
     /// </summary>
     /// <typeparam name="T">The type of item.</typeparam>
-    public class ItemPityStrategy<T> : ILootStrategy<T>, IResettable {
+    public class ItemPityStrategy<T> : ILootGeneratorStrategy<T>, IResettable {
         private readonly IPityTracker _tracker;
         private readonly Func<T, int> _idExtractor;
         private readonly Dictionary<int, PityConfig> _configs = new();
@@ -54,13 +52,13 @@ namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
                 var config = kvp.Value;
 
                 if (droppedIds.Contains(itemId)) {
-                    _tracker.RecordSuccess(itemId);
+                    _tracker.Record(itemId, PityResult.Success);
                 } else {
-                    _tracker.RecordFailure(itemId);
+                    _tracker.Record(itemId, PityResult.Failure);
                     if (_tracker.GetFailures(itemId) >= config.Threshold) {
                         // Guarantee the drop
                         ForceDrop(workingSet, itemId, config);
-                        _tracker.RecordSuccess(itemId);
+                        _tracker.Record(itemId, PityResult.Success);
                     }
                 }
             }
@@ -87,7 +85,7 @@ namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
         /// <summary>
         /// Resets the failure counter for an item.
         /// </summary>
-        public void Reset(T item) => _tracker.RecordSuccess(_idExtractor(item));
+        public void Reset(T item) => _tracker.Record(_idExtractor(item), PityResult.Success);
 
         /// <summary>
         /// Resets all failure counters.

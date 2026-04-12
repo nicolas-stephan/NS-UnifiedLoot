@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 using UnityEngine.Pool;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// Generates loot results using weighted random selection.
     /// This is typically the first strategy in a pipeline.

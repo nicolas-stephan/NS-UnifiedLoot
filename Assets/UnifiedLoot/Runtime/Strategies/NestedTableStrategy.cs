@@ -1,9 +1,7 @@
 using System;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 using UnityEngine.Pool;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// Allows rolling on additional tables from the results.
     /// Useful for nested loot pools (e.g., a "weapon" entry that rolls on a weapon-specific table).

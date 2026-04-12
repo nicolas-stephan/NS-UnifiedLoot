@@ -1,21 +1,15 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Random;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
+using NS.UnifiedLoot;
 
 namespace NS.UnifiedLoot.Examples {
     /// <summary>
     /// Gacha & Loot Box Example.
-    /// Demonstrates pity systems, multi-pulls, and dynamic drop rates.
+    /// Demonstrates pity systems, multi-pulls, and correct use of context reuse.
     /// </summary>
     public class GachaExample : MonoBehaviour, ILootFactory<GachaItemDef, GachaItemInstance> {
-        private static readonly Key<int> PityCount5Star = new("Pity5Star");
-        private static readonly Key<int> PityCount4Star = new("Pity4Star");
-
         [Header("Banner Settings")]
         [SerializeField] private GachaItemTable? bannerTable;
 
@@ -28,34 +22,28 @@ namespace NS.UnifiedLoot.Examples {
         [SerializeField] private int hardPity4Star = 10;
 
         private LootPipeline<GachaItemDef> _gachaPipeline = null!;
-        private int _currentPity5Star;
-        private int _currentPity4Star;
+        private GachaPitySystem _pitySystem = null!;
+        private Context _context = null!;
 
         private readonly List<BuiltLootResult<GachaItemDef, GachaItemInstance>> _recentPulls = new();
 
         #region gachaPipeline
         private void Awake() {
-            // Build the gacha pipeline
+            // 1. Initialize the pity system (holds state internally via IPityTracker)
+            _pitySystem = new GachaPitySystem(hardPity4Star, hardPity5Star, softPityStart5Star);
+
+            // 2. Reuse a single context for efficiency and data persistence across pulls
+            _context = new Context();
+
+            // 3. Build the gacha pipeline
             _gachaPipeline = new LootPipeline<GachaItemDef>()
                 .WithRandom(UnityRandom.Instance)
-                // 1. Soft Pity: Modify weight of 5-star items based on failure count
-                .AddStrategy(new ModifyWeightStrategy<GachaItemDef>((entry, ctx) => {
-                    if (entry.Entry.Item is not { Rarity: GachaRarity.FiveStar })
-                        return entry.Weight;
-
-                    var pity = ctx.GetOrDefault(PityCount5Star);
-                    if (pity < softPityStart5Star)
-                        return entry.Weight;
-
-                    // Increase weight linearly after soft pity start
-                    var boost = 1f + (pity - softPityStart5Star) * 10f;
-                    return entry.Weight * boost;
-                }))
-                // 2. Main roll
+                // Soft Pity: Modify weight of 5-star items using the pity system's current state
+                .AddStrategy(new ModifyWeightStrategy<GachaItemDef>(_pitySystem.GetSoftPityWeight))
+                // Main roll
                 .AddStrategy(new WeightedRandomStrategy<GachaItemDef>(rollCount: 1))
-                // 3. Hard Pity (4-star): If no 4-star or 5-star dropped in 10 rolls, force a 4-star
-                .AddStrategy(new GachaHardPityStrategy(hardPity4Star, hardPity5Star))
-                .AddObserver(new GachaObserver(this));
+                // Hard Pity: Force results if threshold reached and update pity state
+                .AddStrategy(_pitySystem);
         }
         #endregion
 
@@ -63,9 +51,7 @@ namespace NS.UnifiedLoot.Examples {
         [ContextMenu("Single Pull")]
         public void SinglePull() {
             _recentPulls.Clear();
-            var context = CreateContext();
-
-            _gachaPipeline.ExecuteAndBuild(bannerTable!.ToTable(), this, _recentPulls, context);
+            _gachaPipeline.ExecuteAndBuild(bannerTable!.ToTable(), this, _recentPulls, _context);
 
             LogResults("Single Pull");
         }
@@ -75,20 +61,12 @@ namespace NS.UnifiedLoot.Examples {
             _recentPulls.Clear();
 
             Debug.Log("<color=orange><b>Multi-Pull Start!</b></color>");
-            for (var i = 0; i < 10; i++) {
-                var context = CreateContext();
-                _gachaPipeline.ExecuteAndBuild(bannerTable!.ToTable(), this, _recentPulls, context);
-            }
+            for (var i = 0; i < 10; i++)
+                _gachaPipeline.ExecuteAndBuild(bannerTable!.ToTable(), this, _recentPulls, _context);
 
             LogResults("10-Pull");
         }
         #endregion
-
-        private Context CreateContext() {
-            return new Context()
-                .Set(PityCount5Star, _currentPity5Star)
-                .Set(PityCount4Star, _currentPity4Star);
-        }
 
         public GachaItemInstance Create(GachaItemDef definition, Context context, IRandom random) {
             return new GachaItemInstance {
@@ -111,51 +89,97 @@ namespace NS.UnifiedLoot.Examples {
                 sb.AppendLine($"- <color={color}>{pull}</color>");
             }
 
-            sb.AppendLine($"<i>Pity: 5★ ({_currentPity5Star}/{hardPity5Star}), 4★ ({_currentPity4Star}/{hardPity4Star})</i>");
+            sb.AppendLine($"<i>Pity: 5? ({_pitySystem.Pity5}/{hardPity5Star}), 4? ({_pitySystem.Pity4}/{hardPity4Star})</i>");
             Debug.Log(sb.ToString());
         }
 
-        #region customStrategy
+        #region pitySystem
         /// <summary>
-        /// Custom strategy to handle gacha-specific hard pity.
-        /// If the roll produced nothing of high rarity, and we hit the threshold, force a high rarity drop.
+        /// A cohesive pity system that handles soft pity weight modification,
+        /// hard pity enforcement, and success/failure tracking.
+        ///
+        /// <para>By implementing both <see cref="ILootStrategy{T}"/> and <see cref="ILootObserver{T}"/>,
+        /// it can be added to the pipeline once to handle multiple stages of the process.</para>
         /// </summary>
-        private class GachaHardPityStrategy : ILootGeneratorStrategy<GachaItemDef> {
+        private class GachaPitySystem : ILootGeneratorStrategy<GachaItemDef> {
+            private const int Key4 = 4;
+            private const int Key5 = 5;
+
+            private readonly IPityTracker _tracker = new PityTracker();
             private readonly int _threshold4;
             private readonly int _threshold5;
+            private readonly int _softPityStart5;
 
-            public GachaHardPityStrategy(int threshold4, int threshold5) {
+
+            public GachaPitySystem(int threshold4, int threshold5, int softPityStart5) {
                 _threshold4 = threshold4;
                 _threshold5 = threshold5;
+                _softPityStart5 = softPityStart5;
             }
 
-            public void Process(LootWorkingSet<GachaItemDef> workingSet, Context context) {
-                var pity5 = context.GetOrDefault(PityCount5Star);
-                var pity4 = context.GetOrDefault(PityCount4Star);
+            public int Pity5 => _tracker.GetFailures(Key5);
+            public int Pity4 => _tracker.GetFailures(Key4);
 
-                // If we reached 5-star hard pity
-                if (pity5 >= _threshold5 - 1) {
-                    workingSet.Results.Clear();
-                    TryRollFiltered(workingSet, entry => entry.Rarity == GachaRarity.FiveStar);
+            /// <summary>
+            /// Logic for soft pity weight modification.
+            /// </summary>
+            public float GetSoftPityWeight(WeightedEntry<GachaItemDef> we, Context context) {
+                if (we.Entry.Item?.Rarity != GachaRarity.FiveStar)
+                    return we.Weight;
+
+                var pity = _tracker.GetFailures(Key5);
+                if (pity < _softPityStart5)
+                    return we.Weight;
+
+                // Increase weight linearly after soft pity start
+                var boost = 1f + (pity - _softPityStart5) * 10f;
+                return we.Weight * boost;
+            }
+
+            /// <summary>
+            /// Logic for hard pity enforcement (guaranteed drops).
+            /// Runs after the main roll strategy.
+            /// </summary>
+            public void Process(LootWorkingSet<GachaItemDef> workingSet, Context context) {
+                // If the roll didn't happen or produced nothing, we can't enforce pity here
+                if (workingSet.Results.Count == 0)
                     return;
+
+                var pity5 = _tracker.GetFailures(Key5);
+                var pity4 = _tracker.GetFailures(Key4);
+
+                // 1. Check 5-star hard pity (must happen first as it's higher priority)
+                var got5Star = false;
+                if (
+                    pity5 >= _threshold5 - 1 &&
+                    workingSet.Results.All(r => r.Item.Rarity != GachaRarity.FiveStar)
+                ) {
+                    workingSet.Results.Clear();
+                    got5Star = TryRollFiltered(workingSet, GachaRarity.FiveStar);
                 }
 
-                // If we reached 4-star hard pity AND didn't get a 5-star
-                var hasHighRarity = workingSet.Results.Any(r => r.Item.Rarity >= GachaRarity.FourStar);
-                if (hasHighRarity || pity4 < _threshold4 - 1)
-                    return;
+                // 2. Check 4-star hard pity (only if no 5-star or 4-star dropped)
+                var hasHighRarity = !got5Star && workingSet.Results.Any(r => r.Item.Rarity >= GachaRarity.FourStar);
+                var got4Star = false;
+                if (!hasHighRarity && pity4 >= _threshold4 - 1) {
+                    workingSet.Results.Clear();
+                    got4Star = TryRollFiltered(workingSet, GachaRarity.FourStar);
+                }
 
-                workingSet.Results.Clear();
-                TryRollFiltered(workingSet, entry => entry.Rarity == GachaRarity.FourStar);
+                // 5-star resets on 5-star drop, otherwise increments
+                _tracker.Record(Key5, got5Star ? PityResult.Success : PityResult.Failure);
+
+                // 4-star resets on either 4-star or 5-star drop, otherwise increments
+                _tracker.Record(Key4, got5Star || got4Star ? PityResult.Success : PityResult.Failure);
             }
 
-            private void TryRollFiltered(LootWorkingSet<GachaItemDef> workingSet, System.Predicate<GachaItemDef> predicate) {
+            private bool TryRollFiltered(LootWorkingSet<GachaItemDef> workingSet, GachaRarity rarity) {
                 var filteredEntries = workingSet.WeightedEntries
-                    .Where(we => we.Entry.Item != null && predicate(we.Entry.Item))
+                    .Where(we => we.Entry.Item != null && we.Entry.Item.Rarity == rarity)
                     .ToList();
 
                 if (filteredEntries.Count == 0)
-                    return;
+                    return false;
 
                 var totalWeight = filteredEntries.Sum(we => we.Weight);
                 var roll = workingSet.Random.Range(0f, totalWeight);
@@ -166,34 +190,13 @@ namespace NS.UnifiedLoot.Examples {
                     if (!(roll <= current))
                         continue;
                     workingSet.AddResult(we.Entry, we.Index, totalWeight > 0 ? roll / totalWeight : 0);
-                    return;
+                    return true;
                 }
 
-                // Fallback to first if somehow failed
+                // Fallback
                 var first = filteredEntries[0];
                 workingSet.AddResult(first.Entry, first.Index, 1f);
-            }
-        }
-        #endregion
-
-        #region gachaObserver
-        private class GachaObserver : ILootObserver<GachaItemDef> {
-            private readonly GachaExample _example;
-            public GachaObserver(GachaExample example) => _example = example;
-
-            public void OnRollComplete(ILootTable<GachaItemDef> table, IReadOnlyList<LootResult<GachaItemDef>> results, Context context) {
-                var got5Star = results.Any(r => r.Item.Rarity == GachaRarity.FiveStar);
-                var got4Star = results.Any(r => r.Item.Rarity == GachaRarity.FourStar);
-
-                if (got5Star)
-                    _example._currentPity5Star = 0;
-                else
-                    _example._currentPity5Star++;
-
-                if (got5Star || got4Star)
-                    _example._currentPity4Star = 0;
-                else
-                    _example._currentPity4Star++;
+                return true;
             }
         }
         #endregion

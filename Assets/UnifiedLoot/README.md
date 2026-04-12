@@ -7,10 +7,10 @@ with high-frequency loot operations — think Path of Exile, Diablo, or Borderla
 
 - **Pipeline Architecture** — Compose strategies into a reusable processing chain
 - **Type-Safe Generics** — Bring your own item type: enum, struct, class, ScriptableObject
-- **Flexible Context** — Pass any runtime data to strategies via typed, int-keyed context keys
+- **Flexible Context** — Pass any runtime data to strategies via typed, int-keyed keys
 - **High Performance** — Object pooling, optional metadata, int IDs over strings
 - **Multiple Table Types** — Code-defined, ScriptableObject, or composite (merged sub-tables)
-- **Pity Systems** — Hard pity (`PityStrategy`) and soft pity (`SoftPityStrategy`) with group keys
+- **Pity Systems** — Hard pity (`PityStrategy`) with group keys
 - **Observer Pattern** — Hook into roll completions for analytics and logging
 - **Resettable Strategies** — `IResettable` interface for session resets
 - **Editor Tooling** — Custom inspector with probability summary and live validation
@@ -67,24 +67,24 @@ Pass runtime data to strategies without coupling them to your game logic:
 
 ```csharp
 // Define typed keys (create once, store as statics)
-public static class LootKeys
+public static class Keys
 {
-    public static readonly ContextKey<float> Luck       = new("Luck");
-    public static readonly ContextKey<int>   PlayerLevel = new("PlayerLevel");
-    public static readonly ContextKey<bool>  IsBoss      = new("IsBoss");
+    public static readonly Key<float> Luck       = new("Luck");
+    public static readonly Key<int>   PlayerLevel = new("PlayerLevel");
+    public static readonly Key<bool>  IsBoss      = new("IsBoss");
 }
 
 // Build pipeline using context
 var pipeline = new LootPipeline<ItemDef>()
     .AddStrategy(new WeightedRandomStrategy<ItemDef>(3))
-    .AddStrategy(new BonusRollStrategy<ItemDef>(LootKeys.Luck))
+    .AddStrategy(new BonusRollStrategy<ItemDef>(Keys.Luck))
     .AddStrategy(new ModifyWeightStrategy<ItemDef>(
-        ModifyWeightStrategy<ItemDef>.ScaleByLevelRange(LootKeys.PlayerLevel, minLevel: 1, maxLevel: 60)));
+        ModifyWeightStrategy<ItemDef>.ScaleByLevelRange(Keys.PlayerLevel, minLevel: 1, maxLevel: 60)));
 
 // Roll with context
-var context = new LootContext()
-    .With(LootKeys.Luck, 1.5f)
-    .With(LootKeys.PlayerLevel, 42);
+var context = new Context()
+    .Set(Keys.Luck, 1.5f)
+    .Set(Keys.PlayerLevel, 42);
 
 var results = pipeline.Execute(table, context);
 ```
@@ -104,7 +104,7 @@ var results = pipeline.Execute(table, context);
 | Strategy | Description |
 |----------|-------------|
 | `PityStrategy<T>` | Hard pity: guarantees a drop after N consecutive failures |
-| `SoftPityStrategy<T>` | Soft pity: linearly ramps bonus chance from a threshold up to a guarantee |
+| `ItemPityStrategy<T>` | Hard pity for a specific item |
 
 ### Modification
 
@@ -141,7 +141,7 @@ public class MinRarityFilter<T> : ILootStrategy<T> where T : IHasRarity
     readonly Rarity _min;
     public MinRarityFilter(Rarity min) => _min = min;
 
-    public void Process(LootWorkingSet<T> workingSet, LootContext context)
+    public void Process(LootWorkingSet<T> workingSet, Context context)
     {
         for (var i = workingSet.Results.Count - 1; i >= 0; i--)
             if (workingSet.Results[i].Item?.Rarity < _min)
@@ -191,9 +191,9 @@ When your table contains **definitions** (stat templates) and you need **instanc
 ```csharp
 public class WeaponFactory : ILootFactory<WeaponDef, WeaponInstance>
 {
-    public WeaponInstance Create(WeaponDef def, LootContext context)
+    public WeaponInstance Create(WeaponDef def, Context context)
     {
-        var level = context.GetOrDefault(LootKeys.PlayerLevel, 1);
+        var level = context.GetOrDefault(Keys.PlayerLevel, 1);
         return new WeaponInstance
         {
             Name   = def.Name,
@@ -218,7 +218,7 @@ public class LootAnalytics : ILootObserver<ItemDef>
 {
     public void OnRollComplete(ILootTable<ItemDef> table,
                                IReadOnlyList<LootResult<ItemDef>> results,
-                               LootContext context)
+                               Context context)
     {
         foreach (var r in results)
             Analytics.Track("item_dropped", r.Item?.Name, r.Quantity);
@@ -234,9 +234,6 @@ pipeline.AddObserver(new LootAnalytics());
 // Hard pity: guaranteed drop after 89 failures, resets on success
 var pity = new PityStrategy<Item>(threshold: 89);
 
-// Soft pity: ramp bonus chance from 75 failures, guarantee at 90
-var softPity = new SoftPityStrategy<Item>(softPityStart: 75, hardPityAt: 90);
-
 // Group key: share a pity counter across multiple tables
 var pity = new PityStrategy<Item>(threshold: 89, groupKey: 42);
 
@@ -249,7 +246,7 @@ pity.ResetAll();   // implements IResettable
 - Create `LootPipeline` and tables once; reuse them across many rolls
 - Use `.WithMetadata(false)` to skip metadata collection in hot paths
 - Use the `Execute(table, resultsList, context)` overload to avoid per-roll list allocations
-- `ContextKey<T>` uses an auto-incremented `int` ID — zero string overhead
+- `Key<T>` uses an auto-incremented `int` ID — zero string overhead
 - `LootWorkingSet<T>` is pooled internally
 
 ## Documentation

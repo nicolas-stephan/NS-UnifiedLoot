@@ -1,6 +1,5 @@
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Tables {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// Default implementation of <see cref="ILootEntry{T}"/> for code-defined loot tables.
     /// </summary>

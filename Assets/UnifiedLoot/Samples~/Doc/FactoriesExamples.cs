@@ -1,8 +1,8 @@
-ï»¿using System.Collections.Generic;
+using System.Collections.Generic;
 using NS.UnifiedLoot;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Random;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
+using NS.UnifiedLoot;
+using NS.UnifiedLoot;
+using NS.UnifiedLoot;
 using UnityEngine;
 
 public class FactoriesExamples {
@@ -40,14 +40,14 @@ public class FactoriesExamples {
         foreach (var r in built) {
             // inventory.Add(r.Instance, r.Quantity);
 
-            // r.Definition is also available â€” useful for analytics / logging
-            Debug.Log($"Rolled {r.Definition.Name} â†’ {r.Instance.Damage} dmg");
+            // r.Definition is also available — useful for analytics / logging
+            Debug.Log($"Rolled {r.Definition.Name} ? {r.Instance.Damage} dmg");
         }
         #endregion
     }
 
     #region scriptableObjectFactory
-    // Definition â€” ScriptableObject in the project
+    // Definition — ScriptableObject in the project
     [CreateAssetMenu(menuName = "Items/Weapon")]
     public class WeaponDef : ScriptableObject {
         public string displayName;
@@ -59,7 +59,7 @@ public class FactoriesExamples {
         public Rarity Rarity => rarity;
     }
 
-    // Instance â€” runtime data with rolled values
+    // Instance — runtime data with rolled values
     public class WeaponInstance {
         public string Name { get; init; }
         public int Damage { get; init; }
@@ -79,7 +79,7 @@ public class FactoriesExamples {
             };
     }
 
-    // Table â€” ScriptableObject in the editor
+    // Table — ScriptableObject in the editor
     [CreateAssetMenu(menuName = "Loot/Weapon Table")]
     public class WeaponLootTable : LootTableAsset<WeaponDef> { }
     #endregion

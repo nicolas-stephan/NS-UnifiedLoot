@@ -1,13 +1,11 @@
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Pity;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// Implements a pity/mercy system that guarantees a drop after N failures.
     /// Tracks state per-table (or per shared group) using integer keys.
     /// Implements <see cref="IResettable"/> so callers can reset all counters via the interface.
     /// </summary>
-    public class PityStrategy<T> : ILootTableModifierStrategy<T>, IResettable {
+    public class PityStrategy<T> : ILootGeneratorStrategy<T>, IResettable {
         private readonly int _maxFailures;
         private readonly int? _groupKey;
         private readonly IPityTracker _tracker;
@@ -40,24 +38,24 @@ namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
             var key = _groupKey ?? workingSet.SourceTable?.Id ?? 0;
 
             if (workingSet.Results.Count > 0) {
-                _tracker.RecordSuccess(key);
+                _tracker.Record(key, PityResult.Success);
                 return;
             }
 
             var failures = _tracker.GetFailures(key);
-            _tracker.RecordFailure(key);
+            _tracker.Record(key, PityResult.Failure);
             failures++;
 
             if (failures >= _maxFailures) {
                 workingSet.TryRollOneResult();
-                _tracker.RecordSuccess(key);
+                _tracker.Record(key, PityResult.Success);
             }
         }
 
         /// <summary>
         /// Resets the failure counter for a specific key (table ID or group key).
         /// </summary>
-        public void Reset(int key) => _tracker.RecordSuccess(key);
+        public void Reset(int key) => _tracker.Record(key, PityResult.Success);
 
         /// <summary>
         /// Resets all failure counters.

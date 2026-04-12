@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace NS.UnifiedLoot.Examples {
     #region scalingItemDef

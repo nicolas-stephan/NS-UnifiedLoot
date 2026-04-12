@@ -1,5 +1,4 @@
-﻿using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Random;
+using NS.UnifiedLoot;
 using NUnit.Framework;
 
 namespace NS.UnifiedLoot.Tests {

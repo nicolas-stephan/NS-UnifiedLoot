@@ -1,4 +1,4 @@
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Core {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// Metadata about a loot roll, useful for debugging and analytics.
     /// </summary>

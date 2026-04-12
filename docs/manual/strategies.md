@@ -5,7 +5,7 @@ receives the working set (mutable roll state) and context (read-only caller data
 
 ```csharp
 public interface ILootStrategy<T> {
-    void Process(LootWorkingSet<T> workingSet, LootContext context);
+    void Process(LootWorkingSet<T> workingSet, Context context);
 }
 ```
 
@@ -24,7 +24,7 @@ Strategies are executed in the order they are added to the pipeline.
 |-------|-----------|
 | Pre-roll weight scaling | [ModifyWeightStrategy<T>](xref:NS.UnifiedLoot.ModifyWeightStrategy`1) |
 | Selection | [WeightedRandomStrategy<T>](xref:NS.UnifiedLoot.WeightedRandomStrategy`1), [DropChanceStrategy<T>](xref:NS.UnifiedLoot.DropChanceStrategy`1) |
-| Guarantee / fallback | [GuaranteedDropStrategy<T>](xref:NS.UnifiedLoot.GuaranteedDropStrategy`1), [PityStrategy<T>](xref:NS.UnifiedLoot.PityStrategy`1), [SoftPityStrategy<T>](xref:NS.UnifiedLoot.SoftPityStrategy`1), [ItemPityStrategy<T>](xref:NS.UnifiedLoot.ItemPityStrategy`1), [SoftItemPityStrategy<T>](xref:NS.UnifiedLoot.SoftItemPityStrategy`1) |
+| Guarantee / fallback | [GuaranteedDropStrategy<T>](xref:NS.UnifiedLoot.GuaranteedDropStrategy`1), [PityStrategy<T>](xref:NS.UnifiedLoot.PityStrategy`1), [ItemPityStrategy<T>](xref:NS.UnifiedLoot.ItemPityStrategy`1) |
 | Filtering | [FilterStrategy<T>](xref:NS.UnifiedLoot.FilterStrategy`1), [FilterByContextStrategy<T>](xref:NS.UnifiedLoot.FilterByContextStrategy`1) |
 | Post-processing | [ModifyQuantityStrategy<T>](xref:NS.UnifiedLoot.ModifyQuantityStrategy`1), [LimitResultsStrategy<T>](xref:NS.UnifiedLoot.LimitResultsStrategy`1), [ConsolidateResultsStrategy<T>](xref:NS.UnifiedLoot.ConsolidateResultsStrategy`1), [ExpandResultsStrategy<T>](xref:NS.UnifiedLoot.ExpandResultsStrategy`1), [BonusRollStrategy<T>](xref:NS.UnifiedLoot.BonusRollStrategy`1), [UniqueDropStrategy<T>](xref:NS.UnifiedLoot.UniqueDropStrategy`1), [NestedTableStrategy<T>](xref:NS.UnifiedLoot.NestedTableStrategy`1) |
 
@@ -77,18 +77,11 @@ See [Pity Systems](pity-systems.md) for full details.
 Hard pity: after `threshold` consecutive rolls that produce no result, the next roll **always**
 succeeds. Resets on success. Tracks by table ID or group key.
 
-### [SoftPityStrategy<T>](xref:NS.UnifiedLoot.SoftPityStrategy`1)
-
-Soft pity: linearly ramps bonus drop chance from `softPityStart` failures to a guarantee at
-`hardPityAt`. Tracks by table ID or group key.
 
 ### [ItemPityStrategy<T>](xref:NS.UnifiedLoot.ItemPityStrategy`1)
 
 Hard pity for a specific item. Guarantees the item drops after it has failed to drop N times.
 
-### [SoftItemPityStrategy<T>](xref:NS.UnifiedLoot.SoftItemPityStrategy`1)
-
-Soft pity for a specific item. Probabilistic chance increases linearly with failures.
 
 ---
 
@@ -162,8 +155,8 @@ Reads a 0–1 chance from the context and adds one extra weighted random roll if
 succeeds.
 
 ```csharp
-// LootKeys.Luck = 1.0 → 100% bonus roll; 0.0 → no bonus roll
-.AddStrategy(new BonusRollStrategy<Item>(LootKeys.Luck))
+// Keys.Luck = 1.0 → 100% bonus roll; 0.0 → no bonus roll
+.AddStrategy(new BonusRollStrategy<Item>(Keys.Luck))
 ```
 
 ### [UniqueDropStrategy<T>](xref:NS.UnifiedLoot.UniqueDropStrategy`1)
@@ -227,7 +220,7 @@ public class ElementalFilterStrategy<T> : ILootStrategy<T> where T : IElemental 
     public ElementalFilterStrategy(Element allowedElement)
         => _allowedElement = allowedElement;
 
-    public void Process(LootWorkingSet<T> workingSet, LootContext context) {
+    public void Process(LootWorkingSet<T> workingSet, Context context) {
         for (var i = workingSet.Results.Count - 1; i >= 0; i--) {
             var item = workingSet.Results[i].Item;
             if (item != null && item.Element != _allowedElement)
@@ -248,7 +241,7 @@ int idx  = workingSet.Random.Range(0, 5); // exclusive upper bound
 
 ```csharp
 public static class MyKeys {
-    public static readonly BlackboardKey<int> RollCount = new("RollCount");
+    public static readonly Key<int> RollCount = new("RollCount");
 }
 
 // Strategy A — store data
@@ -259,7 +252,7 @@ if (workingSet.Blackboard.TryGet(MyKeys.RollCount, out int n))
     // use n
 ```
 
-The blackboard is a `LootBlackboard` cleared between rolls. Use `BlackboardKey<T>` for type-safe access.
+The blackboard is a `Context` cleared between rolls. Use `Key<T>` for type-safe access.
 
 ### Pipeline introspection
 

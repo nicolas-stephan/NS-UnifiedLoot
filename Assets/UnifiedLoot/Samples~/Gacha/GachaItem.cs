@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace NS.UnifiedLoot.Examples {
     #region gachaItemDef
@@ -13,7 +13,7 @@ namespace NS.UnifiedLoot.Examples {
         public string ItemName = "New Item";
         public GachaRarity Rarity = GachaRarity.ThreeStar;
         public Color Color = Color.white;
-        public string IconUnicode = "⭐️";
+        public string IconUnicode = "??";
 
         public override string ToString() => $"[{Rarity}] {ItemName}";
     }

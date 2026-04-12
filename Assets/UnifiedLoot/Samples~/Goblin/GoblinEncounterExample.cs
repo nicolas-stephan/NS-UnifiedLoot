@@ -2,10 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Random;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
+using NS.UnifiedLoot;
 
 namespace NS.UnifiedLoot.Examples {
     /// <summary>
@@ -24,7 +21,6 @@ namespace NS.UnifiedLoot.Examples {
     /// <see cref="LootTableAsset{TItem}"/>,
     /// <see cref="WeightedRandomStrategy{T}"/>, <see cref="BonusRollStrategy{T}"/>,
     /// <see cref="ConsolidateResultsStrategy{T}"/>, <see cref="ModifyWeightStrategy{T}"/>,
-    /// <see cref="SoftPityStrategy{T}"/>, <see cref="ILootObserver{T}"/>,
     /// <see cref="ILootFactory{TDef, TInstance}"/>, <see cref="LootPipelineExtensions.ExecuteAndBuild{TDef, TInstance}"/>,
     /// <see cref="IResettable"/>, <see cref="Context"/>.</para>
     ///
@@ -48,16 +44,8 @@ namespace NS.UnifiedLoot.Examples {
         [Tooltip("0 = no luck bonus.  1 = guaranteed bonus roll every kill.  Typical: 0.1–0.4")]
         [SerializeField] private float playerLuck = 0.25f;
 
-        [Header("Boss pity  (Goblin Captain)")]
-        [Tooltip("Empty boss runs before the rare-drop chance starts climbing.")]
-        [SerializeField] private int softPityStart = 3;
-        [Tooltip("Empty boss runs that guarantee a rare drop (100 %).")]
-        [SerializeField] private int hardPityAt = 7;
-
-
         private LootPipeline<GoblinItemDef> _goblinPipeline = null!;
         private LootPipeline<GoblinItemDef> _captainPipeline = null!;
-        private SoftPityStrategy<GoblinItemDef> _captainPity = null!;
         private ILootTable<GoblinItemDef> _activeGoblinTable = null!;
         private ILootTable<GoblinItemDef> _activeCaptainTable = null!;
         private Context _context = null!;
@@ -103,8 +91,6 @@ namespace NS.UnifiedLoot.Examples {
         private void BuildCaptainPipeline() {
             //  1. ModifyWeight — GoblinKingsCrown weight scales with player luck
             //  2. WeightedRandom(1) — single roll from the Flattened table
-            //  3. SoftPity — ramps up the rare drop chance after consecutive failures
-            _captainPity = new SoftPityStrategy<GoblinItemDef>(softPityStart, hardPityAt);
 
             _captainPipeline = new LootPipeline<GoblinItemDef>()
                 .WithRandom(UnityRandom.Instance)
@@ -117,7 +103,6 @@ namespace NS.UnifiedLoot.Examples {
                     return entry.Weight * (1f + luck * 3f);
                 }))
                 .AddStrategy(new WeightedRandomStrategy<GoblinItemDef>(rollCount: 1))
-                .AddStrategy(_captainPity)
                 .AddObserver(new ConsoleObserver<GoblinItemDef>("Captain"));
         }
         #endregion
@@ -167,16 +152,9 @@ namespace NS.UnifiedLoot.Examples {
             _reusableResults.Clear();
             _captainPipeline.ExecuteAndBuild(_activeCaptainTable, this, _reusableResults, _context);
             LogBuiltResults("Goblin Captain", _reusableResults);
-            Debug.Log($"[Pity] Current failure count: {_captainPity.GetFailureCount(_activeCaptainTable.Id)}");
             return _reusableResults;
         }
         #endregion
-
-        [ContextMenu("Reset Captain Pity Counter")]
-        public void ResetCaptainPity() {
-            _captainPity.ResetAll();
-            Debug.Log("[UnifiedLoot] Captain pity counter reset.");
-        }
 
         private void LogBuiltResults(string source, List<BuiltLootResult<GoblinItemDef, GoblinItemInstance>> results) {
             if (results.Count == 0)

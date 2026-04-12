@@ -40,10 +40,10 @@ For a regular Goblin, we want a simple but dynamic loot drop:
 
 ## 4. The Goblin Captain (Advanced)
 
-The Captain uses a more complex pipeline with **Pity Systems**.
+The Captain uses a more complex pipeline with **Advanced Scaling**.
 
-### Pity & Luck Pipeline
-The Captain's pipeline ensures that players eventually get a rare drop even if they are unlucky, using a `SoftPityStrategy`.
+### Luck-based Scaling
+The Captain's pipeline uses luck to significantly increase the weight of legendary items.
 
 [!code-csharp[](../../Assets/UnifiedLoot/Samples~/Goblin/GoblinEncounterExample.cs#buildCaptainPipeline)]
 
@@ -67,6 +67,6 @@ Finally, we trigger the roll. We use `ExecuteAndBuild` to perform the selection 
 
 - **[LootTableAsset<T>](xref:NS.UnifiedLoot.LootTableAsset`1)**: Creating designer-editable tables.
 - **[ModifyWeightStrategy<T>](xref:NS.UnifiedLoot.ModifyWeightStrategy`1)**: Dynamically changing weights based on [Context](xref:NS.UnifiedLoot.Context).
-- **[SoftPityStrategy<T>](xref:NS.UnifiedLoot.SoftPityStrategy`1)**: Implementing "bad luck protection".
+- **[PityStrategy<T>](xref:NS.UnifiedLoot.PityStrategy`1)**: Implementing "bad luck protection".
 - **[ILootFactory<TDef, TInstance>](xref:NS.UnifiedLoot.ILootFactory`2)**: Decoupling data from runtime objects.
 - **[ExecuteAndBuild](xref:NS.UnifiedLoot.LootPipeline`1.ExecuteAndBuild*)**: End-to-end loot generation.

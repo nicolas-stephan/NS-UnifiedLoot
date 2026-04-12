@@ -1,4 +1,9 @@
-﻿namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Pity {
+namespace NS.UnifiedLoot {
+    public enum PityResult {
+        Success,
+        Failure
+    }
+
     /// <summary>
     /// Tracks failure/success counts for a pity system.
     /// Can be used standalone or within the loot pipeline.
@@ -12,12 +17,7 @@
         /// <summary>
         /// Increments the failure count for a specific key.
         /// </summary>
-        void RecordFailure(int key);
-
-        /// <summary>
-        /// Resets the failure count for a specific key (usually on success).
-        /// </summary>
-        void RecordSuccess(int key);
+        void Record(int key, PityResult pityResult);
 
         /// <summary>
         /// Resets all counters.

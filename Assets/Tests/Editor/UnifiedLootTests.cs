@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
+using NS.UnifiedLoot;
 using NUnit.Framework;
 
 namespace NS.UnifiedLoot.Tests {

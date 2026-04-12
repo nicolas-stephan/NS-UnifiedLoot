@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
 using UnityEngine.Pool;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// Consolidates duplicate items by combining their quantities.
     /// Useful after strategies that might produce multiple rolls of the same item.

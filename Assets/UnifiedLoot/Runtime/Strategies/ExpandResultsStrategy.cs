@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
 using UnityEngine.Pool;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// Replaces individual results with an expanded collection — useful for "drop sets"
     /// where one logical item resolves into a group of concrete items.

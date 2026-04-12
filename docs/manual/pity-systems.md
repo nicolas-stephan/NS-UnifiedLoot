@@ -1,13 +1,11 @@
 # Pity Systems
 
-Pity systems guarantee players receive a desired outcome after enough failed attempts, preventing streaks of bad luck. Unified Loot provides four pity strategies, categorised by what they track:
+Pity systems guarantee players receive a desired outcome after enough failed attempts, preventing streaks of bad luck. Unified Loot provides two pity strategies, categorised by what they track:
 
 | Target | Strategy | Behaviour |
 |--------|----------|-----------|
 | **Table** | `PityStrategy<T>` | **Hard pity** — guaranteed drop from the table after N failures |
-| **Table** | `SoftPityStrategy<T>` | **Soft pity** — ramps bonus chance before guaranteeing at N |
 | **Item** | `ItemPityStrategy<T>` | **Hard pity** for a specific item (e.g. "Epic Sword") |
-| **Item** | `SoftItemPityStrategy<T>` | **Soft pity** for a specific item |
 
 All pity strategies use an `IPityTracker` to maintain state and support **group keys** for shared counters across multiple tables.
 
@@ -47,15 +45,6 @@ pipeline.AddStrategy(new WeightedRandomStrategy<Item>(1))
 2. If the result list is empty **and** `failureCount >= threshold`, pity fires: one item is selected from the current table and added; failure counter resets.
 3. Otherwise, failure counter increments.
 
-### SoftPityStrategy\<T\> — Soft Pity
-
-Linearly ramps up the probability of a successful drop starting from `softPityStart` failures, reaching a guarantee at `hardPityAt`.
-
-```csharp
-var softPity = new SoftPityStrategy<Item>(softPityStart: 75, hardPityAt: 90);
-```
-
----
 
 ## Item-based Pity
 
@@ -76,18 +65,6 @@ itemPity.AddTrackedItem(epicAxe, threshold: 50);
 pipeline.AddStrategy(itemPity);
 ```
 
-### SoftItemPityStrategy\<T\>
-
-Probabilistic pity for specific items. The chance for the item to drop increases linearly after each failure.
-
-```csharp
-var softItemPity = new SoftItemPityStrategy<Item>(item => item.Id);
-softItemPity.AddTrackedItem(legendarySword, softPityStart: 75, hardPityAt: 100);
-
-pipeline.AddStrategy(softItemPity);
-```
-
----
 
 ## Group Keys (Table Pity Only)
 

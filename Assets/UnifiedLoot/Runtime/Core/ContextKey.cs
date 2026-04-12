@@ -1,4 +1,4 @@
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Core {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// A type-safe key for storing and retrieving values from a <see cref="Context"/>.
     /// </summary>
@@ -11,5 +11,15 @@ namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Core {
 
         public Key(string? name = null) => Name = name;
         public override string ToString() => Name != null ? $"Key<{typeof(T).Name}>({Name})" : $"Key<{typeof(T).Name}>()";
+    }
+
+    public sealed class Key {
+        /// <summary>
+        /// Optional name for debugging purposes.
+        /// </summary>
+        public string? Name { get; }
+
+        public Key(string? name = null) => Name = name;
+        public override string ToString() => Name != null ? $"Key({Name})" : "Key()";
     }
 }

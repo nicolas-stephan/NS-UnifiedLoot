@@ -1,4 +1,4 @@
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
+using NS.UnifiedLoot;
 using UnityEngine;
 using UnityEditor;
 

@@ -1,10 +1,7 @@
 using System.Collections.Generic;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Random;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
 using UnityEngine.Pool;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Core {
+namespace NS.UnifiedLoot {
     internal static class LootPipeline {
         internal static readonly Context EmptyContext = new();
     }
@@ -17,7 +14,7 @@ namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Core {
     public class LootPipeline<T> {
         private readonly List<ILootStrategy<T>> _strategies = new();
         private readonly List<ILootObserver<T>> _observers = new();
-        private IRandom _defaultRandom;
+        private IRandom _defaultRandom = UnityRandom.Instance;
         private bool _collectMetadata = true;
 
         internal IRandom DefaultRandom => _defaultRandom;
@@ -27,9 +24,6 @@ namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Core {
         /// Use <see cref="InsertStrategy"/> and <see cref="RemoveStrategy"/> to mutate.
         /// </summary>
         public IReadOnlyList<ILootStrategy<T>> Strategies => _strategies;
-
-        /// <param name="defaultRandom">The default random to use if none is provided at execution time.</param>
-        public LootPipeline(IRandom? defaultRandom = null) => _defaultRandom = defaultRandom ?? UnityRandom.Instance;
 
         /// <summary>
         /// Appends a strategy to the end of the pipeline.

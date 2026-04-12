@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Core {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// A flexible context container.
     /// </summary>

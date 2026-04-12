@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Random;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
+using System.Collections.Generic;
+using NS.UnifiedLoot;
 
 namespace NS.UnifiedLoot.Example.Doc {
     public class AdvancedExamples<T> {
@@ -42,7 +39,7 @@ namespace NS.UnifiedLoot.Example.Doc {
         #endregion
 
         #region blackboard
-        public static class MyBlackboardKeys {
+        public static class MyKeys {
             public static readonly Key<List<int>> SkippedEntries = new("SkippedEntries");
         }
 
@@ -54,7 +51,7 @@ namespace NS.UnifiedLoot.Example.Doc {
                         skipped.Add(entry.Index);
                 }
 
-                ws.Blackboard.Set(MyBlackboardKeys.SkippedEntries, skipped);
+                ws.Blackboard.Set(MyKeys.SkippedEntries, skipped);
             }
 
             private bool ShouldSkip(WeightedEntry<T> entry) => false;
@@ -62,7 +59,7 @@ namespace NS.UnifiedLoot.Example.Doc {
 
         public class StrategyB : ILootStrategy<T> {
             public void Process(LootWorkingSet<T> ws, Context ctx) {
-                if (ws.Blackboard.TryGet(MyBlackboardKeys.SkippedEntries, out var skipped)) {
+                if (ws.Blackboard.TryGet(MyKeys.SkippedEntries, out var skipped)) {
                     // handle skipped entries
                 }
             }

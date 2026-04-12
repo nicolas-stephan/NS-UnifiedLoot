@@ -1,4 +1,4 @@
-﻿# UnifiedLoot API Reference
+# UnifiedLoot API Reference
 
 This section contains the automatically generated API documentation for the UnifiedLoot package. All components reside under the `NS.UnifiedLoot` namespace.
 

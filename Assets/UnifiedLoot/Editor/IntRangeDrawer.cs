@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
+using NS.UnifiedLoot;
 using UnityEditor;
 using UnityEngine;
 

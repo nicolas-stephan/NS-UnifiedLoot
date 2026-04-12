@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Tables {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// Builder for creating a flattened, immutable loot table from multiple sub-tables.
     /// Replaces the runtime CompositeTable.

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// Tracks items that have already dropped and prevents duplicates.
     /// Useful for one-time drops (e.g., unique quest items, first-time boss kills).

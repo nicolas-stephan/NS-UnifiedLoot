@@ -1,6 +1,5 @@
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// Limits results based on a context value.
     /// </summary>

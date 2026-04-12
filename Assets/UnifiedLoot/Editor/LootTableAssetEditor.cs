@@ -1,10 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Preview;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
+using NS.UnifiedLoot;
 
 namespace NS.UnifiedLoot.Editor {
     [CustomEditor(typeof(LootTableAssetBase), true)]

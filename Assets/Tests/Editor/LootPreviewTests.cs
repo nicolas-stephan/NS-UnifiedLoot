@@ -1,8 +1,5 @@
-﻿using NUnit.Framework;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Preview;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
+using NUnit.Framework;
+using NS.UnifiedLoot;
 
 namespace NS.UnifiedLoot.Tests {
     public class LootPreviewTests {

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Tables {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// A simple code-defined loot table.
     /// </summary>

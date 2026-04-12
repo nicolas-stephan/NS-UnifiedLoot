@@ -1,7 +1,6 @@
 using System;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// Scales the weights of weighted entries before selection strategies run.
     /// Must be placed <em>before</em> <see cref="WeightedRandomStrategy{T}"/> in the pipeline.

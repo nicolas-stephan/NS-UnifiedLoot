@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
+using System.Linq;
+using NS.UnifiedLoot;
 using NUnit.Framework;
 
 namespace NS.UnifiedLoot.Tests {
@@ -24,8 +24,8 @@ namespace NS.UnifiedLoot.Tests {
 
         [Test]
         public void CompositeTable_ScalesWeightsProportionally() {
-            // tableA (Sword w=10) → selection weight 0.3 → effective weight = 0.3
-            // tableB (Potion w=10) → selection weight 0.7 → effective weight = 0.7
+            // tableA (Sword w=10) ? selection weight 0.3 ? effective weight = 0.3
+            // tableB (Potion w=10) ? selection weight 0.7 ? effective weight = 0.7
             var tableA = new LootTable<Item>().Add(Item.Sword, 10f);
             var tableB = new LootTable<Item>().Add(Item.Potion, 10f);
 
@@ -43,8 +43,8 @@ namespace NS.UnifiedLoot.Tests {
 
         [Test]
         public void CompositeTable_MultipleEntriesPerSubTable_ScalesCorrectly() {
-            // tableA: Sword(5) + Arrow(5) → each gets 0.3 * 0.5 = 0.15
-            // tableB: Potion(10) → gets 0.7 * 1.0 = 0.70
+            // tableA: Sword(5) + Arrow(5) ? each gets 0.3 * 0.5 = 0.15
+            // tableB: Potion(10) ? gets 0.7 * 1.0 = 0.70
             var tableA = new LootTable<Item>()
                 .Add(Item.Sword, 5f)
                 .Add(Item.Arrow, 5f);

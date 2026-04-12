@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NS.UnifiedLoot;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
+using NS.UnifiedLoot;
+using NS.UnifiedLoot;
+using NS.UnifiedLoot;
 using UnityEngine;
 
 public class ContextExamples {
     public class Item { }
 
     #region contextKeys
-    public static class LootKeys {
+    public static class Keys {
         public static readonly Key<float> Luck = new("Luck");
         public static readonly Key<int> PlayerLevel = new("PlayerLevel");
         public static readonly Key<bool> IsBossRoom = new("IsBossRoom");
@@ -20,31 +20,31 @@ public class ContextExamples {
     public void BuildingContext() {
         #region buildingContext
         var context = new Context()
-            .Set(LootKeys.Luck, 1.5f)
-            .Set(LootKeys.PlayerLevel, 42)
-            .Set(LootKeys.IsBossRoom, true);
+            .Set(Keys.Luck, 1.5f)
+            .Set(Keys.PlayerLevel, 42)
+            .Set(Keys.IsBossRoom, true);
         #endregion
 
         #region readingContext
         // Throws if key is not present
-        float luck = context.Get(LootKeys.Luck);
+        float luck = context.Get(Keys.Luck);
 
         // Returns default(T) if not present
-        int level = context.GetOrDefault(LootKeys.PlayerLevel);
+        int level = context.GetOrDefault(Keys.PlayerLevel);
 
         // Returns supplied default if not present
-        int levelWithDefault = context.GetOrDefault(LootKeys.PlayerLevel, defaultValue: 1);
+        int levelWithDefault = context.GetOrDefault(Keys.PlayerLevel, defaultValue: 1);
 
         // Safe try-get
-        if (context.TryGet(LootKeys.IsBossRoom, out bool isBoss)) {
+        if (context.TryGet(Keys.IsBossRoom, out bool isBoss)) {
             // ...
         }
         #endregion
 
         #region mutatingContext
-        context.Set(LootKeys.Luck, 2.0f); // overwrite
-        context.Remove(LootKeys.Luck); // delete key
-        bool hasLuck = context.Contains(LootKeys.Luck); // check presence
+        context.Set(Keys.Luck, 2.0f); // overwrite
+        context.Remove(Keys.Luck); // delete key
+        bool hasLuck = context.Contains(Keys.Luck); // check presence
         context.Clear(); // remove all keys
         #endregion
     }
@@ -62,7 +62,7 @@ public class ContextExamples {
     #region contextDrivenStrategy
     public class PlayerLevelScaler<T> : ILootStrategy<T> {
         public void Process(LootWorkingSet<T> workingSet, Context context) {
-            if (!context.TryGet(LootKeys.PlayerLevel, out int level))
+            if (!context.TryGet(Keys.PlayerLevel, out int level))
                 return;
 
             // Scale all quantities by player level / 10

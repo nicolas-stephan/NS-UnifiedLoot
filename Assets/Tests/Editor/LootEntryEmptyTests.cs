@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
+using NS.UnifiedLoot;
 using NUnit.Framework;
 
 namespace NS.UnifiedLoot.Tests {
@@ -10,7 +8,7 @@ namespace NS.UnifiedLoot.Tests {
         [Test]
         public void EmptyEntry_DoesNotProduceResult() {
             // Table: Sword (w=1) and Empty (w=1)
-            // With many rolls, at most Sword should appear — empty entries never produce results
+            // With many rolls, at most Sword should appear � empty entries never produce results
             var table = new LootTable<string>()
                 .Add("Sword")
                 .AddEmpty(1);

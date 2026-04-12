@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Tables;
+using System.Collections.Generic;
+using NS.UnifiedLoot;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;

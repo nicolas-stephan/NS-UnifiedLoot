@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
 using UnityEngine;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Tables {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// A ScriptableObject-based loot table for designer-defined loot.
     /// </summary>

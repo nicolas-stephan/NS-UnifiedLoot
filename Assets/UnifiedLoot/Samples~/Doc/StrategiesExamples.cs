@@ -1,7 +1,7 @@
-ï»¿using System.Collections.Generic;
+using System.Collections.Generic;
 using NS.UnifiedLoot;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies;
+using NS.UnifiedLoot;
+using NS.UnifiedLoot;
 using UnityEngine;
 
 public class StrategiesExamples {
@@ -33,10 +33,10 @@ public class StrategiesExamples {
         #endregion
 
         #region dropChance
-        // Weights are 0â€“1 (0.05 = 5% chance)
+        // Weights are 0–1 (0.05 = 5% chance)
         new DropChanceStrategy<Item>();
 
-        // Weights are 0â€“100 (5.0 = 5% chance)
+        // Weights are 0–100 (5.0 = 5% chance)
         new DropChanceStrategy<Item>(weightAsPercent: true);
         #endregion
     }

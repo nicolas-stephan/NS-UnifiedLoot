@@ -85,5 +85,5 @@ exception). Create them once and call [[Execute](xref:NS.UnifiedLoot.LootPipelin
 - [Context System](context.md) - pass runtime data to strategies
 - [Strategies](strategies.md) - all built-in strategies and how to write your own
 - [Preview System](preview.md) - dry-run loot tables in editor or code
-- [Pity Systems](pity-systems.md) - hard and soft pity
+- [Pity Systems](pity-systems.md) - hard pity and failure tracking
 - [Factories](factories.md) - roll definitions, instantiate instances

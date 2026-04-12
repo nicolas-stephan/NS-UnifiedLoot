@@ -1,6 +1,5 @@
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Core;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Strategies {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// Adds bonus rolls based on context values (like luck or magic find).
     /// </summary>

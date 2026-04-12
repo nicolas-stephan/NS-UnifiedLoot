@@ -1,6 +1,5 @@
-using NS.UnifiedLoot.UnifiedLoot.Runtime.Random;
 
-namespace NS.UnifiedLoot.UnifiedLoot.Runtime.Core {
+namespace NS.UnifiedLoot {
     /// <summary>
     /// Factory interface for converting loot definitions into actual item instances.
     /// Users implement this to define how their items are created from loot results.
