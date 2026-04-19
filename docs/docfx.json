@@ -1,10 +1,10 @@
-{
+﻿{
   "metadata": [
     {
       "src": [
         {
           "files": [
-            "NS.UnifiedLoot.csproj"
+            "UnifiedLoot.doc.csproj"
           ],
           "src": "."
         }
@@ -17,7 +17,7 @@
       "noRestore": false,
       "namespaceLayout": "flattened",
       "memberLayout": "samePage",
-      "allowCompilationErrors": false
+      "allowCompilationErrors": true
     }
   ],
   "build": {
@@ -41,7 +41,7 @@
           "**/*.md",
           "**/toc.yml"
         ],
-        "src": ""
+        "src": "."
       },
       {
         "files": [
@@ -59,7 +59,7 @@
         "files": [
           "media/**"
         ],
-        "src": ""
+        "src": "."
       }
     ],
     "output": "_site",

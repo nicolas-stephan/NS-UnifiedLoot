@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "doc": "dotnet tool run docfx ./docs/docfx.json --serve"
+  }
+}

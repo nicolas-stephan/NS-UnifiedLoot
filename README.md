@@ -253,4 +253,4 @@ pity.ResetAll();   // implements IResettable
 
 Full documentation including guides, strategy reference, and examples:
 
-**[nicolas-stephan.github.io/UnifiedLoot](https://nicolas-stephan.github.io/UnifiedLoot)**
+**[nicolas-stephan.github.io/UnifiedLoot](https://nicolas-stephan.github.io/NS-UnifiedLoot/)**

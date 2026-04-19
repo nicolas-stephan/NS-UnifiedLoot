@@ -5,9 +5,9 @@ on:
     branches: [main]
     paths:
       - 'docs/**'
-      - 'docfx.json'
       - 'Assets/UnifiedLoot/README.md'
       - '.github/workflows/docs.yml'
+      - '.config/dotnet-tools.json'
   workflow_dispatch:
 
 permissions:
@@ -28,16 +28,16 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Install DocFX
-        run: dotnet tool install -g docfx
+        run: dotnet tool restore
 
       - name: Build documentation
-        run: docfx docfx.json
+        run: dotnet tool run docfx docs/docfx.json
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: _site
+          publish_dir: docs/_site
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
           commit_message: 'docs: deploy ${{ github.sha }}'
