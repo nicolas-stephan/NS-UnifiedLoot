@@ -1,7 +1,7 @@
 plugins:
   - '@semantic-release/commit-analyzer'
   - '@semantic-release/release-notes-generator'
-  - 
+  
   - - '@semantic-release/exec'
     - prepareCmd: "sed -i -e '/AssemblyVersion/s/\".*\"/\"${nextRelease.version}\"/' 
         Assets/UnifiedLoot/Runtime/AssemblyInfo.cs
