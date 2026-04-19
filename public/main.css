@@ -1,0 +1,26 @@
+/* Checkout https://getbootstrap.com/docs/5.3/customize/color/ for more customization options */
+:root {
+    --bs-link-color-rgb: 218, 8, 48 !important;
+    --bs-link-hover-color-rgb: 174, 6, 38 !important;
+}
+
+.navbar-brand #logo {
+    width: 37px;
+    height: 37px;
+}
+
+#navbar ul.navbar-nav {
+    margin-top: -3px;
+}
+
+.filter input, .search input {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    font-size: .875rem;
+    border-radius: var(--bs-border-radius-sm);
+}
+
+[data-bs-theme=dark] {
+    --bs-link-color-rgb: 245, 122, 122 !important;
+    --bs-link-hover-color-rgb: 247, 149, 149 !important;
+}

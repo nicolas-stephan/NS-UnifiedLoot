@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Tutorial: The Goblin Encounter | Unified Loot </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Tutorial: The Goblin Encounter | Unified Loot ">
+      
+      
+      <link rel="icon" href="../media/logo.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/nicolas-stephan/UnifiedLoot/blob/main/docs/tutorials/goblin-encounter.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../media/logo.png" alt="Unified Loot">
+            Unified Loot
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="tutorial-the-goblin-encounter">Tutorial: The Goblin Encounter</h1>
+
+<p>This tutorial walks through the <code>GoblinEncounterExample</code> sample, demonstrating a real-world RPG loot system. We'll cover custom item definitions, complex pipelines, and advanced features like pity systems and luck-based scaling.</p>
+<h2 id="1-defining-the-loot">1. Defining the Loot</h2>
+<p>In a real project, loot is rarely just an <code>enum</code>. You often need metadata like item names, colors, icons, and base values.</p>
+<h3 id="the-item-definition">The Item Definition</h3>
+<p>We start by defining a <code>GoblinItemDef</code> which holds the static data for our items. This is what you would typically configure as a <code>ScriptableObject</code> or a serializable class in a list.</p>
+<pre><code class="lang-csharp">public enum Rarity {
+    Common,
+    Rare,
+    Legendary
+}
+
+[System.Serializable]
+public class GoblinItemDef {
+    public string ItemName = &quot;New Item&quot;;
+    public Color Color = Color.white;
+    public int BaseValue = 10;
+    public string IconUnicode = &quot;📦&quot;;
+    public Rarity Rarity = Rarity.Common;
+
+    public override string ToString() =&gt; $&quot;{IconUnicode} {ItemName}&quot;;
+}
+</code></pre><h3 id="the-runtime-instance">The Runtime Instance</h3>
+<p>When loot drops, we might want to create a unique instance of that item, potentially with randomized stats (e.g., varying gold value).</p>
+<pre><code class="lang-csharp">public class GoblinItemInstance {
+    public string Name { get; set; } = string.Empty;
+    public Color Color { get; set; }
+    public int Value { get; set; }
+    public string Icon { get; set; } = string.Empty;
+    public Rarity Rarity { get; set; }
+
+    public override string ToString() =&gt; $&quot;{Icon} {Name} ({Value}g)&quot;;
+}
+</code></pre><hr>
+<h2 id="2-setting-up-the-tables">2. Setting Up the Tables</h2>
+<p>UnifiedLoot supports designer-friendly <code>ScriptableObject</code> assets. To allow designers to edit tables in the Inspector, we create a simple class inheriting from <code>LootTableAsset&lt;T&gt;</code>.</p>
+<pre><code class="lang-csharp">using NS.UnifiedLoot;
+using UnityEngine;
+
+namespace NS.UnifiedLoot.Examples {
+    /// &lt;summary&gt;
+    /// Designer-editable loot table for the goblin encounter example.
+    ///
+    /// &lt;para&gt;&lt;b&gt;How to create an asset:&lt;/b&gt;&lt;br/&gt;
+    /// Right-click in the Project window → &lt;c&gt;Create → UnifiedLoot/Examples/Goblin Item Table&lt;/c&gt;.
+    /// &lt;/para&gt;
+    ///
+    /// &lt;para&gt;&lt;b&gt;How to fill it in:&lt;/b&gt;&lt;br/&gt;
+    /// Expand the Entries list and add rows.  Each row has:
+    /// &lt;list type=&quot;bullet&quot;&gt;
+    ///   &lt;item&gt;&lt;b&gt;Item&lt;/b&gt; — assign a &lt;see cref=&quot;GoblinItemDef&quot;/&gt; asset.&lt;/item&gt;
+    ///   &lt;item&gt;&lt;b&gt;Weight&lt;/b&gt; — relative drop chance (higher = more common). The Inspector
+    ///         shows the effective % next to each weight field.&lt;/item&gt;
+    ///   &lt;item&gt;&lt;b&gt;Quantity&lt;/b&gt; — min/max quantity rolled when this entry drops.&lt;/item&gt;
+    /// &lt;/list&gt;
+    /// &lt;/para&gt;
+    ///
+    /// &lt;para&gt;&lt;b&gt;Assign the asset&lt;/b&gt; to the matching slot on &lt;see cref=&quot;GoblinEncounterExample&quot;/&gt;
+    /// and it will override the code-defined fallback table at runtime.&lt;/para&gt;
+    /// &lt;/summary&gt;
+    [CreateAssetMenu(menuName = &quot;UnifiedLoot/Examples/Goblin Item Table&quot;, fileName = &quot;New Goblin Item Table&quot;)]
+    public class GoblinItemTable : LootTableAsset&lt;GoblinItemDef&gt; { }
+}
+</code></pre><hr>
+<h2 id="3-the-goblin-pipeline">3. The Goblin Pipeline</h2>
+<p>For a regular Goblin, we want a simple but dynamic loot drop:</p>
+<ol>
+<li><strong>Luck Bonus</strong>: Rare items should have a higher chance to drop if the player is lucky.</li>
+<li><strong>Multiple Rolls</strong>: A goblin drops 3 items.</li>
+<li><strong>Bonus Roll</strong>: Lucky players have a chance to get a 4th item.</li>
+<li><strong>Consolidation</strong>: If multiple stacks of coins drop, they should be merged into one result.</li>
+</ol>
+<pre><code class="lang-csharp">private void BuildGoblinPipeline() {
+    //  1. ModifyWeight — rare items (SteelSword, MagicStaff) get a luck bonus
+    //  2. WeightedRandom(3) — three rolls per kill
+    //  3. BonusRoll — luck-based chance at a 4th free roll
+    //  4. Consolidate — stack repeated Coins / Potions
+    _goblinPipeline = new LootPipeline&lt;GoblinItemDef&gt;()
+        .WithRandom(UnityRandom.Instance)
+        .AddStrategy(new ModifyWeightStrategy&lt;GoblinItemDef&gt;((entry, ctx) =&gt; {
+            var item = entry.Entry.Item;
+            if (item is not { Rarity: &gt;= Rarity.Rare })
+                return entry.Weight;
+
+            var luck = Mathf.Clamp01(ctx.GetOrDefault(Luck));
+            return entry.Weight * (1f + luck * 3f); // up to 4× at max luck
+        }))
+        .AddStrategy(new WeightedRandomStrategy&lt;GoblinItemDef&gt;(rollCount: 3))
+        .AddStrategy(new BonusRollStrategy&lt;GoblinItemDef&gt;(Luck))
+        .AddStrategy(new ConsolidateResultsStrategy&lt;GoblinItemDef&gt;())
+        .AddObserver(new ConsoleObserver&lt;GoblinItemDef&gt;(&quot;Goblin&quot;));
+}
+</code></pre><hr>
+<h2 id="4-the-goblin-captain-advanced">4. The Goblin Captain (Advanced)</h2>
+<p>The Captain uses a more complex pipeline with <strong>Advanced Scaling</strong>.</p>
+<h3 id="luck-based-scaling">Luck-based Scaling</h3>
+<p>The Captain's pipeline uses luck to significantly increase the weight of legendary items.</p>
+<pre><code class="lang-csharp">private void BuildCaptainPipeline() {
+    //  1. ModifyWeight — GoblinKingsCrown weight scales with player luck
+    //  2. WeightedRandom(1) — single roll from the Flattened table
+
+    _captainPipeline = new LootPipeline&lt;GoblinItemDef&gt;()
+        .WithRandom(UnityRandom.Instance)
+        .AddStrategy(new ModifyWeightStrategy&lt;GoblinItemDef&gt;((entry, ctx) =&gt; {
+            var item = entry.Entry.Item;
+            if (item is not { Rarity: &gt;= Rarity.Legendary })
+                return entry.Weight;
+
+            var luck = Mathf.Clamp01(ctx.GetOrDefault(Luck));
+            return entry.Weight * (1f + luck * 3f);
+        }))
+        .AddStrategy(new WeightedRandomStrategy&lt;GoblinItemDef&gt;(rollCount: 1))
+        .AddObserver(new ConsoleObserver&lt;GoblinItemDef&gt;(&quot;Captain&quot;));
+}
+</code></pre><hr>
+<h2 id="5-building-the-loot-the-factory">5. Building the Loot (The Factory)</h2>
+<p>UnifiedLoot separates <em>selection</em> (what drops) from <em>instantiation</em> (creating the object). We use an <code>ILootFactory</code> to turn our <code>GoblinItemDef</code> into a <code>GoblinItemInstance</code>.</p>
+<pre><code class="lang-csharp">/// &lt;summary&gt;
+/// Factory method to create runtime instances from definitions.
+/// Demonstrates how to inject logic (like luck-based value scaling) during the build process.
+/// &lt;/summary&gt;
+public GoblinItemInstance Create(GoblinItemDef definition, Context context, IRandom random) {
+    return new GoblinItemInstance {
+        Name = definition.ItemName,
+        Color = definition.Color,
+        Icon = definition.IconUnicode,
+        Rarity = definition.Rarity,
+        Value = Mathf.RoundToInt(definition.BaseValue * random.Range(0.9f, 1.1f) * (1f + context.GetOrDefault(Luck) * 0.5f))
+    };
+}
+</code></pre><hr>
+<h2 id="6-execution">6. Execution</h2>
+<p>Finally, we trigger the roll. We use <code>ExecuteAndBuild</code> to perform the selection and the instantiation in one go.</p>
+<pre><code class="lang-csharp">[ContextMenu(&quot;Kill Goblin (roll loot)&quot;)]
+public List&lt;BuiltLootResult&lt;GoblinItemDef, GoblinItemInstance&gt;&gt; KillGoblin() {
+    UpdateContext();
+    _context.Set(Source, &quot;Goblin&quot;);
+    _reusableResults.Clear();
+    _goblinPipeline.ExecuteAndBuild(_activeGoblinTable, this, _reusableResults, _context);
+    LogBuiltResults(&quot;Goblin&quot;, _reusableResults);
+    return _reusableResults;
+}
+</code></pre><h2 id="summary-of-features-shown">Summary of Features Shown</h2>
+<ul>
+<li><strong><a class="xref" href="../NS.UnifiedLoot.LootTableAsset-1.html">LootTableAsset<t></t></a></strong>: Creating designer-editable tables.</li>
+<li><strong><a class="xref" href="../NS.UnifiedLoot.ModifyWeightStrategy-1.html">ModifyWeightStrategy<t></t></a></strong>: Dynamically changing weights based on <a class="xref" href="../NS.UnifiedLoot.Context.html">Context</a>.</li>
+<li><strong><a class="xref" href="../NS.UnifiedLoot.PityStrategy-1.html">PityStrategy<t></t></a></strong>: Implementing &quot;bad luck protection&quot;.</li>
+<li><strong><a class="xref" href="../NS.UnifiedLoot.ILootFactory-2.html">ILootFactory&lt;TDef, TInstance&gt;</a></strong>: Decoupling data from runtime objects.</li>
+<li><strong><a class="xref" href="../NS.UnifiedLoot.LootPipeline-1.html#NS_UnifiedLoot_LootPipeline_1_ExecuteAndBuild_">ExecuteAndBuild</a></strong>: End-to-end loot generation.</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/nicolas-stephan/UnifiedLoot/blob/main/docs/tutorials/goblin-encounter.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          © 2026 Nicolas Stephan · MIT License
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

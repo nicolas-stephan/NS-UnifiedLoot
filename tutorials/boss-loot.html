@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Tutorial: Boss Loot Systems | Unified Loot </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Tutorial: Boss Loot Systems | Unified Loot ">
+      
+      
+      <link rel="icon" href="../media/logo.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/nicolas-stephan/UnifiedLoot/blob/main/docs/tutorials/boss-loot.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../media/logo.png" alt="Unified Loot">
+            Unified Loot
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="tutorial-boss-loot-systems">Tutorial: Boss Loot Systems</h1>
+
+<p>This tutorial explores the <code>BossLootExample</code> sample, showing how to handle high-value encounters where loot is often dropped in multiple stages and certain item types must be guaranteed.</p>
+<h2 id="1-multi-stage-loot">1. Multi-Stage Loot</h2>
+<p>In complex encounters like bosses, you often don't want a single roll. Instead, you might want to guarantee different categories of loot:</p>
+<ol>
+<li><strong>Currency</strong>: A fixed amount or a guaranteed roll for gold/gems.</li>
+<li><strong>Materials</strong>: Several rolls from a crafting table.</li>
+<li><strong>Equipment</strong>: A high-stakes roll for a piece of gear.</li>
+</ol>
+<p>By using multiple pipelines or executing the same pipeline against different tables, you can easily create these sequences.</p>
+<pre><code class="lang-csharp">[ContextMenu(&quot;Kill Boss (Multi-Stage Loot)&quot;)]
+public void KillBoss() {
+    _allDrops.Clear();
+    Debug.Log(&quot;&lt;color=red&gt;&lt;b&gt;BOSS KILLED!&lt;/b&gt;&lt;/color&gt; Starting loot sequence...&quot;);
+
+    // Stage 1: Currency
+    if (currencyTable != null)
+        _currencyPipeline.ExecuteAndBuild(currencyTable.ToTable(), this, _allDrops, _context);
+
+    // Stage 2: Materials
+    if (materialTable != null)
+        _materialPipeline.ExecuteAndBuild(materialTable.ToTable(), this, _allDrops, _context);
+
+    // Stage 3: Equipment
+    if (equipmentTable != null)
+        _equipmentPipeline.ExecuteAndBuild(equipmentTable.ToTable(), this, _allDrops, _context);
+
+    LogResults();
+}
+</code></pre><h2 id="2-guaranteed-item-types">2. Guaranteed Item Types</h2>
+<p>One common requirement is ensuring the player gets <em>at least one</em> item from a table, even if the table contains &quot;Empty&quot; results or low probabilities. The <code>GuaranteedDropStrategy</code> is perfect for this.</p>
+<pre><code class="lang-csharp">_equipmentPipeline = new LootPipeline&lt;BossItemDef&gt;()
+    .WithRandom(UnityRandom.Instance)
+    .AddStrategy(new WeightedRandomStrategy&lt;BossItemDef&gt;(rollCount: 1))
+    // If the equipment table had &quot;Empty&quot; entries or low drop chances,
+    // this ensures we still get one item from the table.
+    .AddStrategy(new GuaranteedDropStrategy&lt;BossItemDef&gt;())
+    .AddObserver(new BossLootObserver(&quot;Equipment&quot;));
+</code></pre>
+<p>If the <code>WeightedRandomStrategy</code> results in 0 items (e.g., if all weights failed or an &quot;Empty&quot; entry was rolled), <code>GuaranteedDropStrategy</code> will perform an additional roll that ignores &quot;Empty&quot; entries to ensure a result.</p>
+<h2 id="3-implementation-details">3. Implementation Details</h2>
+<h3 id="item-definitions">Item Definitions</h3>
+<p>For this example, we use a <code>BossItemDef</code> that includes a rarity-based power calculation during the build process.</p>
+<pre><code class="lang-csharp">public enum BossItemRarity {
+    Common,
+    Rare,
+    Legendary,
+    Epic,
+    Artifact
+}
+
+[System.Serializable]
+public class BossItemDef {
+    public string ItemName = &quot;Boss Drop&quot;;
+    public Color Color = Color.white;
+    public BossItemRarity Rarity = BossItemRarity.Common;
+    public string IconUnicode = &quot;??&quot;;
+    public bool IsWeapon;
+
+    public override string ToString() =&gt; $&quot;{IconUnicode} {ItemName}&quot;;
+}
+</code></pre><h3 id="the-factory">The Factory</h3>
+<p>The factory calculates the <code>Power</code> of the item instance based on its rarity and a small random variance.</p>
+<pre><code class="lang-csharp">public BossItemInstance Create(BossItemDef definition, Context context, IRandom random) {
+    var powerBase = definition.Rarity switch {
+        BossItemRarity.Common =&gt; 10,
+        BossItemRarity.Rare =&gt; 25,
+        BossItemRarity.Epic =&gt; 50,
+        BossItemRarity.Legendary =&gt; 100,
+        BossItemRarity.Artifact =&gt; 250,
+        _ =&gt; 0
+    };
+
+    return new BossItemInstance {
+        Name = definition.ItemName,
+        Color = definition.Color,
+        Rarity = definition.Rarity,
+        Icon = definition.IconUnicode,
+        Power = powerBase + random.Range(0, 10)
+    };
+}
+</code></pre><h2 id="summary">Summary</h2>
+<p>Boss loot systems demonstrate:</p>
+<ul>
+<li><strong>Sequential Execution</strong>: Running multiple loot rolls into a single result set.</li>
+<li><strong>Fallbacks</strong>: Using <code>GuaranteedDropStrategy</code> for player satisfaction.</li>
+<li><strong>Logic Injection</strong>: Using the factory to scale item stats at runtime.</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/nicolas-stephan/UnifiedLoot/blob/main/docs/tutorials/boss-loot.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          © 2026 Nicolas Stephan · MIT License
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

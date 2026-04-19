@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Tutorial: Gacha &amp; Loot Boxes | Unified Loot </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Tutorial: Gacha &amp; Loot Boxes | Unified Loot ">
+      
+      
+      <link rel="icon" href="../media/logo.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/nicolas-stephan/UnifiedLoot/blob/main/docs/tutorials/gacha.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../media/logo.png" alt="Unified Loot">
+            Unified Loot
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="tutorial-gacha--loot-boxes">Tutorial: Gacha &amp; Loot Boxes</h1>
+
+<p>This tutorial explores the <code>GachaExample</code> sample, showing how to implement common gacha mechanics like hard/soft pity and multi-pulls using UnifiedLoot. We'll also see the correct way to reuse a <code>Context</code> across multiple rolls.</p>
+<h2 id="1-context-reuse">1. Context Reuse</h2>
+<p>When performing multiple rolls (like a &quot;10-pull&quot;), it is more efficient to reuse a single <code>Context</code> instance. This avoids unnecessary allocations and allows strategies and observers to persist data more easily throughout the sequence.</p>
+<pre><code class="lang-csharp">[ContextMenu(&quot;Single Pull&quot;)]
+public void SinglePull() {
+    _recentPulls.Clear();
+    _gachaPipeline.ExecuteAndBuild(bannerTable!.ToTable(), this, _recentPulls, _context);
+
+    LogResults(&quot;Single Pull&quot;);
+}
+
+[ContextMenu(&quot;Multi Pull (10x)&quot;)]
+public void MultiPull() {
+    _recentPulls.Clear();
+
+    Debug.Log(&quot;&lt;color=orange&gt;&lt;b&gt;Multi-Pull Start!&lt;/b&gt;&lt;/color&gt;&quot;);
+    for (var i = 0; i &lt; 10; i++)
+        _gachaPipeline.ExecuteAndBuild(bannerTable!.ToTable(), this, _recentPulls, _context);
+
+    LogResults(&quot;10-Pull&quot;);
+}
+</code></pre><h2 id="2-cohesive-pity-system">2. Cohesive Pity System</h2>
+<p>Instead of splitting pity logic across multiple unrelated classes, we can implement a cohesive <code>GachaPitySystem</code> that handles all stages of the gacha lifecycle. By implementing both <code>ILootStrategy</code> and <code>ILootObserver</code>, it can manage state, modify weights, and enforce guarantees in one place.</p>
+<pre><code class="lang-csharp">/// &lt;summary&gt;
+/// A cohesive pity system that handles soft pity weight modification,
+/// hard pity enforcement, and success/failure tracking.
+///
+/// &lt;para&gt;By implementing both &lt;see cref=&quot;ILootStrategy{T}&quot;/&gt; and &lt;see cref=&quot;ILootObserver{T}&quot;/&gt;,
+/// it can be added to the pipeline once to handle multiple stages of the process.&lt;/para&gt;
+/// &lt;/summary&gt;
+private class GachaPitySystem : ILootGeneratorStrategy&lt;GachaItemDef&gt; {
+    private const int Key4 = 4;
+    private const int Key5 = 5;
+
+    private readonly IPityTracker _tracker = new PityTracker();
+    private readonly int _threshold4;
+    private readonly int _threshold5;
+    private readonly int _softPityStart5;
+
+
+    public GachaPitySystem(int threshold4, int threshold5, int softPityStart5) {
+        _threshold4 = threshold4;
+        _threshold5 = threshold5;
+        _softPityStart5 = softPityStart5;
+    }
+
+    public int Pity5 =&gt; _tracker.GetFailures(Key5);
+    public int Pity4 =&gt; _tracker.GetFailures(Key4);
+
+    /// &lt;summary&gt;
+    /// Logic for soft pity weight modification.
+    /// &lt;/summary&gt;
+    public float GetSoftPityWeight(WeightedEntry&lt;GachaItemDef&gt; we, Context context) {
+        if (we.Entry.Item?.Rarity != GachaRarity.FiveStar)
+            return we.Weight;
+
+        var pity = _tracker.GetFailures(Key5);
+        if (pity &lt; _softPityStart5)
+            return we.Weight;
+
+        // Increase weight linearly after soft pity start
+        var boost = 1f + (pity - _softPityStart5) * 10f;
+        return we.Weight * boost;
+    }
+
+    /// &lt;summary&gt;
+    /// Logic for hard pity enforcement (guaranteed drops).
+    /// Runs after the main roll strategy.
+    /// &lt;/summary&gt;
+    public void Process(LootWorkingSet&lt;GachaItemDef&gt; workingSet, Context context) {
+        // If the roll didn't happen or produced nothing, we can't enforce pity here
+        if (workingSet.Results.Count == 0)
+            return;
+
+        var pity5 = _tracker.GetFailures(Key5);
+        var pity4 = _tracker.GetFailures(Key4);
+
+        // 1. Check 5-star hard pity (must happen first as it's higher priority)
+        var got5Star = false;
+        if (
+            pity5 &gt;= _threshold5 - 1 &amp;&amp;
+            workingSet.Results.All(r =&gt; r.Item.Rarity != GachaRarity.FiveStar)
+        ) {
+            workingSet.Results.Clear();
+            got5Star = TryRollFiltered(workingSet, GachaRarity.FiveStar);
+        }
+
+        // 2. Check 4-star hard pity (only if no 5-star or 4-star dropped)
+        var hasHighRarity = !got5Star &amp;&amp; workingSet.Results.Any(r =&gt; r.Item.Rarity &gt;= GachaRarity.FourStar);
+        var got4Star = false;
+        if (!hasHighRarity &amp;&amp; pity4 &gt;= _threshold4 - 1) {
+            workingSet.Results.Clear();
+            got4Star = TryRollFiltered(workingSet, GachaRarity.FourStar);
+        }
+
+        // 5-star resets on 5-star drop, otherwise increments
+        _tracker.Record(Key5, got5Star ? PityResult.Success : PityResult.Failure);
+
+        // 4-star resets on either 4-star or 5-star drop, otherwise increments
+        _tracker.Record(Key4, got5Star || got4Star ? PityResult.Success : PityResult.Failure);
+    }
+
+    private bool TryRollFiltered(LootWorkingSet&lt;GachaItemDef&gt; workingSet, GachaRarity rarity) {
+        var filteredEntries = workingSet.WeightedEntries
+            .Where(we =&gt; we.Entry.Item != null &amp;&amp; we.Entry.Item.Rarity == rarity)
+            .ToList();
+
+        if (filteredEntries.Count == 0)
+            return false;
+
+        var totalWeight = filteredEntries.Sum(we =&gt; we.Weight);
+        var roll = workingSet.Random.Range(0f, totalWeight);
+        var current = 0f;
+
+        foreach (var we in filteredEntries) {
+            current += we.Weight;
+            if (!(roll &lt;= current))
+                continue;
+            workingSet.AddResult(we.Entry, we.Index, totalWeight &gt; 0 ? roll / totalWeight : 0);
+            return true;
+        }
+
+        // Fallback
+        var first = filteredEntries[0];
+        workingSet.AddResult(first.Entry, first.Index, 1f);
+        return true;
+    }
+}
+</code></pre><h3 id="soft-pity">Soft Pity</h3>
+<p>Soft pity increases the drop rate of rare items after a certain threshold of failures. We use <code>ModifyWeightStrategy</code> and pass it a method from our pity system that calculates the boost based on the internal <code>IPityTracker</code>.</p>
+<pre><code class="lang-csharp">private void Awake() {
+    // 1. Initialize the pity system (holds state internally via IPityTracker)
+    _pitySystem = new GachaPitySystem(hardPity4Star, hardPity5Star, softPityStart5Star);
+
+    // 2. Reuse a single context for efficiency and data persistence across pulls
+    _context = new Context();
+
+    // 3. Build the gacha pipeline
+    _gachaPipeline = new LootPipeline&lt;GachaItemDef&gt;()
+        .WithRandom(UnityRandom.Instance)
+        // Soft Pity: Modify weight of 5-star items using the pity system's current state
+        .AddStrategy(new ModifyWeightStrategy&lt;GachaItemDef&gt;(_pitySystem.GetSoftPityWeight))
+        // Main roll
+        .AddStrategy(new WeightedRandomStrategy&lt;GachaItemDef&gt;(rollCount: 1))
+        // Hard Pity: Force results if threshold reached and update pity state
+        .AddStrategy(_pitySystem);
+}
+</code></pre><h3 id="hard-pity">Hard Pity</h3>
+<p>Hard pity guarantees a specific result after a fixed number of failures. The <code>GachaPitySystem</code> checks the results of the roll and, if the threshold is reached without a high-rarity drop, it clears the current results and forces a filtered roll from the table.</p>
+<h2 id="summary">Summary</h2>
+<p>The Gacha example demonstrates:</p>
+<ul>
+<li><strong>Context Reuse</strong>: Reusing a single <code>Context</code> instance across multiple rolls for efficiency and data persistence.</li>
+<li><strong>Dynamic Weighting</strong>: Using <code>ModifyWeightStrategy</code> for soft pity ramps.</li>
+<li><strong>Cohesive Pity System</strong>: Implementing multiple interfaces in a single class to manage state, modify weights, and enforce hard pity.</li>
+<li><strong>State Management</strong>: Using <code>IPityTracker</code> and <code>ILootObserver</code> to synchronize persistent state with loot results.</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/nicolas-stephan/UnifiedLoot/blob/main/docs/tutorials/gacha.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          © 2026 Nicolas Stephan · MIT License
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

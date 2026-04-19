@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Namespace NS.UnifiedLoot | Unified Loot </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Namespace NS.UnifiedLoot | Unified Loot ">
+      
+      
+      <link rel="icon" href="media/logo.png">
+      <link rel="stylesheet" href="public/docfx.min.css">
+      <link rel="stylesheet" href="public/main.css">
+      <meta name="docfx:navrel" content="toc.html">
+      <meta name="docfx:tocrel" content="api/toc.html">
+      
+      <meta name="docfx:rel" content="">
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="index.html">
+            <img id="logo" class="svg" src="media/logo.png" alt="Unified Loot">
+            Unified Loot
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="NS.UnifiedLoot">
+
+  <h1 id="NS_UnifiedLoot" data-uid="NS.UnifiedLoot" class="text-break">Namespace NS.UnifiedLoot</h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+
+    <h3 id="classes">
+Classes
+</h3>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.BonusRollStrategy-1.html">BonusRollStrategy&lt;T&gt;</a></dt>
+      <dd><p>Adds bonus rolls based on context values (like luck or magic find).</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.CompositeTableBuilder-1.html">CompositeTableBuilder&lt;T&gt;</a></dt>
+      <dd><p>Builder for creating a flattened, immutable loot table from multiple sub-tables.
+Replaces the runtime CompositeTable.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.ConsolidateResultsStrategy-1.html">ConsolidateResultsStrategy&lt;T&gt;</a></dt>
+      <dd><p>Consolidates duplicate items by combining their quantities.
+Useful after strategies that might produce multiple rolls of the same item.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.Context.html">Context</a></dt>
+      <dd><p>A flexible context container.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.DropChanceStrategy-1.html">DropChanceStrategy&lt;T&gt;</a></dt>
+      <dd><p>Rolls each entry independently against its weight as a drop chance (0-1 or 0-100).
+Unlike weighted random, entries don't compete - each is rolled separately.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.ExpandResultsStrategy-1.html">ExpandResultsStrategy&lt;T&gt;</a></dt>
+      <dd><p>Replaces individual results with an expanded collection — useful for &quot;drop sets&quot;
+where one logical item resolves into a group of concrete items.</p>
+<p>
+For each result, the <code>expander</code> delegate is called. If it returns a non-null
+collection, the original result is removed and replaced with one <a class="xref" href="NS.UnifiedLoot.LootResult-1.html">LootResult&lt;T&gt;</a>
+per expanded item (quantity defaults to 1 unless an optional <code>quantityResolver</code>
+is provided).  If the delegate returns <code>null</code>, the result passes through unchanged.
+</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.FilterByContextStrategy-1.html">FilterByContextStrategy&lt;T&gt;</a></dt>
+      <dd><p>Filters results based on a predicate that has access to context.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.FilterStrategy-1.html">FilterStrategy&lt;T&gt;</a></dt>
+      <dd><p>Filters results based on a simple predicate.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.GuaranteedDropStrategy-1.html">GuaranteedDropStrategy&lt;T&gt;</a></dt>
+      <dd><p>Ensures at least one item drops if the current results are empty.
+Useful as a fallback at the end of a pipeline.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.ItemPityStrategy-1.html">ItemPityStrategy&lt;T&gt;</a></dt>
+      <dd><p>A strategy that tracks pity for specific items rather than the whole table.
+If a tracked item hasn't dropped for a certain number of rolls, it is guaranteed.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.Key.html">Key</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.Key-1.html">Key&lt;T&gt;</a></dt>
+      <dd><p>A type-safe key for storing and retrieving values from a <a class="xref" href="NS.UnifiedLoot.Context.html">Context</a>.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.LimitResultsFromContextStrategy-1.html">LimitResultsFromContextStrategy&lt;T&gt;</a></dt>
+      <dd><p>Limits results based on a context value.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.LimitResultsStrategy-1.html">LimitResultsStrategy&lt;T&gt;</a></dt>
+      <dd><p>Limits the number of results to a maximum count.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.LootEntry.html">LootEntry</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.LootEntryDataBase.html">LootEntryDataBase</a></dt>
+      <dd><p>Non-generic base for <a class="xref" href="NS.UnifiedLoot.LootTableAsset-1.html">LootTableAsset&lt;TItem&gt;</a> entries.
+Targeted by the property drawer so that weight, quantity and note render
+with probability hints in the Inspector.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.LootPipeline-1.html">LootPipeline&lt;T&gt;</a></dt>
+      <dd><p>A composable pipeline of strategies that process loot rolls.
+The pipeline defines HOW loot is processed; the table defines WHAT can drop.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.LootPreviewEntry-1.html">LootPreviewEntry&lt;T&gt;</a></dt>
+      <dd><p>A potential outcome in a loot table preview.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.LootPreviewer.html">LootPreviewer</a></dt>
+      <dd><p>Utility for calculating the &quot;dry run&quot; state of a loot table processed by a pipeline.
+Useful for showing users what a loot table looks like after modifications.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.LootTableAssetBase.html">LootTableAssetBase</a></dt>
+      <dd><p>Non-generic base for editor tooling. Not intended for direct use.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.LootTableAsset-1.html">LootTableAsset&lt;TItem&gt;</a></dt>
+      <dd></dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.LootTableAsset-1.LootEntryData.html">LootTableAsset&lt;TItem&gt;.LootEntryData</a></dt>
+      <dd><p>Entry data stored in the asset.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.LootTableIdGenerator.html">LootTableIdGenerator</a></dt>
+      <dd><p>Helper for generating unique table IDs.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.LootTablePreview-1.html">LootTablePreview&lt;T&gt;</a></dt>
+      <dd><p>Represents the state of a loot table after being processed by a pipeline,
+without actually performing any random rolls.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.LootTable-1.html">LootTable&lt;T&gt;</a></dt>
+      <dd><p>A simple code-defined loot table.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.LootWorkingSet-1.html">LootWorkingSet&lt;T&gt;</a></dt>
+      <dd><p>The working state passed through the loot pipeline.
+Strategies read from and write to this set during processing.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.ModifyQuantityStrategy-1.html">ModifyQuantityStrategy&lt;T&gt;</a></dt>
+      <dd><p>Modifies the quantity of all results.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.ModifyWeightStrategy-1.html">ModifyWeightStrategy&lt;T&gt;</a></dt>
+      <dd><p>Scales the weights of weighted entries before selection strategies run.
+Must be placed <em>before</em> <a class="xref" href="NS.UnifiedLoot.WeightedRandomStrategy-1.html">WeightedRandomStrategy&lt;T&gt;</a> in the pipeline.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.NestedTableStrategy-1.html">NestedTableStrategy&lt;T&gt;</a></dt>
+      <dd><p>Allows rolling on additional tables from the results.
+Useful for nested loot pools (e.g., a &quot;weapon&quot; entry that rolls on a weapon-specific table).
+For each matched result, the nested pipeline is executed once per quantity unit.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.PityStrategy-1.html">PityStrategy&lt;T&gt;</a></dt>
+      <dd><p>Implements a pity/mercy system that guarantees a drop after N failures.
+Tracks state per-table (or per shared group) using integer keys.
+Implements <a class="xref" href="NS.UnifiedLoot.IResettable.html">IResettable</a> so callers can reset all counters via the interface.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.PityTracker.html">PityTracker</a></dt>
+      <dd><p>Default in-memory implementation of <a class="xref" href="NS.UnifiedLoot.IPityTracker.html">IPityTracker</a>.
+Stores failure counts in a dictionary.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.SystemRandom.html">SystemRandom</a></dt>
+      <dd><p>Default implementation using System.Random.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.UniqueDropStrategy-1.html">UniqueDropStrategy&lt;T&gt;</a></dt>
+      <dd><p>Tracks items that have already dropped and prevents duplicates.
+Useful for one-time drops (e.g., unique quest items, first-time boss kills).</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.UnityRandom.html">UnityRandom</a></dt>
+      <dd><p>Implementation using Unity's random. Not seedable per-instance.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.WeightedRandomStrategy-1.html">WeightedRandomStrategy&lt;T&gt;</a></dt>
+      <dd><p>Generates loot results using weighted random selection.
+This is typically the first strategy in a pipeline.</p>
+</dd>
+    </dl>
+    <h3 id="structs">
+Structs
+</h3>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.BuiltLootResult-2.html">BuiltLootResult&lt;TDefinition, TInstance&gt;</a></dt>
+      <dd><p>Result of a loot roll that has been built into an instance.
+Contains both the original definition and the created instance.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.IntRange.html">IntRange</a></dt>
+      <dd><p>Represents an inclusive integer range, typically used for quantity rolls.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.LootEntry-1.html">LootEntry&lt;T&gt;</a></dt>
+      <dd><p>Default implementation of <a class="xref" href="NS.UnifiedLoot.ILootEntry-1.html">ILootEntry&lt;T&gt;</a> for code-defined loot tables.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.LootMetadata.html">LootMetadata</a></dt>
+      <dd><p>Metadata about a loot roll, useful for debugging and analytics.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.LootResult-1.html">LootResult&lt;T&gt;</a></dt>
+      <dd><p>Represents a single item drop result from the loot system.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.WeightedEntry-1.html">WeightedEntry&lt;T&gt;</a></dt>
+      <dd><p>An entry with its computed weight for weighted selection algorithms.</p>
+</dd>
+    </dl>
+    <h3 id="interfaces">
+Interfaces
+</h3>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.ILootEntry-1.html">ILootEntry&lt;T&gt;</a></dt>
+      <dd><p>Represents a single entry in a loot table.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.ILootFactory-2.html">ILootFactory&lt;TDefinition, TInstance&gt;</a></dt>
+      <dd><p>Factory interface for converting loot definitions into actual item instances.
+Users implement this to define how their items are created from loot results.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.ILootGeneratorStrategy-1.html">ILootGeneratorStrategy&lt;T&gt;</a></dt>
+      <dd><p>A strategy that selects items from the table and adds them as results.
+These strategies are typically skipped during the &quot;dry-run&quot; preview.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.ILootObserver-1.html">ILootObserver&lt;T&gt;</a></dt>
+      <dd><p>Observes completed loot rolls. Register via <a class="xref" href="NS.UnifiedLoot.LootPipeline-1.html#NS_UnifiedLoot_LootPipeline_1_AddObserver_NS_UnifiedLoot_ILootObserver__0__">AddObserver(ILootObserver&lt;T&gt;)</a>.
+Called after all strategies have finished processing.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.ILootResultModifierStrategy-1.html">ILootResultModifierStrategy&lt;T&gt;</a></dt>
+      <dd><p>A strategy that modifies loot results after they have been generated.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.ILootStrategy-1.html">ILootStrategy&lt;T&gt;</a></dt>
+      <dd><p>A single step in the loot pipeline. Strategies can generate, filter, or modify loot results.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.ILootTableModifierStrategy-1.html">ILootTableModifierStrategy&lt;T&gt;</a></dt>
+      <dd><p>A strategy that modifies the loot table (weights, entries) before any items are rolled.
+These strategies are executed during the &quot;dry-run&quot; preview.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.ILootTable-1.html">ILootTable&lt;T&gt;</a></dt>
+      <dd><p>Represents a collection of loot entries that can be rolled against.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.IPityTracker.html">IPityTracker</a></dt>
+      <dd><p>Tracks failure/success counts for a pity system.
+Can be used standalone or within the loot pipeline.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.IRandom.html">IRandom</a></dt>
+      <dd><p>Abstraction for random number generation, allowing for deterministic/seeded randomness.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.IResettable.html">IResettable</a></dt>
+      <dd><p>Implemented by stateful strategies that support full state reset.
+Use <code>pipeline.Strategies.OfType&lt;IResettable&gt;()</code> to reset all stateful
+strategies from Unity lifecycle hooks (OnDestroy, scene reload, etc.)
+without importing concrete strategy types.</p>
+</dd>
+    </dl>
+    <h3 id="enums">
+Enums
+</h3>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.LootEntryType.html">LootEntryType</a></dt>
+      <dd><p>A ScriptableObject-based loot table for designer-defined loot.</p>
+</dd>
+    </dl>
+    <dl class="jumplist">
+      <dt><a class="xref" href="NS.UnifiedLoot.PityResult.html">PityResult</a></dt>
+      <dd></dd>
+    </dl>
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          © 2026 Nicolas Stephan · MIT License
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

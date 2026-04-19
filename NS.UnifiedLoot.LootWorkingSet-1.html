@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class LootWorkingSet&lt;T&gt; | Unified Loot </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class LootWorkingSet&lt;T&gt; | Unified Loot ">
+      
+      <meta name="description" content="The working state passed through the loot pipeline. Strategies read from and write to this set during processing.">
+      <link rel="icon" href="media/logo.png">
+      <link rel="stylesheet" href="public/docfx.min.css">
+      <link rel="stylesheet" href="public/main.css">
+      <meta name="docfx:navrel" content="toc.html">
+      <meta name="docfx:tocrel" content="api/toc.html">
+      
+      <meta name="docfx:rel" content="">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/nicolas-stephan/UnifiedLoot/new/main/apiSpec/new?filename=NS_UnifiedLoot_LootWorkingSet_1.md&amp;value=---%0Auid%3A%20NS.UnifiedLoot.LootWorkingSet%601%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="index.html">
+            <img id="logo" class="svg" src="media/logo.png" alt="Unified Loot">
+            Unified Loot
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="NS.UnifiedLoot.LootWorkingSet`1">
+
+
+
+  <h1 id="NS_UnifiedLoot_LootWorkingSet_1" data-uid="NS.UnifiedLoot.LootWorkingSet`1" class="text-break">
+Class LootWorkingSet&lt;T&gt;  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootWorkingSet.cs/#L9"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="NS.html">NS</a>.<a class="xref" href="NS.UnifiedLoot.html">UnifiedLoot</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>UnifiedLoot.doc.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>The working state passed through the loot pipeline.
+Strategies read from and write to this set during processing.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class LootWorkingSet&lt;T&gt;</code></pre>
+  </div>
+
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of item.</p>
+</dd>
+  </dl>
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><span class="xref">object</span></div>
+      <div><span class="xref">LootWorkingSet&lt;T&gt;</span></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="NS_UnifiedLoot_LootWorkingSet_1_Blackboard_" data-uid="NS.UnifiedLoot.LootWorkingSet`1.Blackboard*"></a>
+
+  <h3 id="NS_UnifiedLoot_LootWorkingSet_1_Blackboard" data-uid="NS.UnifiedLoot.LootWorkingSet`1.Blackboard">
+  Blackboard
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootWorkingSet.cs/#L45"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Type-safe blackboard strategies can use to communicate intermediate data
+with each other within a single pipeline execution. The blackboard is cleared between
+every execution.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Context Blackboard { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="NS.UnifiedLoot.Context.html">Context</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="NS_UnifiedLoot_LootWorkingSet_1_CollectMetadata_" data-uid="NS.UnifiedLoot.LootWorkingSet`1.CollectMetadata*"></a>
+
+  <h3 id="NS_UnifiedLoot_LootWorkingSet_1_CollectMetadata" data-uid="NS.UnifiedLoot.LootWorkingSet`1.CollectMetadata">
+  CollectMetadata
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootWorkingSet.cs/#L38"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Whether to collect metadata (can be disabled for performance).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CollectMetadata { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="NS_UnifiedLoot_LootWorkingSet_1_Random_" data-uid="NS.UnifiedLoot.LootWorkingSet`1.Random*"></a>
+
+  <h3 id="NS_UnifiedLoot_LootWorkingSet_1_Random" data-uid="NS.UnifiedLoot.LootWorkingSet`1.Random">
+  Random
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootWorkingSet.cs/#L23"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The random number generator to use for this roll.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IRandom Random { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="NS.UnifiedLoot.IRandom.html">IRandom</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="NS_UnifiedLoot_LootWorkingSet_1_Results_" data-uid="NS.UnifiedLoot.LootWorkingSet`1.Results*"></a>
+
+  <h3 id="NS_UnifiedLoot_LootWorkingSet_1_Results" data-uid="NS.UnifiedLoot.LootWorkingSet`1.Results">
+  Results
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootWorkingSet.cs/#L18"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The current results. Strategies can add, remove, or modify entries.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;LootResult&lt;T&gt;&gt; Results { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="NS.UnifiedLoot.LootResult-1.html">LootResult</a>&lt;T&gt;&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="NS_UnifiedLoot_LootWorkingSet_1_SourceTable_" data-uid="NS.UnifiedLoot.LootWorkingSet`1.SourceTable*"></a>
+
+  <h3 id="NS_UnifiedLoot_LootWorkingSet_1_SourceTable" data-uid="NS.UnifiedLoot.LootWorkingSet`1.SourceTable">
+  SourceTable
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootWorkingSet.cs/#L13"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The source loot table being rolled against.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ILootTable&lt;T&gt;? SourceTable { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="NS.UnifiedLoot.ILootTable-1.html">ILootTable</a>&lt;T&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="NS_UnifiedLoot_LootWorkingSet_1_TotalWeight_" data-uid="NS.UnifiedLoot.LootWorkingSet`1.TotalWeight*"></a>
+
+  <h3 id="NS_UnifiedLoot_LootWorkingSet_1_TotalWeight" data-uid="NS.UnifiedLoot.LootWorkingSet`1.TotalWeight">
+  TotalWeight
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootWorkingSet.cs/#L33"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Total weight of all entries (sum of WeightedEntries weights).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public float TotalWeight { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="NS_UnifiedLoot_LootWorkingSet_1_WeightedEntries_" data-uid="NS.UnifiedLoot.LootWorkingSet`1.WeightedEntries*"></a>
+
+  <h3 id="NS_UnifiedLoot_LootWorkingSet_1_WeightedEntries" data-uid="NS.UnifiedLoot.LootWorkingSet`1.WeightedEntries">
+  WeightedEntries
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootWorkingSet.cs/#L28"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Cached list of entries with their computed weights (for weighted selection).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;WeightedEntry&lt;T&gt;&gt; WeightedEntries { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="NS.UnifiedLoot.WeightedEntry-1.html">WeightedEntry</a>&lt;T&gt;&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="NS_UnifiedLoot_LootWorkingSet_1_AddResult_" data-uid="NS.UnifiedLoot.LootWorkingSet`1.AddResult*"></a>
+
+  <h3 id="NS_UnifiedLoot_LootWorkingSet_1_AddResult_NS_UnifiedLoot_ILootEntry__0__System_Int32_System_Single_" data-uid="NS.UnifiedLoot.LootWorkingSet`1.AddResult(NS.UnifiedLoot.ILootEntry{`0},System.Int32,System.Single)">
+  AddResult(ILootEntry&lt;T&gt;, int, float)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootWorkingSet.cs/#L67"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds a result from an entry, rolling quantity.
+Entries with a null item are silently skipped (empty entries).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddResult(ILootEntry&lt;T&gt; entry, int entryIndex, float rollValue)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>entry</code> <a class="xref" href="NS.UnifiedLoot.ILootEntry-1.html">ILootEntry</a>&lt;T&gt;</dt>
+    <dd></dd>
+    <dt><code>entryIndex</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>rollValue</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="NS_UnifiedLoot_LootWorkingSet_1_AddResult_" data-uid="NS.UnifiedLoot.LootWorkingSet`1.AddResult*"></a>
+
+  <h3 id="NS_UnifiedLoot_LootWorkingSet_1_AddResult__0_System_Int32_NS_UnifiedLoot_LootMetadata_" data-uid="NS.UnifiedLoot.LootWorkingSet`1.AddResult(`0,System.Int32,NS.UnifiedLoot.LootMetadata)">
+  AddResult(T, int, LootMetadata)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootWorkingSet.cs/#L61"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Adds a result to the working set.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddResult(T item, int quantity, LootMetadata metadata = default)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>item</code> <span class="xref">T</span></dt>
+    <dd></dd>
+    <dt><code>quantity</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>metadata</code> <a class="xref" href="NS.UnifiedLoot.LootMetadata.html">LootMetadata</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="NS_UnifiedLoot_LootWorkingSet_1_TryRollOneResult_" data-uid="NS.UnifiedLoot.LootWorkingSet`1.TryRollOneResult*"></a>
+
+  <h3 id="NS_UnifiedLoot_LootWorkingSet_1_TryRollOneResult" data-uid="NS.UnifiedLoot.LootWorkingSet`1.TryRollOneResult">
+  TryRollOneResult()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootWorkingSet.cs/#L88"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Picks one entry via weighted random selection and adds it as a result.
+Does nothing if there are no entries or total weight is zero.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void TryRollOneResult()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootWorkingSet.cs/#L9" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          © 2026 Nicolas Stephan · MIT License
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

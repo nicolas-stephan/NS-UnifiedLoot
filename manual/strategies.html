@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Strategies | Unified Loot </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Strategies | Unified Loot ">
+      
+      
+      <link rel="icon" href="../media/logo.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/nicolas-stephan/UnifiedLoot/blob/main/docs/manual/strategies.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../media/logo.png" alt="Unified Loot">
+            Unified Loot
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="strategies">Strategies</h1>
+
+<p>Strategies are the building blocks of a pipeline. Each implements <a class="xref" href="../NS.UnifiedLoot.ILootStrategy-1.html">ILootStrategy<t></t></a> and
+receives the working set (mutable roll state) and context (read-only caller data).</p>
+<pre><code class="lang-csharp">public interface ILootStrategy&lt;T&gt; {
+    void Process(LootWorkingSet&lt;T&gt; workingSet, Context context);
+}
+</code></pre>
+<p>Strategies are executed in the order they are added to the pipeline.</p>
+<h2 id="strategy-ordering">Strategy Ordering</h2>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>Order matters. A typical pipeline flows like this:</p>
+<pre><code>[ModifyWeight]  →  [Selection]  →  [Pity]  →  [Filter]  →  [PostProcess]
+</code></pre>
+</div>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Strategies</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pre-roll weight scaling</td>
+<td><a class="xref" href="../NS.UnifiedLoot.ModifyWeightStrategy-1.html">ModifyWeightStrategy<t></t></a></td>
+</tr>
+<tr>
+<td>Selection</td>
+<td><a class="xref" href="../NS.UnifiedLoot.WeightedRandomStrategy-1.html">WeightedRandomStrategy<t></t></a>, <a class="xref" href="../NS.UnifiedLoot.DropChanceStrategy-1.html">DropChanceStrategy<t></t></a></td>
+</tr>
+<tr>
+<td>Guarantee / fallback</td>
+<td><a class="xref" href="../NS.UnifiedLoot.GuaranteedDropStrategy-1.html">GuaranteedDropStrategy<t></t></a>, <a class="xref" href="../NS.UnifiedLoot.PityStrategy-1.html">PityStrategy<t></t></a>, <a class="xref" href="../NS.UnifiedLoot.ItemPityStrategy-1.html">ItemPityStrategy<t></t></a></td>
+</tr>
+<tr>
+<td>Filtering</td>
+<td><a class="xref" href="../NS.UnifiedLoot.FilterStrategy-1.html">FilterStrategy<t></t></a>, <a class="xref" href="../NS.UnifiedLoot.FilterByContextStrategy-1.html">FilterByContextStrategy<t></t></a></td>
+</tr>
+<tr>
+<td>Post-processing</td>
+<td><a class="xref" href="../NS.UnifiedLoot.ModifyQuantityStrategy-1.html">ModifyQuantityStrategy<t></t></a>, <a class="xref" href="../NS.UnifiedLoot.LimitResultsStrategy-1.html">LimitResultsStrategy<t></t></a>, <a class="xref" href="../NS.UnifiedLoot.ConsolidateResultsStrategy-1.html">ConsolidateResultsStrategy<t></t></a>, <a class="xref" href="../NS.UnifiedLoot.ExpandResultsStrategy-1.html">ExpandResultsStrategy<t></t></a>, <a class="xref" href="../NS.UnifiedLoot.BonusRollStrategy-1.html">BonusRollStrategy<t></t></a>, <a class="xref" href="../NS.UnifiedLoot.UniqueDropStrategy-1.html">UniqueDropStrategy<t></t></a>, <a class="xref" href="../NS.UnifiedLoot.NestedTableStrategy-1.html">NestedTableStrategy<t></t></a></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="selection-strategies">Selection Strategies</h2>
+<h3 id="weightedrandomstrategy"><a class="xref" href="../NS.UnifiedLoot.WeightedRandomStrategy-1.html">WeightedRandomStrategy<t></t></a></h3>
+<p>Picks <code>rollCount</code> items from the table using cumulative weighted random selection.</p>
+<pre><code class="lang-csharp">// Roll 3 times
+new WeightedRandomStrategy&lt;Item&gt;(rollCount: 3);
+
+// Roll once, no duplicates
+new WeightedRandomStrategy&lt;Item&gt;(rollCount: 1, allowDuplicates: false);
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>The same item can appear multiple times in the results if <code>allowDuplicates</code> is <code>true</code> (default).</p>
+</div>
+<h3 id="dropchancestrategy"><a class="xref" href="../NS.UnifiedLoot.DropChanceStrategy-1.html">DropChanceStrategy<t></t></a></h3>
+<p>Rolls every entry <strong>independently</strong>. Each entry's <code>Weight</code> is treated as a probability, not a
+relative weight.</p>
+<pre><code class="lang-csharp">// Weights are 0�1 (0.05 = 5% chance)
+new DropChanceStrategy&lt;Item&gt;();
+
+// Weights are 0�100 (5.0 = 5% chance)
+new DropChanceStrategy&lt;Item&gt;(weightAsPercent: true);
+</code></pre>
+<div class="TIP">
+<h5>Tip</h5>
+<p>This is useful for tables where each entry should be evaluated separately rather than competing
+with each other.</p>
+</div>
+<hr>
+<h2 id="guarantee--fallback-strategies">Guarantee / Fallback Strategies</h2>
+<h3 id="guaranteeddropstrategy"><a class="xref" href="../NS.UnifiedLoot.GuaranteedDropStrategy-1.html">GuaranteedDropStrategy<t></t></a></h3>
+<p>Only activates when the result list is empty. Performs one weighted random selection from the
+table.</p>
+<pre><code class="lang-csharp">pipeline.AddStrategy(new GuaranteedDropStrategy&lt;Item&gt;());
+</code></pre>
+<div class="TIP">
+<h5>Tip</h5>
+<p>Place this <strong>after</strong> your selection strategies so it only fires when they produce nothing.</p>
+</div>
+<hr>
+<h2 id="pity-strategies">Pity Strategies</h2>
+<p>See <a href="pity-systems.html">Pity Systems</a> for full details.</p>
+<h3 id="pitystrategy"><a class="xref" href="../NS.UnifiedLoot.PityStrategy-1.html">PityStrategy<t></t></a></h3>
+<p>Hard pity: after <code>threshold</code> consecutive rolls that produce no result, the next roll <strong>always</strong>
+succeeds. Resets on success. Tracks by table ID or group key.</p>
+<h3 id="itempitystrategy"><a class="xref" href="../NS.UnifiedLoot.ItemPityStrategy-1.html">ItemPityStrategy<t></t></a></h3>
+<p>Hard pity for a specific item. Guarantees the item drops after it has failed to drop N times.</p>
+<hr>
+<h2 id="pre-roll-modification">Pre-roll Modification</h2>
+<h3 id="modifyweightstrategy"><a class="xref" href="../NS.UnifiedLoot.ModifyWeightStrategy-1.html">ModifyWeightStrategy<t></t></a></h3>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>Scale entry weights <strong>before</strong> selection. Must be placed before any selection strategy.</p>
+</div>
+<pre><code class="lang-csharp">// Multiply all weights by a fixed factor
+pipeline.AddStrategy(ModifyWeightStrategy&lt;Item&gt;.Multiplier(2f));
+
+// Read multiplier from context
+pipeline.AddStrategy(ModifyWeightStrategy&lt;Item&gt;.MultiplierFromContext(luckKey));
+
+// Scale based on context value range
+pipeline.AddStrategy(ModifyWeightStrategy&lt;Item&gt;.ScaleByContextRange(
+    contextKey,
+    range: new(1, 60),
+    multiplier: 2.5f
+));
+
+// Custom per-entry scaling
+pipeline.AddStrategy(new ModifyWeightStrategy&lt;Item&gt;((entry, context) =&gt; {
+    float @base = entry.Weight;
+    return entry.Entry.Item is RareItem ? @base * 2f : @base;
+}));
+</code></pre>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>Recalculates cumulative weights and <code>TotalWeight</code> after modification so selection strategies see the updated distribution.</p>
+</div>
+<hr>
+<h2 id="filtering-strategies">Filtering Strategies</h2>
+<h3 id="filterstrategy"><a class="xref" href="../NS.UnifiedLoot.FilterStrategy-1.html">FilterStrategy<t></t></a></h3>
+<p>Removes results where the predicate returns <code>false</code>.</p>
+<pre><code class="lang-csharp">// Remove items below quality threshold
+pipeline.AddStrategy(new FilterStrategy&lt;Item&gt;(result =&gt; result.Item.Quality &gt;= Rarity.Rare));
+</code></pre><h3 id="filterbycontextstrategy"><a class="xref" href="../NS.UnifiedLoot.FilterByContextStrategy-1.html">FilterByContextStrategy<t></t></a></h3>
+<p>Like <a class="xref" href="../NS.UnifiedLoot.FilterStrategy-1.html">FilterStrategy<t></t></a> but the predicate also receives the context:</p>
+<pre><code class="lang-csharp">pipeline.AddStrategy(new FilterByContextStrategy&lt;Item&gt;((result, context) =&gt; {
+    if (!context.TryGet(playerLevelKey, out int level))
+        return true; // keep if no level context
+    return result.Item.MinLevel &lt;= level;
+}));
+</code></pre><hr>
+<h2 id="quantity-modification">Quantity Modification</h2>
+<h3 id="modifyquantitystrategy"><a class="xref" href="../NS.UnifiedLoot.ModifyQuantityStrategy-1.html">ModifyQuantityStrategy<t></t></a></h3>
+<p>Adjusts the quantity of each result after selection.</p>
+<pre><code class="lang-csharp">// Multiply by a fixed factor (rounds down, min 1)
+pipeline.AddStrategy(ModifyQuantityStrategy&lt;Item&gt;.Multiplier(2));
+
+// Multiply by a context value
+pipeline.AddStrategy(ModifyQuantityStrategy&lt;Item&gt;.MultiplierFromContext(quantityBonusKey));
+
+// Custom logic
+pipeline.AddStrategy(new ModifyQuantityStrategy&lt;Item&gt;((qty, context) =&gt;
+    context.GetOrDefault(isBossKey) ? qty * 3 : qty));
+</code></pre><hr>
+<h2 id="result-count-strategies">Result Count Strategies</h2>
+<h3 id="limitresultsstrategy"><a class="xref" href="../NS.UnifiedLoot.LimitResultsStrategy-1.html">LimitResultsStrategy<t></t></a></h3>
+<p>Caps the result list at <code>maxResults</code>. Excess items are removed from the end.</p>
+<pre><code class="lang-csharp">pipeline.AddStrategy(new LimitResultsStrategy&lt;Item&gt;(maxResults: 5));
+</code></pre><h3 id="limitresultsfromcontextstrategy"><a class="xref" href="../NS.UnifiedLoot.LimitResultsFromContextStrategy-1.html">LimitResultsFromContextStrategy<t></t></a></h3>
+<p>Reads the limit from a context key:</p>
+<pre><code class="lang-csharp">pipeline.AddStrategy(new LimitResultsFromContextStrategy&lt;Item&gt;(maxDropsKey));
+</code></pre><hr>
+<h2 id="post-processing-strategies">Post-processing Strategies</h2>
+<h3 id="consolidateresultsstrategy"><a class="xref" href="../NS.UnifiedLoot.ConsolidateResultsStrategy-1.html">ConsolidateResultsStrategy<t></t></a></h3>
+<p>Merges duplicate items into a single result by summing their quantities.</p>
+<pre><code class="lang-csharp">// Use default equality (Equals/GetHashCode)
+pipeline.AddStrategy(new ConsolidateResultsStrategy&lt;Item&gt;());
+
+// Custom comparer (e.g. compare by item ID only, ignore quality)
+pipeline.AddStrategy(new ConsolidateResultsStrategy&lt;Item&gt;(new ItemIdComparer()));
+</code></pre><h3 id="bonusrollstrategy"><a class="xref" href="../NS.UnifiedLoot.BonusRollStrategy-1.html">BonusRollStrategy<t></t></a></h3>
+<p>Reads a 0–1 chance from the context and adds one extra weighted random roll if the chance
+succeeds.</p>
+<pre><code class="lang-csharp">// Keys.Luck = 1.0 → 100% bonus roll; 0.0 → no bonus roll
+.AddStrategy(new BonusRollStrategy&lt;Item&gt;(Keys.Luck))
+</code></pre>
+<h3 id="uniquedropstrategy"><a class="xref" href="../NS.UnifiedLoot.UniqueDropStrategy-1.html">UniqueDropStrategy<t></t></a></h3>
+<p>Stateful. Tracks items that have already dropped (per instance) and removes duplicates from
+future results.</p>
+<pre><code class="lang-csharp">var uniqueDrops = new UniqueDropStrategy&lt;Item&gt;();
+
+// Later — reset between sessions or dungeon runs
+uniqueDrops.ResetAll();   // or uniqueDrops.Reset(specificItem)
+
+// Check / manually mark
+uniqueDrops.HasDropped(sword);      // bool
+uniqueDrops.MarkAsDropped(sword);   // manual override
+</code></pre>
+<h3 id="nestedtablestrategy"><a class="xref" href="../NS.UnifiedLoot.NestedTableStrategy-1.html">NestedTableStrategy<t></t></a></h3>
+<p>When an item acts as a &quot;table selector&quot;, resolve it against a sub-table and replace the item
+with the results of that sub-table.</p>
+<pre><code class="lang-csharp">// Provide a resolver that maps an item to its sub-table
+.AddStrategy(new NestedTableStrategy&lt;TableKey&gt;(
+    tableResolver: key =&gt; tableRegistry[key],
+    nestedPipeline: innerPipeline // optional; defaults to WeightedRandom(1)
+))
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>Items that don't resolve to a table (resolver returns null) are kept as-is.</p>
+</div>
+<h3 id="expandresultsstrategy"><a class="xref" href="../NS.UnifiedLoot.ExpandResultsStrategy-1.html">ExpandResultsStrategy<t></t></a></h3>
+<p>Expands individual results into multiple items via a delegate. Useful for &quot;loot set&quot; items that
+contain a collection of actual drops.</p>
+<pre><code class="lang-csharp">.AddStrategy(new ExpandResultsStrategy&lt;Item&gt;(
+    expander: item =&gt; lootSetDatabase[item], // returns IEnumerable&lt;Item&gt;? or null to skip
+    quantityResolver: item =&gt; new IntRange(1, 3) // optional per-expanded-item quantity
+))
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>Items where the expander returns <code>null</code> are kept unchanged.</p>
+</div>
+<hr>
+<h2 id="writing-a-custom-strategy">Writing a Custom Strategy</h2>
+<p>Implement <code>ILootStrategy&lt;T&gt;</code>. You have full access to the working set's results, weighted
+entries, blackboard, random, and source table:</p>
+<pre><code class="lang-csharp">public class ElementalFilterStrategy&lt;T&gt; : ILootStrategy&lt;T&gt; where T : IElemental {
+    readonly Element _allowedElement;
+
+    public ElementalFilterStrategy(Element allowedElement)
+        =&gt; _allowedElement = allowedElement;
+
+    public void Process(LootWorkingSet&lt;T&gt; workingSet, Context context) {
+        for (var i = workingSet.Results.Count - 1; i &gt;= 0; i--) {
+            var item = workingSet.Results[i].Item;
+            if (item != null &amp;&amp; item.Element != _allowedElement)
+                workingSet.Results.RemoveAt(i);
+        }
+    }
+}
+</code></pre>
+<h3 id="accessing-the-random-source">Accessing the random source</h3>
+<pre><code class="lang-csharp">float roll = workingSet.Random.Value; // 0–1 exclusive
+int idx  = workingSet.Random.Range(0, 5); // exclusive upper bound
+</code></pre>
+<h3 id="inter-strategy-communication-via-blackboard">Inter-strategy communication via Blackboard</h3>
+<pre><code class="lang-csharp">public static class MyKeys {
+    public static readonly Key&lt;int&gt; RollCount = new(&quot;RollCount&quot;);
+}
+
+// Strategy A — store data
+workingSet.Blackboard.Set(MyKeys.RollCount, rollCount);
+
+// Strategy B — read data
+if (workingSet.Blackboard.TryGet(MyKeys.RollCount, out int n))
+    // use n
+</code></pre>
+<p>The blackboard is a <code>Context</code> cleared between rolls. Use <code>Key&lt;T&gt;</code> for type-safe access.</p>
+<h3 id="pipeline-introspection">Pipeline introspection</h3>
+<pre><code class="lang-csharp">IReadOnlyList&lt;ILootStrategy&lt;T&gt;&gt; steps = pipeline.Strategies;
+
+// Insert before an existing strategy
+int idx = pipeline.Strategies.IndexOf(existingStrategy);
+pipeline.InsertStrategy(idx, myNewStrategy);
+
+// Remove a strategy
+pipeline.RemoveStrategy(existingStrategy);
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/nicolas-stephan/UnifiedLoot/blob/main/docs/manual/strategies.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          © 2026 Nicolas Stephan · MIT License
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

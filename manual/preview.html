@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Preview System | Unified Loot </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Preview System | Unified Loot ">
+      
+      
+      <link rel="icon" href="../media/logo.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/nicolas-stephan/UnifiedLoot/blob/main/docs/manual/preview.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../media/logo.png" alt="Unified Loot">
+            Unified Loot
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="preview-system">Preview System</h1>
+
+<p>The Preview System allows you to perform &quot;dry runs&quot; of your loot tables through a pipeline. This is essential for debugging complex strategy chains, showing potential outcomes to players, or validating drop rates in the Unity Editor.</p>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>Unlike a standard <a class="xref" href="../NS.UnifiedLoot.LootPipeline-1.html#NS_UnifiedLoot_LootPipeline_1_Execute_">Execute</a>, a preview does not perform any random rolls. Instead, it calculates the modified weights and probabilities for every entry in the table after all strategies have been applied.</p>
+</div>
+<h2 id="using-the-editor-preview">Using the Editor Preview</h2>
+<p>The easiest way to see the preview system in action is through the <strong>Pipeline Preview Simulation</strong> found on any <a href="tables.html#loottableasset--scriptableobject">LootTableAsset</a>.</p>
+<ol>
+<li>Select a <a href="tables.html#loottableasset--scriptableobject">LootTableAsset</a> in your Project window.</li>
+<li>In the Inspector, expand the <strong>Pipeline Preview Simulation</strong> foldout.</li>
+<li>This tool simulates a <a href="strategies.html#modifyweightstrategy">ModifyWeightStrategy</a> applied to the table.</li>
+<li>You can see how the &quot;Original Weight&quot; compares to the &quot;Modified Weight&quot;, and what the resulting drop probability (%) will be.</li>
+</ol>
+<div class="NOTE">
+<h5>Note</h5>
+<p>The Editor Preview is a built-in tool to help you visualize how pipelines modify tables. It demonstrates the math behind the strategies before any items are actually rolled.</p>
+</div>
+<h2 id="previewing-in-code">Previewing in Code</h2>
+<p>You can generate a preview programmatically using the <a class="xref" href="../NS.UnifiedLoot.LootPreviewer.html">LootPreviewer</a> utility class.</p>
+<pre><code class="lang-csharp">// 1. Setup your pipeline and table
+var pipeline = new LootPipeline&lt;MyItem&gt;();
+pipeline.AddStrategy(ModifyWeightStrategy&lt;MyItem&gt;.Multiplier(2.0f));
+
+var table = new LootTable&lt;MyItem&gt;();
+// ... populate table ...
+
+// 2. Request a preview
+LootTablePreview&lt;MyItem&gt; preview = LootPreviewer.GetPreview(pipeline, table);
+
+// 3. Inspect the results
+Debug.Log($&quot;Total Weight: {preview.TotalWeight}&quot;);
+
+foreach (var entry in preview.Entries)
+{
+    Debug.Log($&quot;Item: {entry.Item}, Prob: {entry.Probability * 100}%&quot;);
+    Debug.Log($&quot;Weight: {entry.OriginalWeight} -&gt; {entry.ModifiedWeight}&quot;);
+}
+</code></pre>
+<h2 id="preview-data-structure">Preview Data Structure</h2>
+<p>The <code>GetPreview</code> method returns a <a class="xref" href="../NS.UnifiedLoot.LootTablePreview-1.html">LootTablePreview<t></t></a> object containing:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Property</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>Entries</code></td>
+<td style="text-align: left;"><code>List&lt;LootPreviewEntry&lt;T&gt;&gt;</code></td>
+<td style="text-align: left;">Detailed information for each potential outcome.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>TotalWeight</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">The sum of all modified weights in the table.</td>
+</tr>
+</tbody>
+</table>
+<p>Each <code>LootPreviewEntry&lt;T&gt;</code> provides:</p>
+<ul>
+<li><strong>Item</strong>: The reference to the item.</li>
+<li><strong>OriginalWeight / ModifiedWeight</strong>: The weight before and after pipeline processing.</li>
+<li><strong>OriginalQuantity / ModifiedQuantity</strong>: The quantity range before and after processing.</li>
+<li><strong>Probability</strong>: The 0-1 chance of this item being picked in a single roll.</li>
+</ul>
+<h2 id="how-strategies-support-previews">How Strategies Support Previews</h2>
+<p>The <code>LootPreviewer</code> automatically handles strategies that implement <a class="xref" href="../NS.UnifiedLoot.ILootTableModifierStrategy-1.html">ILootTableModifierStrategy<t></t></a> (like weight modifiers) because they directly affect the <code>LootWorkingSet</code>.</p>
+<p>However, some strategies might want to show changes that don't happen in the &quot;table modification&quot; phase. Strategies can implement the <code>OnPreview</code> method from <a class="xref" href="../NS.UnifiedLoot.ILootStrategy-1.html">ILootStrategy<t></t></a> to provide custom preview data:</p>
+<pre><code class="lang-csharp">public class MyCustomStrategy&lt;T&gt; : ILootStrategy&lt;T&gt;, ILootResultModifierStrategy&lt;T&gt;
+{
+    public void OnPreview(LootTablePreview&lt;T&gt; preview, Context context)
+    {
+        // For example, a strategy that doubles all quantities:
+        foreach (var entry in preview.Entries)
+        {
+            entry.ModifiedQuantity = new IntRange(
+                entry.OriginalQuantity.Min * 2,
+                entry.OriginalQuantity.Max * 2
+            );
+        }
+    }
+
+    // ... other interface implementations ...
+}
+</code></pre>
+<div class="TIP">
+<h5>Tip</h5>
+<p>Strategies that purely generate results (like <code>WeightedRandomStrategy</code>) are typically ignored during previews, as previews focus on the <em>state</em> of the table rather than specific <em>outcomes</em>.</p>
+</div>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/nicolas-stephan/UnifiedLoot/blob/main/docs/manual/preview.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          © 2026 Nicolas Stephan · MIT License
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,1011 @@
+{
+  "source_base_path": "/home/runner/work/NS-UnifiedLoot/NS-UnifiedLoot/docs",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      }
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.BonusRollStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.BonusRollStrategy-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.BonusRollStrategy<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.BonusRollStrategy-1.yml\" sourcestartlinenumber=\"1\">Adds bonus rolls based on context values (like luck or magic find).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.BuiltLootResult-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.BuiltLootResult-2.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.BuiltLootResult<TDefinition, TInstance>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.BuiltLootResult-2.yml\" sourcestartlinenumber=\"1\">Result of a loot roll that has been built into an instance.\nContains both the original definition and the created instance.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.CompositeTableBuilder-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.CompositeTableBuilder-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.CompositeTableBuilder<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.CompositeTableBuilder-1.yml\" sourcestartlinenumber=\"1\">Builder for creating a flattened, immutable loot table from multiple sub-tables.\nReplaces the runtime CompositeTable.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.ConsolidateResultsStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.ConsolidateResultsStrategy-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.ConsolidateResultsStrategy<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.ConsolidateResultsStrategy-1.yml\" sourcestartlinenumber=\"1\">Consolidates duplicate items by combining their quantities.\nUseful after strategies that might produce multiple rolls of the same item.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.Context.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.Context.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.Context",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.Context.yml\" sourcestartlinenumber=\"1\">A flexible context container.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.DropChanceStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.DropChanceStrategy-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.DropChanceStrategy<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.DropChanceStrategy-1.yml\" sourcestartlinenumber=\"1\">Rolls each entry independently against its weight as a drop chance (0-1 or 0-100).\nUnlike weighted random, entries don't compete - each is rolled separately.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.ExpandResultsStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.ExpandResultsStrategy-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.ExpandResultsStrategy<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.ExpandResultsStrategy-1.yml\" sourcestartlinenumber=\"1\">Replaces individual results with an expanded collection — useful for &quot;drop sets&quot;\nwhere one logical item resolves into a group of concrete items.</p>\n<p>\nFor each result, the <code>expander</code> delegate is called. If it returns a non-null\ncollection, the original result is removed and replaced with one <xref href=\"NS.UnifiedLoot.LootResult%601\" data-throw-if-not-resolved=\"false\"></xref>\nper expanded item (quantity defaults to 1 unless an optional <code>quantityResolver</code>\nis provided).  If the delegate returns <code>null</code>, the result passes through unchanged.\n</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.FilterByContextStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.FilterByContextStrategy-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.FilterByContextStrategy<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.FilterByContextStrategy-1.yml\" sourcestartlinenumber=\"1\">Filters results based on a predicate that has access to context.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.FilterStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.FilterStrategy-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.FilterStrategy<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.FilterStrategy-1.yml\" sourcestartlinenumber=\"1\">Filters results based on a simple predicate.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.GuaranteedDropStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.GuaranteedDropStrategy-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.GuaranteedDropStrategy<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.GuaranteedDropStrategy-1.yml\" sourcestartlinenumber=\"1\">Ensures at least one item drops if the current results are empty.\nUseful as a fallback at the end of a pipeline.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.ILootEntry-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.ILootEntry-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.ILootEntry<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.ILootEntry-1.yml\" sourcestartlinenumber=\"1\">Represents a single entry in a loot table.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.ILootFactory-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.ILootFactory-2.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.ILootFactory<TDefinition, TInstance>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.ILootFactory-2.yml\" sourcestartlinenumber=\"1\">Factory interface for converting loot definitions into actual item instances.\nUsers implement this to define how their items are created from loot results.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.ILootGeneratorStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.ILootGeneratorStrategy-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.ILootGeneratorStrategy<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.ILootGeneratorStrategy-1.yml\" sourcestartlinenumber=\"1\">A strategy that selects items from the table and adds them as results.\nThese strategies are typically skipped during the &quot;dry-run&quot; preview.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.ILootObserver-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.ILootObserver-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.ILootObserver<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.ILootObserver-1.yml\" sourcestartlinenumber=\"1\">Observes completed loot rolls. Register via <xref href=\"NS.UnifiedLoot.LootPipeline%601.AddObserver(NS.UnifiedLoot.ILootObserver%7b%600%7d)\" data-throw-if-not-resolved=\"false\"></xref>.\nCalled after all strategies have finished processing.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.ILootResultModifierStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.ILootResultModifierStrategy-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.ILootResultModifierStrategy<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.ILootResultModifierStrategy-1.yml\" sourcestartlinenumber=\"1\">A strategy that modifies loot results after they have been generated.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.ILootStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.ILootStrategy-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.ILootStrategy<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.ILootStrategy-1.yml\" sourcestartlinenumber=\"1\">A single step in the loot pipeline. Strategies can generate, filter, or modify loot results.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.ILootTable-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.ILootTable-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.ILootTable<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.ILootTable-1.yml\" sourcestartlinenumber=\"1\">Represents a collection of loot entries that can be rolled against.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.ILootTableModifierStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.ILootTableModifierStrategy-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.ILootTableModifierStrategy<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.ILootTableModifierStrategy-1.yml\" sourcestartlinenumber=\"1\">A strategy that modifies the loot table (weights, entries) before any items are rolled.\nThese strategies are executed during the &quot;dry-run&quot; preview.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.IPityTracker.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.IPityTracker.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.IPityTracker",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.IPityTracker.yml\" sourcestartlinenumber=\"1\">Tracks failure/success counts for a pity system.\nCan be used standalone or within the loot pipeline.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.IRandom.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.IRandom.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.IRandom",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.IRandom.yml\" sourcestartlinenumber=\"1\">Abstraction for random number generation, allowing for deterministic/seeded randomness.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.IResettable.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.IResettable.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.IResettable",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.IResettable.yml\" sourcestartlinenumber=\"1\">Implemented by stateful strategies that support full state reset.\nUse <code>pipeline.Strategies.OfType&lt;IResettable&gt;()</code> to reset all stateful\nstrategies from Unity lifecycle hooks (OnDestroy, scene reload, etc.)\nwithout importing concrete strategy types.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.IntRange.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.IntRange.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.IntRange",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.IntRange.yml\" sourcestartlinenumber=\"1\">Represents an inclusive integer range, typically used for quantity rolls.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.ItemPityStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.ItemPityStrategy-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.ItemPityStrategy<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.ItemPityStrategy-1.yml\" sourcestartlinenumber=\"1\">A strategy that tracks pity for specific items rather than the whole table.\nIf a tracked item hasn't dropped for a certain number of rolls, it is guaranteed.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.Key-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.Key-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.Key<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.Key-1.yml\" sourcestartlinenumber=\"1\">A type-safe key for storing and retrieving values from a <xref href=\"NS.UnifiedLoot.Context\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.Key.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.Key.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.Key",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.LimitResultsFromContextStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.LimitResultsFromContextStrategy-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.LimitResultsFromContextStrategy<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.LimitResultsFromContextStrategy-1.yml\" sourcestartlinenumber=\"1\">Limits results based on a context value.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.LimitResultsStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.LimitResultsStrategy-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.LimitResultsStrategy<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.LimitResultsStrategy-1.yml\" sourcestartlinenumber=\"1\">Limits the number of results to a maximum count.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.LootEntry-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.LootEntry-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.LootEntry<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.LootEntry-1.yml\" sourcestartlinenumber=\"1\">Default implementation of <xref href=\"NS.UnifiedLoot.ILootEntry%601\" data-throw-if-not-resolved=\"false\"></xref> for code-defined loot tables.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.LootEntry.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.LootEntry.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.LootEntry",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.LootEntryDataBase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.LootEntryDataBase.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.LootEntryDataBase",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.LootEntryDataBase.yml\" sourcestartlinenumber=\"1\">Non-generic base for <xref href=\"NS.UnifiedLoot.LootTableAsset%601\" data-throw-if-not-resolved=\"false\"></xref> entries.\nTargeted by the property drawer so that weight, quantity and note render\nwith probability hints in the Inspector.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.LootEntryType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.LootEntryType.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.LootEntryType",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.LootEntryType.yml\" sourcestartlinenumber=\"1\">A ScriptableObject-based loot table for designer-defined loot.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.LootMetadata.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.LootMetadata.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.LootMetadata",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.LootMetadata.yml\" sourcestartlinenumber=\"1\">Metadata about a loot roll, useful for debugging and analytics.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.LootPipeline-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.LootPipeline-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.LootPipeline<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.LootPipeline-1.yml\" sourcestartlinenumber=\"1\">A composable pipeline of strategies that process loot rolls.\nThe pipeline defines HOW loot is processed; the table defines WHAT can drop.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.LootPreviewEntry-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.LootPreviewEntry-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.LootPreviewEntry<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.LootPreviewEntry-1.yml\" sourcestartlinenumber=\"1\">A potential outcome in a loot table preview.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.LootPreviewer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.LootPreviewer.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.LootPreviewer",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.LootPreviewer.yml\" sourcestartlinenumber=\"1\">Utility for calculating the &quot;dry run&quot; state of a loot table processed by a pipeline.\nUseful for showing users what a loot table looks like after modifications.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.LootResult-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.LootResult-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.LootResult<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.LootResult-1.yml\" sourcestartlinenumber=\"1\">Represents a single item drop result from the loot system.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.LootTable-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.LootTable-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.LootTable<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.LootTable-1.yml\" sourcestartlinenumber=\"1\">A simple code-defined loot table.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.LootTableAsset-1.LootEntryData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.LootTableAsset-1.LootEntryData.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.LootTableAsset<TItem>.LootEntryData",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.LootTableAsset-1.LootEntryData.yml\" sourcestartlinenumber=\"1\">Entry data stored in the asset.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.LootTableAsset-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.LootTableAsset-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.LootTableAsset<TItem>",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.LootTableAssetBase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.LootTableAssetBase.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.LootTableAssetBase",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.LootTableAssetBase.yml\" sourcestartlinenumber=\"1\">Non-generic base for editor tooling. Not intended for direct use.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.LootTableIdGenerator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.LootTableIdGenerator.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.LootTableIdGenerator",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.LootTableIdGenerator.yml\" sourcestartlinenumber=\"1\">Helper for generating unique table IDs.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.LootTablePreview-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.LootTablePreview-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.LootTablePreview<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.LootTablePreview-1.yml\" sourcestartlinenumber=\"1\">Represents the state of a loot table after being processed by a pipeline,\nwithout actually performing any random rolls.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.LootWorkingSet-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.LootWorkingSet-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.LootWorkingSet<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.LootWorkingSet-1.yml\" sourcestartlinenumber=\"1\">The working state passed through the loot pipeline.\nStrategies read from and write to this set during processing.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.ModifyQuantityStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.ModifyQuantityStrategy-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.ModifyQuantityStrategy<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.ModifyQuantityStrategy-1.yml\" sourcestartlinenumber=\"1\">Modifies the quantity of all results.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.ModifyWeightStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.ModifyWeightStrategy-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.ModifyWeightStrategy<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.ModifyWeightStrategy-1.yml\" sourcestartlinenumber=\"1\">Scales the weights of weighted entries before selection strategies run.\nMust be placed <em>before</em> <xref href=\"NS.UnifiedLoot.WeightedRandomStrategy%601\" data-throw-if-not-resolved=\"false\"></xref> in the pipeline.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.NestedTableStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.NestedTableStrategy-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.NestedTableStrategy<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.NestedTableStrategy-1.yml\" sourcestartlinenumber=\"1\">Allows rolling on additional tables from the results.\nUseful for nested loot pools (e.g., a &quot;weapon&quot; entry that rolls on a weapon-specific table).\nFor each matched result, the nested pipeline is executed once per quantity unit.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.PityResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.PityResult.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.PityResult",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.PityStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.PityStrategy-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.PityStrategy<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.PityStrategy-1.yml\" sourcestartlinenumber=\"1\">Implements a pity/mercy system that guarantees a drop after N failures.\nTracks state per-table (or per shared group) using integer keys.\nImplements <xref href=\"NS.UnifiedLoot.IResettable\" data-throw-if-not-resolved=\"false\"></xref> so callers can reset all counters via the interface.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.PityTracker.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.PityTracker.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.PityTracker",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.PityTracker.yml\" sourcestartlinenumber=\"1\">Default in-memory implementation of <xref href=\"NS.UnifiedLoot.IPityTracker\" data-throw-if-not-resolved=\"false\"></xref>.\nStores failure counts in a dictionary.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.SystemRandom.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.SystemRandom.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.SystemRandom",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.SystemRandom.yml\" sourcestartlinenumber=\"1\">Default implementation using System.Random.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.UniqueDropStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.UniqueDropStrategy-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.UniqueDropStrategy<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.UniqueDropStrategy-1.yml\" sourcestartlinenumber=\"1\">Tracks items that have already dropped and prevents duplicates.\nUseful for one-time drops (e.g., unique quest items, first-time boss kills).</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.UnityRandom.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.UnityRandom.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.UnityRandom",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.UnityRandom.yml\" sourcestartlinenumber=\"1\">Implementation using Unity's random. Not seedable per-instance.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.WeightedEntry-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.WeightedEntry-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.WeightedEntry<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.WeightedEntry-1.yml\" sourcestartlinenumber=\"1\">An entry with its computed weight for weighted selection algorithms.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.WeightedRandomStrategy-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.WeightedRandomStrategy-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot.WeightedRandomStrategy<T>",
+      "Summary": "<p sourcefile=\"api/NS.UnifiedLoot.WeightedRandomStrategy-1.yml\" sourcestartlinenumber=\"1\">Generates loot results using weighted random selection.\nThis is typically the first strategy in a pipeline.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/NS.UnifiedLoot.yml",
+      "output": {
+        ".html": {
+          "relative_path": "NS.UnifiedLoot.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "NS.UnifiedLoot",
+      "Summary": null
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html"
+        },
+        ".json": {
+          "relative_path": "api/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/advanced.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/advanced.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/context.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/context.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/factories.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/factories.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/observers.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/observers.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/pity-systems.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/pity-systems.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/preview.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/preview.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/strategies.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/strategies.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/tables.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/tables.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "manual/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "manual/toc.html"
+        },
+        ".json": {
+          "relative_path": "manual/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "media/logo.png",
+      "output": {
+        "resource": {
+          "relative_path": "media/logo.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html"
+        },
+        ".json": {
+          "relative_path": "toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tutorials/boss-loot.md",
+      "output": {
+        ".html": {
+          "relative_path": "tutorials/boss-loot.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tutorials/dynamic-scaling.md",
+      "output": {
+        ".html": {
+          "relative_path": "tutorials/dynamic-scaling.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tutorials/gacha.md",
+      "output": {
+        ".html": {
+          "relative_path": "tutorials/gacha.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tutorials/goblin-encounter.md",
+      "output": {
+        ".html": {
+          "relative_path": "tutorials/goblin-encounter.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "tutorials/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "tutorials/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "tutorials/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "tutorials/toc.html"
+        },
+        ".json": {
+          "relative_path": "tutorials/toc.json"
+        }
+      },
+      "version": ""
+    }
+  ],
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

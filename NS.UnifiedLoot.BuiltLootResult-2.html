@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Struct BuiltLootResult&lt;TDefinition, TInstance&gt; | Unified Loot </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Struct BuiltLootResult&lt;TDefinition, TInstance&gt; | Unified Loot ">
+      
+      <meta name="description" content="Result of a loot roll that has been built into an instance. Contains both the original definition and the created instance.">
+      <link rel="icon" href="media/logo.png">
+      <link rel="stylesheet" href="public/docfx.min.css">
+      <link rel="stylesheet" href="public/main.css">
+      <meta name="docfx:navrel" content="toc.html">
+      <meta name="docfx:tocrel" content="api/toc.html">
+      
+      <meta name="docfx:rel" content="">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/nicolas-stephan/UnifiedLoot/new/main/apiSpec/new?filename=NS_UnifiedLoot_BuiltLootResult_2.md&amp;value=---%0Auid%3A%20NS.UnifiedLoot.BuiltLootResult%602%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="index.html">
+            <img id="logo" class="svg" src="media/logo.png" alt="Unified Loot">
+            Unified Loot
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="NS.UnifiedLoot.BuiltLootResult`2">
+
+
+
+  <h1 id="NS_UnifiedLoot_BuiltLootResult_2" data-uid="NS.UnifiedLoot.BuiltLootResult`2" class="text-break">
+Struct BuiltLootResult&lt;TDefinition, TInstance&gt;  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootPipeline.cs/#L197"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="NS.html">NS</a>.<a class="xref" href="NS.UnifiedLoot.html">UnifiedLoot</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>UnifiedLoot.doc.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Result of a loot roll that has been built into an instance.
+Contains both the original definition and the created instance.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public readonly struct BuiltLootResult&lt;TDefinition, TInstance&gt;</code></pre>
+  </div>
+
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TDefinition</code></dt>
+    <dd><p>The loot definition type.</p>
+</dd>
+    <dt><code>TInstance</code></dt>
+    <dd><p>The created instance type.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="NS_UnifiedLoot_BuiltLootResult_2_Definition_" data-uid="NS.UnifiedLoot.BuiltLootResult`2.Definition*"></a>
+
+  <h3 id="NS_UnifiedLoot_BuiltLootResult_2_Definition" data-uid="NS.UnifiedLoot.BuiltLootResult`2.Definition">
+  Definition
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootPipeline.cs/#L201"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The original loot definition that was rolled.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TDefinition Definition { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TDefinition</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="NS_UnifiedLoot_BuiltLootResult_2_Instance_" data-uid="NS.UnifiedLoot.BuiltLootResult`2.Instance*"></a>
+
+  <h3 id="NS_UnifiedLoot_BuiltLootResult_2_Instance" data-uid="NS.UnifiedLoot.BuiltLootResult`2.Instance">
+  Instance
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootPipeline.cs/#L206"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The created item instance.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TInstance Instance { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">TInstance</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="NS_UnifiedLoot_BuiltLootResult_2_Metadata_" data-uid="NS.UnifiedLoot.BuiltLootResult`2.Metadata*"></a>
+
+  <h3 id="NS_UnifiedLoot_BuiltLootResult_2_Metadata" data-uid="NS.UnifiedLoot.BuiltLootResult`2.Metadata">
+  Metadata
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootPipeline.cs/#L216"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Metadata about the roll.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public LootMetadata Metadata { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="NS.UnifiedLoot.LootMetadata.html">LootMetadata</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="NS_UnifiedLoot_BuiltLootResult_2_Quantity_" data-uid="NS.UnifiedLoot.BuiltLootResult`2.Quantity*"></a>
+
+  <h3 id="NS_UnifiedLoot_BuiltLootResult_2_Quantity" data-uid="NS.UnifiedLoot.BuiltLootResult`2.Quantity">
+  Quantity
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootPipeline.cs/#L211"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>The quantity rolled.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Quantity { get; init; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="NS_UnifiedLoot_BuiltLootResult_2_ToString_" data-uid="NS.UnifiedLoot.BuiltLootResult`2.ToString*"></a>
+
+  <h3 id="NS_UnifiedLoot_BuiltLootResult_2_ToString" data-uid="NS.UnifiedLoot.BuiltLootResult`2.ToString">
+  ToString()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootPipeline.cs/#L218"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns the fully qualified type name of this instance.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The fully qualified type name.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootPipeline.cs/#L197" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          © 2026 Nicolas Stephan · MIT License
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

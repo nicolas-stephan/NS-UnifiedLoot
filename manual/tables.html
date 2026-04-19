@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Tables | Unified Loot </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Tables | Unified Loot ">
+      
+      
+      <link rel="icon" href="../media/logo.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/nicolas-stephan/UnifiedLoot/blob/main/docs/manual/tables.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../media/logo.png" alt="Unified Loot">
+            Unified Loot
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="tables">Tables</h1>
+
+<p>A loot table is anything that implements <a class="xref" href="../NS.UnifiedLoot.ILootTable-1.html">ILootTable<t></t></a>. It is a read-only collection of
+<a class="xref" href="../NS.UnifiedLoot.ILootEntry-1.html">ILootEntry<t></t></a> values. The pipeline reads from it but never mutates it.</p>
+<h2 id="iloottable"><a class="xref" href="../NS.UnifiedLoot.ILootTable-1.html">ILootTable<t></t></a></h2>
+<pre><code class="lang-csharp">public interface ILootTable&lt;out T&gt; : IEnumerable&lt;ILootEntry&lt;T&gt;&gt; {
+    int Id { get; } // auto-generated int, used by pity tracking
+    int Count { get; }
+    ILootEntry&lt;T&gt; this[int index] { get; }
+}
+</code></pre>
+<h2 id="ilootentry"><a class="xref" href="../NS.UnifiedLoot.ILootEntry-1.html">ILootEntry<t></t></a></h2>
+<pre><code class="lang-csharp">public interface ILootEntry&lt;out T&gt; {
+    T? Item { get; } // nullable — null means &quot;no drop&quot;
+    float Weight { get; }
+    IntRange Quantity { get; }
+}
+</code></pre>
+<h2 id="loottable---code-defined"><a class="xref" href="../NS.UnifiedLoot.LootTable-1.html">LootTable<t></t></a> - Code-Defined</h2>
+<p>The simplest table type. Fluent builder API, good for tables you define in code.</p>
+<pre><code class="lang-csharp">var table = new LootTable&lt;Item&gt;()
+    .Add(sword, weight: 10f)
+    .Add(shield, weight: 10f)
+    .Add(potion, weight: 50f, minQuantity: 2, maxQuantity: 5)
+    .Add(gold, weight: 30f, quantity: new IntRange(10, 50));
+</code></pre><h3 id="add-overloads">Add overloads</h3>
+<pre><code class="lang-csharp">// Fixed quantity of 1
+table.Add(sword, weight: 10f);
+
+// Fixed quantity
+table.Add(sword, weight: 10f, quantity: 3);
+
+// Min/max quantity
+table.Add(sword, weight: 10f, minQuantity: 2, maxQuantity: 8);
+
+// Explicit IntRange
+table.Add(sword, weight: 10f, quantity: new IntRange(2, 8));
+</code></pre><h3 id="null-items">Null items</h3>
+<p>Use <a class="xref" href="../NS.UnifiedLoot.LootTable-1.html#NS_UnifiedLoot_LootTable_1_AddEmpty_">AddEmpty</a> to add a &quot;no drop&quot; slot. When selected, the entry
+is silently skipped and produces no <a class="xref" href="../NS.UnifiedLoot.LootResult-1.html">LootResult<t></t></a>. This is useful for modelling a chance of
+getting nothing:</p>
+<pre><code class="lang-csharp">var chestTable = new LootTable&lt;Item&gt;()
+    .AddEmpty(weight: 50f) // 50% chance of nothing
+    .Add(potion, weight: 30f)
+    .Add(sword, weight: 20f);
+</code></pre><h2 id="loottableasset--scriptableobject"><a class="xref" href="../NS.UnifiedLoot.LootTableAsset-1.html">LootTableAsset<t></t></a> — ScriptableObject</h2>
+<p>For tables that designers configure in the Unity Editor:</p>
+<pre><code class="lang-csharp">[CreateAssetMenu(menuName = &quot;Loot/Item Table&quot;)]
+public class ItemLootTable : LootTableAsset&lt;ItemDefinition&gt; { }
+</code></pre>
+<p>Create the asset in the Project window. The custom inspector shows:</p>
+<ul>
+<li>A probability summary for every entry</li>
+<li>Live validation warnings (null items, zero weight, empty table, single-entry table)</li>
+</ul>
+<div class="NOTE">
+<h5>Note</h5>
+<p><code>LootTableAsset&lt;T&gt;</code> does <strong>not</strong> require <code>T</code> to be a <code>ScriptableObject</code> — any serialisable
+type works.</p>
+</div>
+<h3 id="passing-to-a-pipeline">Passing to a pipeline</h3>
+<pre><code class="lang-csharp">// Drag the asset in the Inspector
+// [SerializeField] ItemLootTable _enemyDrops;
+
+// Should be cached
+var enemyRuntimeTable = _enemyDrops.ToTable();
+
+// At runtime
+var results = new List&lt;LootResult&lt;ItemDefinition&gt;&gt;();
+_pipeline.Execute(enemyRuntimeTable, results);
+</code></pre><h3 id="loottableassetbase"><a class="xref" href="../NS.UnifiedLoot.LootTableAssetBase.html">LootTableAssetBase</a></h3>
+<p>All <a class="xref" href="../NS.UnifiedLoot.LootTableAsset-1.html">LootTableAsset<t></t></a> inherit from the non-generic <a class="xref" href="../NS.UnifiedLoot.LootTableAssetBase.html">LootTableAssetBase</a>. This lets you write
+editor code (custom drawers, validators) that targets all table assets without knowing <code>T</code>.</p>
+<h2 id="compositetablebuilder"><a class="xref" href="../NS.UnifiedLoot.CompositeTableBuilder-1.html">CompositeTableBuilder<t></t></a></h2>
+<p>The <a class="xref" href="../NS.UnifiedLoot.CompositeTableBuilder-1.html">CompositeTableBuilder<t></t></a> allows you to merge multiple sub-tables into a single, flattened table. This is useful for building a master loot table from several independent sources (e.g., merging &quot;Global Drops&quot; and &quot;Act 1 Rare Drops&quot;).</p>
+<pre><code class="lang-csharp">var composite = new CompositeTableBuilder&lt;Item&gt;()
+    .Add(commonTable, selectionWeight: 0.7f)
+    .Add(rareTable, selectionWeight: 0.3f)
+    .Build();
+</code></pre><h3 id="weight-scaling">Weight scaling</h3>
+<p>The <a class="xref" href="../NS.UnifiedLoot.CompositeTableBuilder-1.html">CompositeTableBuilder<t></t></a> ensures that the internal relative weights within each sub-table are preserved. The effective weight of an entry inside the final composite is:</p>
+<pre><code>effectiveWeight = (selectionWeight / totalSelectionWeight) * (entryWeight / tableEntryWeight)
+</code></pre>
+<p>This ensures that a sub-table with higher <code>selectionWeight</code> contributes more items to the composite, without distorting the internal rarity of its items.</p>
+<h2 id="intrange"><a class="xref" href="../NS.UnifiedLoot.IntRange.html">IntRange</a></h2>
+<p><a class="xref" href="../NS.UnifiedLoot.IntRange.html">IntRange</a> is a serialisable min/max quantity:</p>
+<pre><code class="lang-csharp">var range = new IntRange(2, 8);
+int rolled = range.Roll(UnityRandom.Instance); // inclusive on both ends
+bool ok = range.Contains(5); // true
+
+// Implicit conversion from int (min == max)
+IntRange single = 3;
+</code></pre><h2 id="custom-tables">Custom Tables</h2>
+<p>Any class implementing <a class="xref" href="../NS.UnifiedLoot.ILootTable-1.html">ILootTable<t></t></a> works. Use the
+<a class="xref" href="../NS.UnifiedLoot.LootTableIdGenerator.html">LootTableIdGenerator</a> to get a unique auto-incremented int ID:</p>
+<pre><code class="lang-csharp">public class ProcGenTable : ILootTable&lt;Item&gt; {
+    public int Id { get; } = LootTableIdGenerator.GetNextId();
+    public int Count =&gt; _entries.Count;
+    public ILootEntry&lt;Item&gt; this[int index] =&gt; _entries[index];
+
+    private readonly List&lt;ILootEntry&lt;Item&gt;&gt; _entries = new();
+
+    // Procedurally fill _entries here...
+}
+</code></pre>
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/nicolas-stephan/UnifiedLoot/blob/main/docs/manual/tables.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          © 2026 Nicolas Stephan · MIT License
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

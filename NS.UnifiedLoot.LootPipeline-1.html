@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class LootPipeline&lt;T&gt; | Unified Loot </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class LootPipeline&lt;T&gt; | Unified Loot ">
+      
+      <meta name="description" content="A composable pipeline of strategies that process loot rolls. The pipeline defines HOW loot is processed; the table defines WHAT can drop.">
+      <link rel="icon" href="media/logo.png">
+      <link rel="stylesheet" href="public/docfx.min.css">
+      <link rel="stylesheet" href="public/main.css">
+      <meta name="docfx:navrel" content="toc.html">
+      <meta name="docfx:tocrel" content="api/toc.html">
+      
+      <meta name="docfx:rel" content="">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/nicolas-stephan/UnifiedLoot/new/main/apiSpec/new?filename=NS_UnifiedLoot_LootPipeline_1.md&amp;value=---%0Auid%3A%20NS.UnifiedLoot.LootPipeline%601%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="index.html">
+            <img id="logo" class="svg" src="media/logo.png" alt="Unified Loot">
+            Unified Loot
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="NS.UnifiedLoot.LootPipeline`1">
+
+
+
+  <h1 id="NS_UnifiedLoot_LootPipeline_1" data-uid="NS.UnifiedLoot.LootPipeline`1" class="text-break">
+Class LootPipeline&lt;T&gt;  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootPipeline.cs/#L14"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="NS.html">NS</a>.<a class="xref" href="NS.UnifiedLoot.html">UnifiedLoot</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>UnifiedLoot.doc.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>A composable pipeline of strategies that process loot rolls.
+The pipeline defines HOW loot is processed; the table defines WHAT can drop.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class LootPipeline&lt;T&gt;</code></pre>
+  </div>
+
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>T</code></dt>
+    <dd><p>The type of item.</p>
+</dd>
+  </dl>
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><span class="xref">object</span></div>
+      <div><span class="xref">LootPipeline&lt;T&gt;</span></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="NS_UnifiedLoot_LootPipeline_1_Strategies_" data-uid="NS.UnifiedLoot.LootPipeline`1.Strategies*"></a>
+
+  <h3 id="NS_UnifiedLoot_LootPipeline_1_Strategies" data-uid="NS.UnifiedLoot.LootPipeline`1.Strategies">
+  Strategies
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootPipeline.cs/#L26"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Read-only view of the strategies currently in the pipeline.
+Use <a class="xref" href="NS.UnifiedLoot.LootPipeline-1.html#NS_UnifiedLoot_LootPipeline_1_InsertStrategy_System_Int32_NS_UnifiedLoot_ILootStrategy__0__">InsertStrategy(int, ILootStrategy&lt;T&gt;)</a> and <a class="xref" href="NS.UnifiedLoot.LootPipeline-1.html#NS_UnifiedLoot_LootPipeline_1_RemoveStrategy_NS_UnifiedLoot_ILootStrategy__0__">RemoveStrategy(ILootStrategy&lt;T&gt;)</a> to mutate.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;ILootStrategy&lt;T&gt;&gt; Strategies { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;<a class="xref" href="NS.UnifiedLoot.ILootStrategy-1.html">ILootStrategy</a>&lt;T&gt;&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="NS_UnifiedLoot_LootPipeline_1_AddObserver_" data-uid="NS.UnifiedLoot.LootPipeline`1.AddObserver*"></a>
+
+  <h3 id="NS_UnifiedLoot_LootPipeline_1_AddObserver_NS_UnifiedLoot_ILootObserver__0__" data-uid="NS.UnifiedLoot.LootPipeline`1.AddObserver(NS.UnifiedLoot.ILootObserver{`0})">
+  AddObserver(ILootObserver&lt;T&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootPipeline.cs/#L72"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Registers an observer notified after every roll completes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public LootPipeline&lt;T&gt; AddObserver(ILootObserver&lt;T&gt; observer)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>observer</code> <a class="xref" href="NS.UnifiedLoot.ILootObserver-1.html">ILootObserver</a>&lt;T&gt;</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="NS.UnifiedLoot.LootPipeline-1.html">LootPipeline</a>&lt;T&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="NS_UnifiedLoot_LootPipeline_1_AddStrategy_" data-uid="NS.UnifiedLoot.LootPipeline`1.AddStrategy*"></a>
+
+  <h3 id="NS_UnifiedLoot_LootPipeline_1_AddStrategy_NS_UnifiedLoot_ILootStrategy__0__" data-uid="NS.UnifiedLoot.LootPipeline`1.AddStrategy(NS.UnifiedLoot.ILootStrategy{`0})">
+  AddStrategy(ILootStrategy&lt;T&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootPipeline.cs/#L31"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Appends a strategy to the end of the pipeline.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public LootPipeline&lt;T&gt; AddStrategy(ILootStrategy&lt;T&gt; strategy)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>strategy</code> <a class="xref" href="NS.UnifiedLoot.ILootStrategy-1.html">ILootStrategy</a>&lt;T&gt;</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="NS.UnifiedLoot.LootPipeline-1.html">LootPipeline</a>&lt;T&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="NS_UnifiedLoot_LootPipeline_1_Execute_" data-uid="NS.UnifiedLoot.LootPipeline`1.Execute*"></a>
+
+  <h3 id="NS_UnifiedLoot_LootPipeline_1_Execute_NS_UnifiedLoot_ILootTable__0__System_Collections_Generic_List_NS_UnifiedLoot_LootResult__0___NS_UnifiedLoot_Context_NS_UnifiedLoot_IRandom_" data-uid="NS.UnifiedLoot.LootPipeline`1.Execute(NS.UnifiedLoot.ILootTable{`0},System.Collections.Generic.List{NS.UnifiedLoot.LootResult{`0}},NS.UnifiedLoot.Context,NS.UnifiedLoot.IRandom)">
+  Execute(ILootTable&lt;T&gt;, List&lt;LootResult&lt;T&gt;&gt;, Context?, IRandom?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootPipeline.cs/#L89"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Executes the pipeline and writes results to an existing list (reduces allocations).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Execute(ILootTable&lt;T&gt; table, List&lt;LootResult&lt;T&gt;&gt; results, Context? context = null, IRandom? random = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>table</code> <a class="xref" href="NS.UnifiedLoot.ILootTable-1.html">ILootTable</a>&lt;T&gt;</dt>
+    <dd></dd>
+    <dt><code>results</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="NS.UnifiedLoot.LootResult-1.html">LootResult</a>&lt;T&gt;&gt;</dt>
+    <dd></dd>
+    <dt><code>context</code> <a class="xref" href="NS.UnifiedLoot.Context.html">Context</a></dt>
+    <dd></dd>
+    <dt><code>random</code> <a class="xref" href="NS.UnifiedLoot.IRandom.html">IRandom</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="NS_UnifiedLoot_LootPipeline_1_ExecuteAndBuild_" data-uid="NS.UnifiedLoot.LootPipeline`1.ExecuteAndBuild*"></a>
+
+  <h3 id="NS_UnifiedLoot_LootPipeline_1_ExecuteAndBuild__1_NS_UnifiedLoot_ILootTable__0__NS_UnifiedLoot_ILootFactory__0___0__System_Collections_Generic_List_NS_UnifiedLoot_BuiltLootResult__0___0___NS_UnifiedLoot_Context_NS_UnifiedLoot_IRandom_" data-uid="NS.UnifiedLoot.LootPipeline`1.ExecuteAndBuild``1(NS.UnifiedLoot.ILootTable{`0},NS.UnifiedLoot.ILootFactory{`0,``0},System.Collections.Generic.List{NS.UnifiedLoot.BuiltLootResult{`0,``0}},NS.UnifiedLoot.Context,NS.UnifiedLoot.IRandom)">
+  ExecuteAndBuild&lt;TInstance&gt;(ILootTable&lt;T&gt;, ILootFactory&lt;T, TInstance&gt;, List&lt;BuiltLootResult&lt;T, TInstance&gt;&gt;, Context?, IRandom?)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootPipeline.cs/#L123"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Executes the pipeline and converts results using a factory.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ExecuteAndBuild&lt;TInstance&gt;(ILootTable&lt;T&gt; table, ILootFactory&lt;T, TInstance&gt; factory, List&lt;BuiltLootResult&lt;T, TInstance&gt;&gt; results, Context? context = null, IRandom? random = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>table</code> <a class="xref" href="NS.UnifiedLoot.ILootTable-1.html">ILootTable</a>&lt;T&gt;</dt>
+    <dd><p>The loot table to roll against.</p>
+</dd>
+    <dt><code>factory</code> <a class="xref" href="NS.UnifiedLoot.ILootFactory-2.html">ILootFactory</a>&lt;T, TInstance&gt;</dt>
+    <dd><p>The factory to convert definitions to instances.</p>
+</dd>
+    <dt><code>results</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="NS.UnifiedLoot.BuiltLootResult-2.html">BuiltLootResult</a>&lt;T, TInstance&gt;&gt;</dt>
+    <dd><p>The list to append results to.</p>
+</dd>
+    <dt><code>context</code> <a class="xref" href="NS.UnifiedLoot.Context.html">Context</a></dt>
+    <dd><p>Optional context data.</p>
+</dd>
+    <dt><code>random</code> <a class="xref" href="NS.UnifiedLoot.IRandom.html">IRandom</a></dt>
+    <dd><p>Optional random override.</p>
+</dd>
+  </dl>
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TInstance</code></dt>
+    <dd><p>The instance type to create.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+  <a id="NS_UnifiedLoot_LootPipeline_1_InsertStrategy_" data-uid="NS.UnifiedLoot.LootPipeline`1.InsertStrategy*"></a>
+
+  <h3 id="NS_UnifiedLoot_LootPipeline_1_InsertStrategy_System_Int32_NS_UnifiedLoot_ILootStrategy__0__" data-uid="NS.UnifiedLoot.LootPipeline`1.InsertStrategy(System.Int32,NS.UnifiedLoot.ILootStrategy{`0})">
+  InsertStrategy(int, ILootStrategy&lt;T&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootPipeline.cs/#L39"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Inserts a strategy at the given index in the pipeline.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public LootPipeline&lt;T&gt; InsertStrategy(int index, ILootStrategy&lt;T&gt; strategy)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd></dd>
+    <dt><code>strategy</code> <a class="xref" href="NS.UnifiedLoot.ILootStrategy-1.html">ILootStrategy</a>&lt;T&gt;</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="NS.UnifiedLoot.LootPipeline-1.html">LootPipeline</a>&lt;T&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="NS_UnifiedLoot_LootPipeline_1_RemoveObserver_" data-uid="NS.UnifiedLoot.LootPipeline`1.RemoveObserver*"></a>
+
+  <h3 id="NS_UnifiedLoot_LootPipeline_1_RemoveObserver_NS_UnifiedLoot_ILootObserver__0__" data-uid="NS.UnifiedLoot.LootPipeline`1.RemoveObserver(NS.UnifiedLoot.ILootObserver{`0})">
+  RemoveObserver(ILootObserver&lt;T&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootPipeline.cs/#L80"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Removes a previously registered observer.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public LootPipeline&lt;T&gt; RemoveObserver(ILootObserver&lt;T&gt; observer)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>observer</code> <a class="xref" href="NS.UnifiedLoot.ILootObserver-1.html">ILootObserver</a>&lt;T&gt;</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="NS.UnifiedLoot.LootPipeline-1.html">LootPipeline</a>&lt;T&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="NS_UnifiedLoot_LootPipeline_1_RemoveStrategy_" data-uid="NS.UnifiedLoot.LootPipeline`1.RemoveStrategy*"></a>
+
+  <h3 id="NS_UnifiedLoot_LootPipeline_1_RemoveStrategy_NS_UnifiedLoot_ILootStrategy__0__" data-uid="NS.UnifiedLoot.LootPipeline`1.RemoveStrategy(NS.UnifiedLoot.ILootStrategy{`0})">
+  RemoveStrategy(ILootStrategy&lt;T&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootPipeline.cs/#L48"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Removes the first occurrence of a strategy from the pipeline.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public LootPipeline&lt;T&gt; RemoveStrategy(ILootStrategy&lt;T&gt; strategy)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>strategy</code> <a class="xref" href="NS.UnifiedLoot.ILootStrategy-1.html">ILootStrategy</a>&lt;T&gt;</dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="NS.UnifiedLoot.LootPipeline-1.html">LootPipeline</a>&lt;T&gt;</dt>
+    <dd><p>This pipeline for chaining.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="NS_UnifiedLoot_LootPipeline_1_WithMetadata_" data-uid="NS.UnifiedLoot.LootPipeline`1.WithMetadata*"></a>
+
+  <h3 id="NS_UnifiedLoot_LootPipeline_1_WithMetadata_System_Boolean_" data-uid="NS.UnifiedLoot.LootPipeline`1.WithMetadata(System.Boolean)">
+  WithMetadata(bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootPipeline.cs/#L64"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Enables or disables metadata collection. Disabling improves performance.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public LootPipeline&lt;T&gt; WithMetadata(bool collect)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>collect</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="NS.UnifiedLoot.LootPipeline-1.html">LootPipeline</a>&lt;T&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="NS_UnifiedLoot_LootPipeline_1_WithRandom_" data-uid="NS.UnifiedLoot.LootPipeline`1.WithRandom*"></a>
+
+  <h3 id="NS_UnifiedLoot_LootPipeline_1_WithRandom_NS_UnifiedLoot_IRandom_" data-uid="NS.UnifiedLoot.LootPipeline`1.WithRandom(NS.UnifiedLoot.IRandom)">
+  WithRandom(IRandom)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootPipeline.cs/#L56"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Sets the default random number generator.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public LootPipeline&lt;T&gt; WithRandom(IRandom random)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>random</code> <a class="xref" href="NS.UnifiedLoot.IRandom.html">IRandom</a></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="NS.UnifiedLoot.LootPipeline-1.html">LootPipeline</a>&lt;T&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/nicolas-stephan/NS-UnifiedLoot/blob/main/Assets/UnifiedLoot/Runtime/Core/LootPipeline.cs/#L14" class="edit-link">Edit this page</a>
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          © 2026 Nicolas Stephan · MIT License
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

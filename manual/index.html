@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Getting Started | Unified Loot </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Getting Started | Unified Loot ">
+      
+      
+      <link rel="icon" href="../media/logo.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/nicolas-stephan/UnifiedLoot/blob/main/docs/manual/index.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../media/logo.png" alt="Unified Loot">
+            Unified Loot
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="getting-started">Getting Started</h1>
+
+<p>This guide walks you from installation to your first loot roll in five minutes.</p>
+<h2 id="installation">Installation</h2>
+<p>Open your project's <code>Packages/manifest.json</code> and add the package:</p>
+<pre><code class="lang-json">{
+  &quot;dependencies&quot;: {
+    &quot;com.ns.unified-loot&quot;: &quot;https://github.com/nicolas-stephan/UnifiedLoot.git&quot;
+  }
+}
+</code></pre>
+<p>To pin a specific version:</p>
+<pre><code class="lang-json">&quot;com.ns.unified-loot&quot;: &quot;https://github.com/nicolas-stephan/UnifiedLoot.git#v0.2.0&quot;
+</code></pre>
+<p>Unity will download the package automatically on next editor start.</p>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p><strong>Requirements:</strong> Unity 6000.0+</p>
+</div>
+<h2 id="core-concepts">Core Concepts</h2>
+<p>Before jumping to code, understand the two key roles:</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Class</th>
+<th>Defines</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Table</strong></td>
+<td><a class="xref" href="../NS.UnifiedLoot.LootTable-1.html">LootTable<t></t></a></td>
+<td><em>What</em> can drop and at what weight</td>
+</tr>
+<tr>
+<td><strong>Pipeline</strong></td>
+<td><a class="xref" href="../NS.UnifiedLoot.LootPipeline-1.html">LootPipeline<t></t></a></td>
+<td><em>How</em> items are selected, filtered, and modified</td>
+</tr>
+</tbody>
+</table>
+<p>The pipeline never knows or cares which table it runs against. You can pass different tables to
+the same pipeline at any time.</p>
+<h2 id="your-first-table">Your First Table</h2>
+<p>Pick any type for your items — an enum is simplest to start:</p>
+<pre><code class="lang-csharp">public enum Drop {
+    Coin,
+    Potion,
+    Sword,
+    Shield
+}
+
+private readonly LootTable&lt;Drop&gt; _table = new LootTable&lt;Drop&gt;()
+    .Add(Drop.Coin, weight: 50f, minQuantity: 5, maxQuantity: 20)
+    .Add(Drop.Potion, weight: 30f)
+    .Add(Drop.Sword, weight: 10f)
+    .Add(Drop.Shield, weight: 10f);
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>Weights are relative — they do not need to sum to 100.</p>
+</div>
+<h2 id="your-first-pipeline">Your First Pipeline</h2>
+<pre><code class="lang-csharp">private readonly LootPipeline&lt;Drop&gt; _pipeline = new LootPipeline&lt;Drop&gt;()
+    .AddStrategy(new WeightedRandomStrategy&lt;Drop&gt;(rollCount: 3));
+</code></pre>
+<p><a class="xref" href="../NS.UnifiedLoot.WeightedRandomStrategy-1.html">WeightedRandomStrategy</a> is the most common starting point. It picks <code>rollCount</code> items from the
+table using weighted random selection.</p>
+<h2 id="rolling">Rolling</h2>
+<pre><code class="lang-csharp">var results = new List&lt;LootResult&lt;Drop&gt;&gt;();
+_pipeline.Execute(_table, results);
+
+foreach (var result in results)
+    Debug.Log($&quot;Dropped: {result.Item} x{result.Quantity}&quot;);
+</code></pre>
+<p><a class="xref" href="../NS.UnifiedLoot.LootPipeline-1.html#NS_UnifiedLoot_LootPipeline_1_Execute_">Execute</a> populates a <code>List&lt;LootResult&lt;T&gt;&gt;</code>. Each <a class="xref" href="../NS.UnifiedLoot.LootResult-1.html">LootResult<t></t></a> has:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a class="xref" href="../NS.UnifiedLoot.LootResult-1.html#NS_UnifiedLoot_LootResult_1_Item">Item</a></td>
+<td><code>T?</code></td>
+<td>The dropped item (nullable — see <a href="tables.html#null-items">null entries</a>)</td>
+</tr>
+<tr>
+<td><a class="xref" href="../NS.UnifiedLoot.LootResult-1.html#NS_UnifiedLoot_LootResult_1_Quantity">Quantity</a></td>
+<td><code>int</code></td>
+<td>How many dropped</td>
+</tr>
+<tr>
+<td><a class="xref" href="../NS.UnifiedLoot.LootResult-1.html#NS_UnifiedLoot_LootResult_1_Metadata">Metadata</a></td>
+<td><a class="xref" href="../NS.UnifiedLoot.LootMetadata.html">LootMetadata</a></td>
+<td>Debug info: source table, weights, roll value</td>
+</tr>
+</tbody>
+</table>
+<h2 id="adding-a-guaranteed-fallback">Adding a Guaranteed Fallback</h2>
+<p>If all weighted rolls somehow produce nothing, <a class="xref" href="../NS.UnifiedLoot.GuaranteedDropStrategy-1.html">GuaranteedDropStrategy<t></t></a> makes sure at least
+one item always drops:</p>
+<pre><code class="lang-csharp">var pipeline = new LootPipeline&lt;Drop&gt;()
+    .AddStrategy(new WeightedRandomStrategy&lt;Drop&gt;(3))
+    .AddStrategy(new GuaranteedDropStrategy&lt;Drop&gt;());
+</code></pre><h2 id="reusing-the-pipeline">Reusing the Pipeline</h2>
+<p>Pipelines are <strong>stateless by default</strong> (stateful strategies like <a class="xref" href="../NS.UnifiedLoot.PityStrategy-1.html">PityStrategy<t></t></a> are the
+exception). Create them once and call [<a class="xref" href="../NS.UnifiedLoot.LootPipeline-1.html#NS_UnifiedLoot_LootPipeline_1_Execute_">Execute</a>] as many times as you need:</p>
+<pre><code class="lang-csharp">// In Awake / Start
+        dropPipeline = new LootPipeline&lt;Drop&gt;()
+            .WithMetadata(false) // skip metadata
+            .AddStrategy(new WeightedRandomStrategy&lt;Drop&gt;(2))
+            .AddStrategy(new ConsolidateResultsStrategy&lt;Drop&gt;());
+
+// In game code (called many times)
+        var results = new List&lt;LootResult&lt;Drop&gt;&gt;();
+        dropPipeline.Execute(enemyTable, results);
+</code></pre><h2 id="next-steps">Next Steps</h2>
+<ul>
+<li><a href="tables.html">Tables</a> - LootTable, ScriptableObject tables, CompositeTable</li>
+<li><a href="context.html">Context System</a> - pass runtime data to strategies</li>
+<li><a href="strategies.html">Strategies</a> - all built-in strategies and how to write your own</li>
+<li><a href="preview.html">Preview System</a> - dry-run loot tables in editor or code</li>
+<li><a href="pity-systems.html">Pity Systems</a> - hard pity and failure tracking</li>
+<li><a href="factories.html">Factories</a> - roll definitions, instantiate instances</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/nicolas-stephan/UnifiedLoot/blob/main/docs/manual/index.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          © 2026 Nicolas Stephan · MIT License
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

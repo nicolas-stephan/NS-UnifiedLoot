@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Tutorial: Dynamic Scaling | Unified Loot </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Tutorial: Dynamic Scaling | Unified Loot ">
+      
+      
+      <link rel="icon" href="../media/logo.png">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/nicolas-stephan/UnifiedLoot/blob/main/docs/tutorials/dynamic-scaling.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../media/logo.png" alt="Unified Loot">
+            Unified Loot
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="tutorial-dynamic-scaling">Tutorial: Dynamic Scaling</h1>
+
+<p>This tutorial explores the <code>ScalingExample</code> sample, showing how to adjust loot quality, quantity, and item stats dynamically based on the game's context (e.g., player level or difficulty).</p>
+<h2 id="1-dynamic-weighting-quality-scaling">1. Dynamic Weighting (Quality Scaling)</h2>
+<p>As a player levels up, you often want them to find better gear. Instead of creating a new loot table for every level, you can use <code>ModifyWeightStrategy</code> to adjust the probabilities of an existing table.</p>
+<pre><code class="lang-csharp">private void Awake() {
+    // Build the scaling pipeline
+    _scalingPipeline = new LootPipeline&lt;ScalingItemDef&gt;()
+        .WithRandom(UnityRandom.Instance)
+        // 1. Dynamic Weighting: Rare items get more likely as level increases
+        .AddStrategy(new ModifyWeightStrategy&lt;ScalingItemDef&gt;((entry, ctx) =&gt; {
+            var level = ctx.GetOrDefault(PlayerLevel, 1);
+            var rarity = entry.Entry.Item?.rarity ?? ScalingRarity.Common;
+
+            return rarity switch {
+                ScalingRarity.Poor =&gt; entry.Weight / (1f + level * 0.1f),
+                ScalingRarity.Rare =&gt; entry.Weight * (1f + level * 0.05f),
+                ScalingRarity.Epic =&gt; entry.Weight * (1f + level * 0.025f),
+                _ =&gt; entry.Weight
+            };
+        }))
+        // 2. Main roll
+        .AddStrategy(new WeightedRandomStrategy&lt;ScalingItemDef&gt;(rollCount: 2))
+        // 3. Dynamic Quantity: More loot on higher difficulties
+        .AddStrategy(new ModifyQuantityStrategy&lt;ScalingItemDef&gt;((qty, ctx) =&gt; {
+            var diff = ctx.GetOrDefault(Difficulty, 1f);
+            return Mathf.RoundToInt(qty * diff);
+        }))
+        .AddStrategy(new ConsolidateResultsStrategy&lt;ScalingItemDef&gt;());
+}
+</code></pre>
+<p>In this example, the weights of &quot;Poor&quot; items decrease while &quot;Rare&quot; and &quot;Epic&quot; items increase as the <code>PlayerLevel</code> in the <code>Context</code> goes up.</p>
+<h2 id="2-dynamic-quantity-difficulty-scaling">2. Dynamic Quantity (Difficulty Scaling)</h2>
+<p>For harder encounters or higher game difficulties, you might want to drop <em>more</em> items. The <code>ModifyQuantityStrategy</code> allows you to scale the number of items produced by the generator.</p>
+<pre><code class="lang-csharp">private void Awake() {
+    // Build the scaling pipeline
+    _scalingPipeline = new LootPipeline&lt;ScalingItemDef&gt;()
+        .WithRandom(UnityRandom.Instance)
+        // 1. Dynamic Weighting: Rare items get more likely as level increases
+        .AddStrategy(new ModifyWeightStrategy&lt;ScalingItemDef&gt;((entry, ctx) =&gt; {
+            var level = ctx.GetOrDefault(PlayerLevel, 1);
+            var rarity = entry.Entry.Item?.rarity ?? ScalingRarity.Common;
+
+            return rarity switch {
+                ScalingRarity.Poor =&gt; entry.Weight / (1f + level * 0.1f),
+                ScalingRarity.Rare =&gt; entry.Weight * (1f + level * 0.05f),
+                ScalingRarity.Epic =&gt; entry.Weight * (1f + level * 0.025f),
+                _ =&gt; entry.Weight
+            };
+        }))
+        // 2. Main roll
+        .AddStrategy(new WeightedRandomStrategy&lt;ScalingItemDef&gt;(rollCount: 2))
+        // 3. Dynamic Quantity: More loot on higher difficulties
+        .AddStrategy(new ModifyQuantityStrategy&lt;ScalingItemDef&gt;((qty, ctx) =&gt; {
+            var diff = ctx.GetOrDefault(Difficulty, 1f);
+            return Mathf.RoundToInt(qty * diff);
+        }))
+        .AddStrategy(new ConsolidateResultsStrategy&lt;ScalingItemDef&gt;());
+}
+</code></pre>
+<p>Here, the final quantity is multiplied by a <code>Difficulty</code> value provided in the context.</p>
+<h2 id="3-stat-scaling-the-factory">3. Stat Scaling (The Factory)</h2>
+<p>Finally, the items themselves should be more powerful at higher levels. Since UnifiedLoot separates selection from instantiation, the <code>ILootFactory</code> is the perfect place to inject this logic.</p>
+<pre><code class="lang-csharp">public ScalingItemInstance Create(ScalingItemDef definition, Context context, IRandom random) {
+    var level = context.GetOrDefault(PlayerLevel, 1);
+    var diff = context.GetOrDefault(Difficulty, 1f);
+
+    // Scale power based on base range, player level, and difficulty
+    float basePower = random.Range(definition.minBasePower, definition.maxBasePower);
+    var finalPower = Mathf.RoundToInt(basePower * (1f + level * 0.1f) * diff);
+
+    return new ScalingItemInstance {
+        Name = definition.itemName,
+        Rarity = definition.rarity,
+        Color = definition.color,
+        Power = finalPower
+    };
+}
+</code></pre>
+<p>The factory receives the <code>Context</code>, allowing it to read the <code>PlayerLevel</code> and <code>Difficulty</code> to calculate the final <code>Power</code> of the <code>ScalingItemInstance</code>.</p>
+<h2 id="4-execution">4. Execution</h2>
+<p>To trigger the roll, we pack the current game state into a <code>Context</code> and call <code>ExecuteAndBuild</code>.</p>
+<pre><code class="lang-csharp">[ContextMenu(&quot;Roll Scaling Loot&quot;)]
+public void RollLoot() {
+    _context
+        .Set(PlayerLevel, playerLevel)
+        .Set(Difficulty, gameDifficulty);
+
+    _results.Clear();
+    _scalingPipeline.ExecuteAndBuild(equipmentTable!.ToTable(), this, _results, _context);
+
+    LogResults();
+}
+</code></pre><h2 id="summary">Summary</h2>
+<p>Dynamic scaling demonstrates:</p>
+<ul>
+<li><strong>Contextual Awareness</strong>: Using the <code>Context</code> to pass game state into the loot system.</li>
+<li><strong>Probabilistic Adjustment</strong>: Changing weights at runtime without modifying assets.</li>
+<li><strong>Factory-based Scaling</strong>: Decoupling item data from its runtime power level.</li>
+</ul>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/nicolas-stephan/UnifiedLoot/blob/main/docs/tutorials/dynamic-scaling.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          © 2026 Nicolas Stephan · MIT License
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
