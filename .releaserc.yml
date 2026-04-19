@@ -1,21 +1,27 @@
 plugins:
-  - '@semantic-release/github'
-  - '@semantic-release/release-notes-generator'
   - '@semantic-release/commit-analyzer'
+  - '@semantic-release/release-notes-generator'
+  - 
   - - '@semantic-release/exec'
     - prepareCmd: "sed -i -e '/AssemblyVersion/s/\".*\"/\"${nextRelease.version}\"/' 
-        Assets/GameplayTags/Runtime/AssemblyInfo.cs
-        Assets/GameplayTags/Editor/AssemblyInfo.cs
-        Assets/GameplayTags/Samples~/AssemblyInfo.cs"
+        Assets/UnifiedLoot/Runtime/AssemblyInfo.cs
+        Assets/UnifiedLoot/Editor/AssemblyInfo.cs
+        Assets/UnifiedLoot/Samples~/AssemblyInfo.cs"
+
   - - '@semantic-release/changelog'
-    - changelogFile: 'Assets/GameplayTags/CHANGELOG.md'
+    - changelogFile: 'Assets/UnifiedLoot/CHANGELOG.md'
+
   - - '@semantic-release/npm'
     - npmPublish: false
-      pkgRoot: "Assets/GameplayTags"
+      pkgRoot: "Assets/UnifiedLoot"
+      
   - - '@semantic-release/git'
     - assets:
-        - 'Assets/GameplayTags/Editor/AssemblyInfo.cs'
-        - 'Assets/GameplayTags/Runtime/AssemblyInfo.cs'
-        - 'Assets/GameplayTags/Samples~/AssemblyInfo.cs'
-        - 'Assets/GameplayTags/package.json'
-        - 'Assets/GameplayTags/CHANGELOG.md'
+        - 'Assets/UnifiedLoot/Editor/AssemblyInfo.cs'
+        - 'Assets/UnifiedLoot/Runtime/AssemblyInfo.cs'
+        - 'Assets/UnifiedLoot/Samples~/AssemblyInfo.cs'
+        - 'Assets/UnifiedLoot/package.json'
+        - 'Assets/UnifiedLoot/CHANGELOG.md'
+      message: "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      
+  - '@semantic-release/github'
