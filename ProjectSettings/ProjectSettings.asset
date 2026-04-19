@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: TagSystem
+  productName: UnifiedLoot
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -846,14 +846,14 @@ PlayerSettings:
   editorAssembliesCompatibilityLevel: 1
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: TagSystem
+  metroPackageName: UnifiedLoot
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: TagSystem
+  metroApplicationDescription: UnifiedLoot
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0
@@ -927,7 +927,7 @@ PlayerSettings:
   cloudProjectId: 8db75c55-e1b1-427b-8e61-cfd94704b305
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: TagSystem
+  projectName: UnifiedLoot
   organizationId: anaconda-games-as-publisher
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
